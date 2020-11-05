@@ -7,9 +7,15 @@ use Illuminate\Http\Request;
 
 class SpeedrunController extends Controller
 {
+    public function welcome()
+    {
+        $featured = Speedrun::inRandomOrder()->first();
+        $speedruns = Speedrun::where('verified',1)->orderBy('time', 'asc')->get()->filter(function($run) {return !$run->disqualified();});
+        return view('welcome', ['featured'=>$featured, 'speedruns'=>$speedruns]);
+    }
     public function index()
     {
-        $speedruns = Speedrun::all();
+        $speedruns = Speedrun::where('verified',1)->orderBy('time', 'asc')->get()->filter(function($run) {return !$run->disqualified();});
         return view('speedrun.list',['speedruns'=>$speedruns]);
     }
     public function show(Speedrun $speedrun)

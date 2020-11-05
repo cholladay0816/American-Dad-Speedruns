@@ -19,6 +19,7 @@ class CreateSpeedrunsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->decimal('time', 12,4);
             $table->string('url', 28)->unique();
+            $table->tinyInteger('verified')->default(0);
             $table->timestamps();
         });
     }

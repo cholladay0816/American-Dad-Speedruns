@@ -19,7 +19,7 @@
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.js" defer></script>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen text-white" style="background-color:#1D1D1D;">
+        <div class="min-h-screen text-white bg-dark" style="">
             @livewire('navigation-dropdown')
 
             <!-- Page Heading -->
