@@ -23,4 +23,16 @@ class Speedrun extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function placement()
+    {
+        $runs = Speedrun::where('time', '<' ,$this->time);
+        $count = 0;
+        foreach ($runs as $run)
+        {
+            if($run->category()->id == $this->category()->id && $run->platform()->id == $this->platform()->id)
+                $count++;
+        }
+        return $count + 1;
+    }
 }
