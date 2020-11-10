@@ -24,9 +24,10 @@
     <body class="flex items-center justify-center">
         @if($featured)
             <div class="max-w-7xl mx-auto p-12">
-                <div class=" grid grid-cols-1 xl:grid-cols-2 gap-2 border rounded p-10 bg-gray-50 text-black">
-                    <div class="h-96">
-                    <iframe width="100%" height="100%" frameborder="0"
+                <div class=" grid grid-cols-1 xl:grid-cols-3 gap-2 border rounded p-10 bg-gray-50 text-black">
+                    <div class="h-96 xl:col-span-2 relative overflow-hidden block">
+                    <iframe class="absolute top-0 bottom-0 left-0"
+                            width="100%" height="100%" frameborder="0"
                             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen=""
                             src="{{$featured->embed_url()}}" ></iframe>
@@ -59,9 +60,9 @@
             <div class=" my-auto flex flex-col">
                 <div class="font-bold text-4xl">Stan Says:</div>
                 <div class="font-semibold text-gray-300">You should join the American Dad Speedrunning Discord!</div>
-                <div class="text-gray-500">All the cool kids are already @here.</div>
+                <div class="border-l-2 border-yellow-300 text-white bg-opacity-25 hover:bg-opacity-40 bg-yellow-500 px-3">All the cool kids are already <a class="text-indigo-500 font-semibold">@here</a>.</div>
                 <a href="" class="bg-indigo-500 border-white text-white text-xl rounded px-2 py-2 mr-auto mt-5 ">Click here to Join!</a>
-                <div class="text-gray-300 mt-8">Note: we are not affiliated with the server, .</div>
+                <div class="text-gray-300 mt-8">Note: we are not affiliated with this server.</div>
             </div>
         </div>
     </div>

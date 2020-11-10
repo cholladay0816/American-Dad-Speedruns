@@ -61,6 +61,11 @@ class Speedrun extends Model
     {
         if($this->disqualified())
             return 'Disqualified';
-        return 'Active';
+        return $this->verified==1?'Verified':'Submitted';
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

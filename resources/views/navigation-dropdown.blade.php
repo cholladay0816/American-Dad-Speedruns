@@ -1,7 +1,7 @@
-<nav x-data="{ open: false }" class="bg-green-400 border-b border-green-400 text-white">
+<nav x-data="{ open: false }" class="bg-green-500 border-b border-green-500 text-white relative sticky top-0 z-50">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-14">
             <div class="flex">
                 <!-- Logo -->
                 <div class="text-white flex-shrink-0 flex items-center">
@@ -13,8 +13,13 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="text-white hidden space-x-4 sm:-my-px sm:ml-10 sm:flex">
-                    <a href="{{url('/')}}" class="font-bold text-xl text-white text-center my-auto">American Dad Speedruns</a>
+                <div class="text-white hidden space-x-4 sm:-my-px sm:ml-4 sm:flex">
+                    <a href="{{url('/')}}" class="font-bold text-xl text-white text-center my-auto pr-4">American Dad Speedruns</a>
+                    <a href="{{url('/platforms')}}" class="px-1 text-md text-gray-100 text-center my-auto">Platforms</a>
+                    <a href="{{url('/categories')}}" class="px-1 text-md text-gray-100 text-center my-auto">Categories</a>
+                    @auth()
+                    <a href="{{url('/speedruns/new')}}" class="px-1 text-md text-gray-100 text-center my-auto">Submit Run</a>
+                    @endauth
                 </div>
             </div>
             @if(auth()->user())
