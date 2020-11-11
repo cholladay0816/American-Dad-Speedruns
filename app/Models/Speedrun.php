@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Speedrun extends Model
 {
     use HasFactory;
-
+    protected $guarded = ['verified'];
     public function category()
     {
         return $this->belongsToMany(Category::class)->firstOrFail();

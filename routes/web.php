@@ -17,6 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::middleware(['auth:sanctum', 'verified'])->group(function() {
+
+    Route::get('/speedruns/new', [SpeedrunController::class, 'create']);
+    Route::post('/speedruns/new', [SpeedrunController::class, 'store']);
+
+    Route::put('/speedruns/{speedrun}', [SpeedrunController::class, 'update']);
+    Route::delete('/speedruns/{speedrun}', [SpeedrunController::class, 'delete']);
+
+});
+
+
 Route::get('/', [SpeedrunController::class, 'welcome']);
 
 Route::get('/runner/{user}', [RunnerController::class, 'show']);
@@ -33,8 +44,6 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 
 Route::get('/platforms/{platform:title}', [PlatformController::class, 'show']);
 Route::get('/platforms', [PlatformController::class, 'index'])->name('platforms');
-
-
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
