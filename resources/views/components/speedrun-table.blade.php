@@ -47,17 +47,17 @@
                             {{$speedrun->time}}s
                         </td>
                         <td class="hidden md:table-cell px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            Any%
+                            {{$speedrun->category()->title}}
                         </td>
                         <td class="hidden md:table-cell px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
                             {{$speedrun->platform()->title}}
                         </td>
                         <td class="md:hidden table-cell px-6 py-4 whitespace-no-wrap">
-                            <div class="text-sm leading-5 text-gray-900">{{$speedrun->category()->title}}</div>
-                            <div class="text-sm leading-5 text-gray-500">{{$speedrun->platform()->title}}</div>
+                            <a href="{{$speedrun->category()->title}}" class="text-sm leading-5 text-gray-900">{{$speedrun->category()->title}}</a>
+                            <a href="{{$speedrun->category()->title}}" class="text-sm leading-5 text-gray-500">{{$speedrun->platform()->title}}</a>
                         </td>
                         <td class="hidden md:table-cell px-6 py-4 whitespace-no-wrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full text-green-800 {{$speedrun->disqualified()?'bg-red-200':'bg-green-100'}}">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{$speedrun->disqualified()?'bg-red-200 text-red-800':'text-green-800 bg-green-100'}}">
                                       {{$speedrun->status()}}
                                     </span>
                         </td>

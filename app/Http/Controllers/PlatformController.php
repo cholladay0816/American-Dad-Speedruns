@@ -14,7 +14,8 @@ class PlatformController extends Controller
      */
     public function index()
     {
-        //
+        $platforms = Platform::all();
+        return view('platform.list', ['platforms'=>$platforms]);
     }
 
     /**
@@ -46,7 +47,10 @@ class PlatformController extends Controller
      */
     public function show(Platform $platform)
     {
-        //
+        $speedruns = $platform->speedruns->sortBy(function ($speedrun, $key) {
+                return $speedrun->disqualified()?INF:$speedrun->time;
+        });
+        return view('speedrun.list', ['speedruns'=>$speedruns]);
     }
 
     /**

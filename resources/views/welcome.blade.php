@@ -60,7 +60,7 @@
             <div class=" my-auto flex flex-col">
                 <div class="font-bold text-4xl">Stan Says:</div>
                 <div class="font-semibold text-gray-300">You should join the American Dad Speedrunning Discord!</div>
-                <div class="border-l-2 border-yellow-300 text-white bg-opacity-25 hover:bg-opacity-40 bg-yellow-500 px-3">All the cool kids are already <a class="text-indigo-500 font-semibold">@here</a>.</div>
+                <div class="border-l-2 border-yellow-300 text-white bg-opacity-10 hover:bg-opacity-25 bg-yellow-500 px-3">All the cool kids are already <a class="text-indigo-500 font-semibold">@here</a>.</div>
                 <a href="" class="bg-indigo-500 border-white text-white text-xl rounded px-2 py-2 mr-auto mt-5 ">Click here to Join!</a>
                 <div class="text-gray-300 mt-8">Note: we are not affiliated with this server.</div>
             </div>

@@ -2,20 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d4fe1793-19b3-4d2a-ade4-c7535c261b7c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/View/Components/Comment.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/components/comment.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/platform/list.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/category/list.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CommentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CommentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SpeedrunController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SpeedrunController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Comment.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Comment.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PlatformController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PlatformController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/Speedrun.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Speedrun.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/navigation-dropdown.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/navigation-dropdown.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/speedrun/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/speedrun/show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/components/speedrun-table.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/components/speedrun-table.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/platform/list.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/platform/list.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/welcome.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/welcome.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,7 +186,7 @@
       <updated>1604546309111</updated>
       <workItem from="1604546312166" duration="19549000" />
       <workItem from="1604625102205" duration="3396000" />
-      <workItem from="1604993311272" duration="4917000" />
+      <workItem from="1604993311272" duration="9140000" />
     </task>
     <servers />
   </component>
@@ -202,6 +197,10 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="530" y="184" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1605004289085">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="530" y="184" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1605004289085" />
     <state x="-1020" y="204" key="FileChooserDialogImpl" timestamp="1604637949799">
       <screen x="-1600" y="0" width="1600" height="860" />
     </state>
@@ -222,10 +221,10 @@
       <screen x="-1600" y="0" width="1600" height="860" />
     </state>
     <state width="1556" height="205" key="GridCell.Tab.0.right/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1604637952629" />
-    <state x="635" y="352" key="NewPhpFileDialog" timestamp="1605001022070">
+    <state x="635" y="352" key="NewPhpFileDialog" timestamp="1605002302741">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
-    <state x="635" y="352" key="NewPhpFileDialog/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1605001022070" />
+    <state x="635" y="352" key="NewPhpFileDialog/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1605002302741" />
     <state x="617" y="343" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1604999446071">
       <screen x="0" y="0" width="1600" height="860" />
     </state>

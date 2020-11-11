@@ -41,7 +41,10 @@ class Speedrun extends Model
             if($run->disqualified())
                 continue;
 
-            if($run->category()->id == $this->category()->id && $run->platform()->id == $this->platform()->id)
+            //if($run->category()->id == $this->category()->id && $run->platform()->id == $this->platform()->id)
+            //    $count++;
+
+            if($run->category()->id == $this->category()->id)
                 $count++;
         }
         return $count + 1;
