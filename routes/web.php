@@ -30,7 +30,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
 Route::get('/', [SpeedrunController::class, 'welcome']);
 
-Route::get('/runner/{user}', [RunnerController::class, 'show']);
+Route::get('/runner/{user:name}', [RunnerController::class, 'show']);
 
 Route::get('/speedruns', [SpeedrunController::class, 'index'])->name('speedruns');
 Route::get('/speedruns/{speedrun}', [SpeedrunController::class, 'show']);

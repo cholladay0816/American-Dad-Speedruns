@@ -8,11 +8,8 @@ use Illuminate\Http\Request;
 class RunnerController extends Controller
 {
     //Gets all runs by one user
-    public function show($username)
+    public function show(User $user)
     {
-        $user = User::where('name',$username)->firstOrFail();
-        $speedruns = $user->speedruns;
-
-        return view('speedrun.list', ['speedruns'=>$speedruns]);
+        return view('speedrun.list', ['speedruns'=>$user->speedruns]);
     }
 }

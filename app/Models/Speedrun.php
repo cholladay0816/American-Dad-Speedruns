@@ -9,14 +9,27 @@ class Speedrun extends Model
 {
     use HasFactory;
     protected $guarded = ['verified'];
-    public function category()
+    public function categories()
     {
-        return $this->belongsToMany(Category::class)->firstOrFail();
+        return $this->belongsToMany(Category::class);
     }
 
+    public function platforms()
+    {
+        return $this->belongsToMany(Platform::class);
+    }
+
+    public function category()
+    {
+        if($this->categories->count() == 0)
+            $this->categories()->attach(1);
+        return $this->categories()->first();
+    }
     public function platform()
     {
-        return $this->belongsToMany(Platform::class)->firstOrFail();
+        if($this->platforms->count() == 0)
+            $this->platforms()->attach(1);
+        return $this->platforms()->first();
     }
 
     public function user()
@@ -33,6 +46,8 @@ class Speedrun extends Model
     public function placement()
     {
         if($this->disqualified())
+            return Speedrun::where('verified','1')->get()->count();
+        if($this->verified == 0)
             return Speedrun::where('verified','1')->get()->count();
         $runs = Speedrun::where('time', '<' ,$this->time)->where('verified','1')->get();
         $count = 0;

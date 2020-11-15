@@ -15,7 +15,7 @@ class CreatePlatformsTable extends Migration
     {
         Schema::create('platforms', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->unique();
+            $table->string('title')->unique()->default('XBox');
             $table->string('description')->nullable();
             $table->string('url')->nullable();
             $table->timestamps();

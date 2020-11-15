@@ -14,7 +14,7 @@
 
                 <!-- Navigation Links -->
                 <div class="text-white hidden space-x-4 sm:-my-px sm:ml-4 sm:flex">
-                    <a href="{{url('/')}}" class="font-bold text-xl text-white text-center my-auto pr-4">American Dad Speedruns</a>
+                    <a href="{{url('/')}}" class="font-bold md:text-xl sm:text-md text-white text-center my-auto pr-4">American Dad Speedruns</a>
                     <a href="{{url('/platforms')}}" class="px-1 text-md text-gray-100 text-center my-auto">Platforms</a>
                     <a href="{{url('/categories')}}" class="px-1 text-md text-gray-100 text-center my-auto">Categories</a>
                     <a href="{{url('/speedruns/new')}}" class="px-1 text-md text-gray-100 text-center my-auto">Submit Run</a>

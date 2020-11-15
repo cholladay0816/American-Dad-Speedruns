@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\Platform;
 use App\Models\Speedrun;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use mysql_xdevapi\Exception;
 
 class SpeedrunController extends Controller
 {
@@ -42,24 +44,28 @@ class SpeedrunController extends Controller
             [
                 'url'=>'required|url|unique:speedruns,url|max:28|starts_with:https://youtu.be/',
                 'time'=>'numeric|required|min:0.0001',
-                'platform_id'=>'integer|required|exists:platforms,id',
-                'category_id'=>'integer|required|exists:categories,id'
+                'platform'=>'integer|required|exists:platforms,id',
+                'category'=>'integer|required|exists:categories,id'
             ]);
         $speedrun = new Speedrun(['url'=>$request['url'],'time'=>$request['time']]);
         $speedrun->user_id = auth()->user()->id;
-        $speedrun->platform()->sync($request['platform_id']);
-        $speedrun->category()->sync($request['category_id']);
         $speedrun->save();
-        return redirect(url('/speedruns/'.auth()->user()->name))->with(['success'=>'Speedrun Submitted']);
+        $speedrun->platforms()->sync([$request['platform']]);
+        $speedrun->categories()->sync([$request['category']]);
+
+
+        return redirect('/runner/'.auth()->user()->name)->with(['success'=>'Speedrun Submitted']);
     }
 
-    public function update(Speedrun $speedrun)
-    {
-
-    }
 
     public function delete(Speedrun $speedrun)
     {
+        //Delete if user is the creator or if user has manager permissions
+        if($speedrun->user_id == auth()->user()->id || Gate::allows('manage_speedruns'))
+            $speedrun->delete();
+        else
+            abort(401);
 
+        return redirect('/runner/'.auth()->user()->name)->with(['success'=>'Speedrun Deleted']);
     }
 }

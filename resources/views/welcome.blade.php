@@ -21,51 +21,63 @@
         </style>
     </head>
     <x-app-layout>
-    <body class="flex items-center justify-center">
-        @if($featured)
-            <div class="max-w-7xl mx-auto p-12">
-                <div class=" grid grid-cols-1 xl:grid-cols-3 gap-2 border rounded p-10 bg-gray-50 text-black">
-                    <div class="h-96 xl:col-span-2 relative overflow-hidden block">
-                    <iframe class="absolute top-0 bottom-0 left-0"
-                            width="100%" height="100%" frameborder="0"
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen=""
-                            src="{{$featured->embed_url()}}" ></iframe>
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="font-bold text-2xl">Featured Run</div>
-                        <div class="font-semibold text-2xl">{{$featured->time}}s by {{$featured->user->name}}</div>
-                        <div class="text-gray-700 text-lg">{{$featured->category()->title}} - {{$featured->platform()->title}}</div>
-                    </div>
-                </div>
-            </div>
-        @endif
+    <body>
+        <div class="grid grid-cols-1 lg:grid-cols-6">
 
-        @if($speedruns)
-            <div class="max-w-7xl mx-auto p-12">
-                <div class="border rounded p-10 bg-gray-50 text-black">
-                    <div class="font-bold text-2xl mb-10">Recently Submitted Speedruns</div>
-                    <div class="-mx-10">
-                    @component('components.speedrun-table', ['speedruns'=>$speedruns])
-                    @endcomponent
-                    </div>
+            <div class="col-span-1 grid grid-cols-1 grid-flow-row-dense auto-rows-min text-black">
+                <p class="col-span-0 text-gray-200 font-semibold text-center mx-auto pt-10">Advertisements</p>
+                <div class="bg-gray-200 p-5 m-5 rounded text-center">
+                    advertisement
                 </div>
             </div>
-        @endif
-    <div class="mx-auto border-white border-t border-dotted">
-        <div class="max-w-7xl max-h-xl mx-auto grid grid-cols-2">
-            <div class="h-100">
-                <img class="max-w-24" src="https://www.americandadspeedruns.com/public/img/stan_says.png"/>
-            </div>
-            <div class=" my-auto flex flex-col">
-                <div class="font-bold text-4xl">Stan Says:</div>
-                <div class="font-semibold text-gray-300">You should join the American Dad Speedrunning Discord!</div>
-                <div class="border-l-2 border-yellow-300 text-white bg-opacity-10 hover:bg-opacity-25 bg-yellow-500 px-3">All the cool kids are already <a class="text-indigo-500 font-semibold">@here</a>.</div>
-                <a href="" class="bg-indigo-500 border-white text-white text-xl rounded px-2 py-2 mr-auto mt-5 ">Click here to Join!</a>
-                <div class="text-gray-300 mt-8">Note: we are not affiliated with this server.</div>
+            <div class="max-w-full lg:max-w-6xl mx-auto col-span-1 md:col-span-4">
+                <div class="py-12">
+                    <div class="grid grid-cols-1 xl:grid-cols-3 gap-2 border rounded p-10 bg-gray-50 text-black">
+                        <div class="h-56 md:h-96 xl:col-span-2 relative overflow-hidden block max-w-96">
+                        <iframe class="absolute top-0 bottom-0 left-0"
+                                width="100%" height="100%" frameborder="0"
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen=""
+                                src="{{$featured->embed_url()}}" ></iframe>
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="font-bold text-2xl">Featured Run</div>
+                            <div class="font-semibold text-2xl">{{$featured->time}}s by {{$featured->user->name}}</div>
+                            <div class="text-gray-700 text-lg">{{$featured->category()->title}} - {{$featured->platform()->title}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                @if($speedruns)
+                    <div class="max-w-full lg:max-w-6xl mx-auto py-12">
+                        <div class="border rounded py-10 md:p-10 bg-gray-50 text-black">
+                            <div class="font-bold text-2xl mb-10">Recently Submitted Speedruns</div>
+                            <div class="md:-mx-10">
+                            @component('components.speedrun-table', ['speedruns'=>$speedruns])
+                            @endcomponent
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                <div class="mx-auto border-white border-t border-dotted">
+                    <div class="max-w-7xl max-h-xl mx-auto grid grid-cols-2">
+                        <div class="h-100">
+                            <img class="max-w-24" src="https://www.americandadspeedruns.com/public/img/stan_says.png"/>
+                        </div>
+                        <div class=" my-auto flex flex-col">
+                            <div class="font-bold text-4xl">Stan Says:</div>
+                            <div class="font-semibold text-gray-300">You should join the American Dad Speedrunning Discord!</div>
+                            <div class="border-l-2 border-yellow-300 text-white bg-opacity-10 hover:bg-opacity-25 bg-yellow-500 px-3">All the cool kids are already <a class="text-indigo-500 font-semibold">@here</a>.</div>
+                            <a href="" class="bg-indigo-500 border-white text-white text-xl rounded px-2 py-2 mr-auto mt-5 ">Click here to Join!</a>
+                            <div class="text-gray-300 mt-8">Note: we are not affiliated with this server.</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+
+                </div>
             </div>
         </div>
-    </div>
     </body>
     </x-app-layout>
 </html>

@@ -2,11 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d4fe1793-19b3-4d2a-ade4-c7535c261b7c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/views/speedrun/new.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/RunnerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/RunnerController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SpeedrunController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SpeedrunController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/Speedrun.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Speedrun.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_05_031740_create_platforms_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_11_05_031740_create_platforms_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_05_031814_create_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_11_05_031814_create_categories_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_05_032207_create_speedruns_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_11_05_032207_create_speedruns_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/components/speedrun-table.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/components/speedrun-table.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/navigation-dropdown.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/navigation-dropdown.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/speedrun/new.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/speedrun/new.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/speedrun/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/speedrun/show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/welcome.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/welcome.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -183,7 +190,8 @@
       <updated>1604546309111</updated>
       <workItem from="1604546312166" duration="19549000" />
       <workItem from="1604625102205" duration="3396000" />
-      <workItem from="1604993311272" duration="12747000" />
+      <workItem from="1604993311272" duration="21677000" />
+      <workItem from="1605464610093" duration="2448000" />
     </task>
     <servers />
   </component>
@@ -202,22 +210,26 @@
       <screen x="-1600" y="0" width="1600" height="860" />
     </state>
     <state x="-1020" y="204" key="FileChooserDialogImpl/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1604637949799" />
-    <state width="1556" height="205" key="GridCell.Tab.0.bottom" timestamp="1604637952629">
+    <state width="1556" height="202" key="GridCell.Tab.0.bottom" timestamp="1605413935068">
       <screen x="-1600" y="0" width="1600" height="860" />
     </state>
-    <state width="1556" height="205" key="GridCell.Tab.0.bottom/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1604637952629" />
-    <state width="1556" height="205" key="GridCell.Tab.0.center" timestamp="1604637952629">
+    <state width="1556" height="202" key="GridCell.Tab.0.bottom/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1605413935068" />
+    <state width="1556" height="202" key="GridCell.Tab.0.bottom/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1605306565973" />
+    <state width="1556" height="202" key="GridCell.Tab.0.center" timestamp="1605413935068">
       <screen x="-1600" y="0" width="1600" height="860" />
     </state>
-    <state width="1556" height="205" key="GridCell.Tab.0.center/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1604637952629" />
-    <state width="1556" height="205" key="GridCell.Tab.0.left" timestamp="1604637952629">
+    <state width="1556" height="202" key="GridCell.Tab.0.center/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1605413935068" />
+    <state width="1556" height="202" key="GridCell.Tab.0.center/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1605306565915" />
+    <state width="1556" height="202" key="GridCell.Tab.0.left" timestamp="1605413935068">
       <screen x="-1600" y="0" width="1600" height="860" />
     </state>
-    <state width="1556" height="205" key="GridCell.Tab.0.left/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1604637952629" />
-    <state width="1556" height="205" key="GridCell.Tab.0.right" timestamp="1604637952629">
+    <state width="1556" height="202" key="GridCell.Tab.0.left/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1605413935068" />
+    <state width="1556" height="202" key="GridCell.Tab.0.left/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1605306565891" />
+    <state width="1556" height="202" key="GridCell.Tab.0.right" timestamp="1605413935068">
       <screen x="-1600" y="0" width="1600" height="860" />
     </state>
-    <state width="1556" height="205" key="GridCell.Tab.0.right/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1604637952629" />
+    <state width="1556" height="202" key="GridCell.Tab.0.right/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1605413935068" />
+    <state width="1556" height="202" key="GridCell.Tab.0.right/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1605306565960" />
     <state x="635" y="352" key="NewPhpFileDialog" timestamp="1605074634356">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
@@ -226,10 +238,10 @@
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state x="617" y="343" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1604999446071" />
-    <state x="-1144" y="200" width="672" height="677" key="run.anything.popup" timestamp="1604993368351">
-      <screen x="-1600" y="0" width="1600" height="860" />
+    <state x="456" y="200" width="672" height="677" key="run.anything.popup" timestamp="1605464713063">
+      <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state x="-1144" y="200" width="672" height="677" key="run.anything.popup/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1604993368351" />
-    <state x="456" y="200" width="672" height="677" key="run.anything.popup/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1604625306682" />
+    <state x="456" y="200" width="672" height="677" key="run.anything.popup/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1605464713063" />
   </component>
 </project>
