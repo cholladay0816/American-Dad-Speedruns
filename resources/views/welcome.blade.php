@@ -31,6 +31,7 @@
                 </div>
             </div>
             <div class="max-w-full lg:max-w-6xl mx-auto col-span-1 md:col-span-4">
+                @if(isset($featured))
                 <div class="py-12">
                     <div class="grid grid-cols-1 xl:grid-cols-3 gap-2 border rounded p-10 bg-gray-50 text-black">
                         <div class="h-56 md:h-96 xl:col-span-2 relative overflow-hidden block max-w-96">
@@ -47,6 +48,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
                 @if($speedruns)
                     <div class="max-w-full lg:max-w-6xl mx-auto py-12">
