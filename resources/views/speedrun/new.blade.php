@@ -1,5 +1,7 @@
 <x-app-layout>
-
+    <x-slot name="title">
+        Submit Run
+    </x-slot>
     <form method="POST" class="w-full max-w-lg mx-auto my-auto">
         @csrf
         @method('POST')

@@ -22,6 +22,8 @@
     </head>
     <x-app-layout>
     <body>
+        <h1 class="text-center font-bold mx-auto text-5xl mt-4">American Dad Speedruns</h1>
+        <h2 class="text-center mx-auto text-lg  text-gray-200">The official leaderboards for all American Dad Speedruns.</h2>
         <div class="grid grid-cols-1 lg:grid-cols-6">
 
             <div class="col-span-1 grid grid-cols-1 grid-flow-row-dense auto-rows-min text-black">

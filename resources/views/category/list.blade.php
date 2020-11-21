@@ -1,5 +1,7 @@
 <x-app-layout>
-
+    <x-slot name="title">
+        Categories
+    </x-slot>
     <div class="max-w-7xl mx-auto grid grid-cols-3 gap-5 py-10 text-black">
 
         @foreach($categories as $category)

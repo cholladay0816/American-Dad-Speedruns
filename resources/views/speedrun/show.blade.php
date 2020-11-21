@@ -1,4 +1,12 @@
 <x-app-layout>
+    <x-slot name="title">
+        {{$title}}
+    </x-slot>
+    <x-slot name="description">
+        {{$speedrun->user->name}} completed this speedrun in {{$speedrun->time}} seconds,
+        placing @th($speedrun->placement()) in the {{$speedrun->category()->title}} category.
+        This run was performed on the {{$speedrun->platform()->title}} platform.
+    </x-slot>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-white leading-tight">
             [@th($speedrun->placement())] {{$speedrun->category()->title." by ".$speedrun->user->name." in ".$speedrun->time."s [".$speedrun->platform()->title."]"  }}
@@ -15,7 +23,8 @@
 
             </div>
         </div>
-    <div class="mx-auto text-2xl font-semibold text-center">Comments</div>
+        <div class="mx-auto text-2xl font-semibold text-center">Comments</div>
+        <div class="py-5 text-gray-200 mx-auto text-lg font-semibold text-center">Coming soon!</div>
 
         @foreach($speedrun->comments as $comment)
             @component('components.comment', ['comment' => $comment])

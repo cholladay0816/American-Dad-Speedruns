@@ -8,6 +8,7 @@ use App\Models\Speedrun;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use mysql_xdevapi\Exception;
+use NumberFormatter;
 
 class SpeedrunController extends Controller
 {
@@ -24,7 +25,10 @@ class SpeedrunController extends Controller
     }
     public function show(Speedrun $speedrun)
     {
-        return view('speedrun.show',['speedrun'=>$speedrun]);
+        $ordinal = (new NumberFormatter('en_US', NumberFormatter::ORDINAL))->format($speedrun->placement());
+
+        $title = '['.$ordinal.'] '.$speedrun->category()->title." by ".$speedrun->user->name." in ".$speedrun->time."s";
+        return view('speedrun.show',['speedrun'=>$speedrun, 'title'=>$title]);
     }
     public function find()
     {
