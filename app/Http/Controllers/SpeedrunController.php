@@ -61,6 +61,23 @@ class SpeedrunController extends Controller
         return redirect('/runner/'.auth()->user()->name)->with(['success'=>'Speedrun Submitted']);
     }
 
+    public function verify(Speedrun $speedrun)
+    {
+        if(Gate::allows('manage_speedruns'))
+        {
+            $speedrun->verified = 1;
+            $speedrun->save();
+            return redirect()->back()->with(['success'=>'Speedrun Verified']);
+        }
+        else {
+            abort(401);
+        }
+    }
+
+    public function update(Speedrun $speedrun)
+    {
+
+    }
 
     public function delete(Speedrun $speedrun)
     {

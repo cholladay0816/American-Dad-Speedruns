@@ -67,13 +67,13 @@
 
                             @if($speedrun->canDelete())
                                 @if($speedrun->verified==0)
-                                    <form method="POST" action="{{url('/speedrun/'.$speedrun->id)}}">
+                                    <form method="POST" action="{{url('/speedruns/'.$speedrun->id)}}">
                                         @csrf
-                                        @method('PUT')
+                                        @method('PATCH')
                                         <input class="text-green-500 hover:text-green-800 bg-white" type="submit" value="Verify">
                                     </form>
                                 @endif
-                                <form method="POST" action="{{url('/speedrun/'.$speedrun->id)}}">
+                                <form method="POST" action="{{url('/speedruns/'.$speedrun->id)}}">
                                     @csrf
                                     @method('DELETE')
                                     <input class="text-red-500 hover:text-red-800 bg-white" type="submit" value="Delete">

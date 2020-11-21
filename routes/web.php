@@ -19,9 +19,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
-    Route::middleware('ability:view_admin')->group(function()
+    Route::middleware('can:view_admin')->group(function()
     {
         Route::get('/admin', [AdminController::class, 'index']);
+        Route::patch('/speedruns/{speedrun}', [SpeedrunController::class, 'verify']);
     });
 
     Route::get('/speedruns/new', [SpeedrunController::class, 'create']);

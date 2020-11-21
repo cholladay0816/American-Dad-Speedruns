@@ -22,11 +22,8 @@ class DatabaseSeeder extends Seeder
         $admin = \App\Models\Role::firstOrCreate(['name'=>'administrator','title'=>'Administrator']);
         $mod = \App\Models\Role::firstOrCreate(['name'=>'moderator','title'=>'Moderator']);
 
-        $admin->abilities()->sync($m_users);
-        $admin->abilities()->sync($m_runs);
-        $admin->abilities()->sync($v_admin);
+        $admin->abilities()->sync([$m_users->id, $m_runs->id, $v_admin->id]);
 
-        $mod->abilities()->sync($m_runs);
-        $mod->abilities()->sync($v_admin);
+        $mod->abilities()->sync([$m_runs->id, $v_admin->id]);
     }
 }
