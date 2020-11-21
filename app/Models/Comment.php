@@ -9,6 +9,8 @@ class Comment extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function speedrun()
     {
         return $this->belongsTo(Speedrun::class);

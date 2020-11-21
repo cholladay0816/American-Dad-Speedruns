@@ -63,4 +63,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Speedrun::class);
     }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+    public function abilities()
+    {
+        return $this->roles->map->abilities->flatten()->pluck('name')->unique();
+    }
+    public function hasAbility($ability)
+    {
+        return $this->abilities()->contains($ability);
+    }
 }

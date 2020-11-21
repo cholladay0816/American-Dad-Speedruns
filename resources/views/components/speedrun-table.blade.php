@@ -63,6 +63,22 @@
                         </td>
                         <td class="sm:px-2 py-4 whitespace-no-wrap text-left text-sm leading-5 font-medium">
                             <a href="{{url('/watch/'.$speedrun->id)}}" class="text-indigo-600 hover:text-indigo-900">Watch</a>
+
+
+                            @if($speedrun->canDelete())
+                                @if($speedrun->verified==0)
+                                    <form method="POST" action="{{url('/speedrun/'.$speedrun->id)}}">
+                                        @csrf
+                                        @method('PUT')
+                                        <input class="text-green-500 hover:text-green-800 bg-white" type="submit" value="Verify">
+                                    </form>
+                                @endif
+                                <form method="POST" action="{{url('/speedrun/'.$speedrun->id)}}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input class="text-red-500 hover:text-red-800 bg-white" type="submit" value="Delete">
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

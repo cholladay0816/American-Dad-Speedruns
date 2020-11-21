@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 
 class Speedrun extends Model
 {
@@ -30,6 +31,13 @@ class Speedrun extends Model
         if($this->platforms->count() == 0)
             $this->platforms()->attach(1);
         return $this->platforms()->first();
+    }
+
+    public function canDelete()
+    {
+        if(auth()->guest())
+            return false;
+        return $this->user_id == auth()->user()->id || Gate::allows('manage_speedruns');
     }
 
     public function user()

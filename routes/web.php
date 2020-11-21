@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\RunnerController;
@@ -18,6 +19,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
+    Route::middleware('ability:view_admin')->group(function()
+    {
+        Route::get('/admin', [AdminController::class, 'index']);
+    });
 
     Route::get('/speedruns/new', [SpeedrunController::class, 'create']);
     Route::post('/speedruns/new', [SpeedrunController::class, 'store']);

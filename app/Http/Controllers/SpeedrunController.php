@@ -70,6 +70,6 @@ class SpeedrunController extends Controller
         else
             abort(401);
 
-        return redirect('/runner/'.auth()->user()->name)->with(['success'=>'Speedrun Deleted']);
+        return redirect()->back()->with(['success'=>'Speedrun Deleted']);
     }
 }
