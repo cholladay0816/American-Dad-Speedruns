@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d4fe1793-19b3-4d2a-ade4-c7535c261b7c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/American-Dad-Speedruns.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/American-Dad-Speedruns.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/category/list.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/category/list.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/platform/list.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/platform/list.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SpeedrunController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SpeedrunController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,7 +182,7 @@
       <workItem from="1604625102205" duration="3396000" />
       <workItem from="1604993311272" duration="21677000" />
       <workItem from="1605464610093" duration="3079000" />
-      <workItem from="1605731364138" duration="27259000" />
+      <workItem from="1605731364138" duration="28115000" />
     </task>
     <servers />
   </component>
