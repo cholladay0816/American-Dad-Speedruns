@@ -26,13 +26,13 @@ class DatabaseSeeder extends Seeder
 
         $mod->abilities()->sync([$m_runs->id, $v_admin->id]);
 
-        \App\Models\Category::firstOrCreate(['title'=>'Any%','description'=>'Simple: beat the game from start to finish by any means available.','url'=>url('public/img/american_dad_speedrun_logo.png')]);
-        \App\Models\Category::firstOrCreate(['title'=>'Joe%','description'=>'Same rules as Any%, but you must use the Joe character.','url'=>url('public/img/american_joe_speedrun_logo.png')]);
-        \App\Models\Category::firstOrCreate(['title'=>'New%','description'=>'New game content is allowed for this category.','url'=>url('public/img/american_dad_speedrun_logo.png')]);
-        \App\Models\Category::firstOrCreate(['title'=>'JoeSwap%','description'=>'I don\'t remember what this one is.','url'=>url('public/img/american_joe_speedrun_logo.png')]);
+        \App\Models\Category::firstOrCreate(['title'=>'Any%','description'=>'Simple: beat the game from start to finish by any means available.','url'=>url('img/american_dad_speedrun_logo.png')]);
+        \App\Models\Category::firstOrCreate(['title'=>'Joe%','description'=>'Same rules as Any%, but you must use the Joe character.','url'=>url('img/american_joe_speedrun_logo.png')]);
+        \App\Models\Category::firstOrCreate(['title'=>'New%','description'=>'New game content is allowed for this category.','url'=>url('img/american_dad_speedrun_logo.png')]);
+        \App\Models\Category::firstOrCreate(['title'=>'JoeSwap%','description'=>'I don\'t remember what this one is.','url'=>url('img/american_joe_speedrun_logo.png')]);
         \App\Models\Category::firstOrCreate(['title'=>'Glitchless%','description'=>'No glitches or exploits allowed, play the game how God intended.','url'=>url('public/img/american_dad_speedrun_logo.png')]);
-        \App\Models\Category::firstOrCreate(['title'=>'MacFarlane%','description'=>'The entire MacFarlane anthology back to back.','url'=>url('public/img/american_dad_speedrun_logo.png')]);
-        \App\Models\Category::firstOrCreate(['title'=>'TAS','description'=>'Tool-Assisted Speedruns: first they came for the jobs, now they\'re after the world record.','url'=>url('public/img/american_dad_speedrun_logo.png')]);
+        \App\Models\Category::firstOrCreate(['title'=>'MacFarlane%','description'=>'The entire MacFarlane anthology back to back.','url'=>url('img/american_dad_speedrun_logo.png')]);
+        \App\Models\Category::firstOrCreate(['title'=>'TAS','description'=>'Tool-Assisted Speedruns: first they came for the jobs, now they\'re after the world record.','url'=>url('img/american_dad_speedrun_logo.png')]);
 
         \App\Models\Platform::firstOrCreate(['title'=>'DOS', 'description'=>'Development Build, never intended to be used for anything other than testing until the source code was leaked online mid-development. People have been practicing their runs on this buggy version since.']);
         \App\Models\Platform::firstOrCreate(['title'=>'PC', 'description'=>'Port of Gamecube Release, most popular yet controversial speedrun category for its precision and moddability.']);
