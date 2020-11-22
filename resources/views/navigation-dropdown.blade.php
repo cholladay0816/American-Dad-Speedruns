@@ -46,6 +46,9 @@
                             {{ __('Profile') }}
                         </x-jet-dropdown-link>
 
+                        <x-jet-dropdown-link href="{{ url('/runner/'.auth()->user()->name) }}">
+                            {{ __('My Runs') }}
+                        </x-jet-dropdown-link>
 
 
                         <!-- Authentication -->

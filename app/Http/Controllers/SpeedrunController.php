@@ -14,7 +14,7 @@ class SpeedrunController extends Controller
 {
     public function welcome()
     {
-        $featured = Speedrun::inRandomOrder()->first();
+        $featured = Speedrun::where('verified',1)->inRandomOrder()->get()->filter(function($run) {return !$run->disqualified();})->first();
         $speedruns = Speedrun::where('verified',1)->latest()->limit(12)->get()->filter(function($run) {return !$run->disqualified();});
         return view('welcome', ['featured'=>$featured, 'speedruns'=>$speedruns]);
     }

@@ -40,14 +40,29 @@ class Speedrun extends Model
         return $this->user_id == auth()->user()->id || Gate::allows('manage_speedruns');
     }
 
+    public function videoExists()
+    {
+        $res = @file_get_contents('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=' . $this->video_id());
+
+        return $res;
+    }
+    public function disqualify($reason = 'No reason provided.')
+    {
+        $dq = new Disqualification(['speedrun_id'=>$this->id, 'reason'=>$reason]);
+        $dq->save();
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
+    public function video_id()
+    {
+        return substr( $this->url, 17);;
+    }
     public function embed_url()
     {
-        $id = substr( $this->url, 17);
+        $id = $this->video_id();
         return 'https://www.youtube.com/embed/'.$id;
     }
 
