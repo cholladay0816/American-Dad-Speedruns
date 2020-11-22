@@ -17,7 +17,6 @@ class CreatePlatformsTable extends Migration
             $table->id();
             $table->string('title')->unique()->default('XBox');
             $table->string('description')->nullable();
-            $table->string('url')->nullable();
             $table->timestamps();
         });
     }
