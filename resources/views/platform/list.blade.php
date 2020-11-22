@@ -2,7 +2,7 @@
     <x-slot name="title">
         Platforms
     </x-slot>
-    <div class="max-w-7xl mx-auto grid grid-cols-3 gap-5 py-10 text-black">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-5 py-10 text-black">
         @foreach($platforms as $platform)
             <div class="motion-safe:transition-none motion-reduce:transform-none transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110
              rounded overflow-hidden shadow-lg bg-white grid grid-cols-1 py-3">
