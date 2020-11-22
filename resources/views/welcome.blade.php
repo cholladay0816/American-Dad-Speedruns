@@ -26,17 +26,18 @@
         <h2 class="text-center mx-auto text-lg  text-gray-200">The official leaderboards for all American Dad Speedruns.</h2>
         <div class="grid grid-cols-1 lg:grid-cols-6">
 
-            <div class="col-span-1 grid grid-cols-1 grid-flow-row-dense auto-rows-min text-black">
+            <inc
+                class="col-span-1 grid grid-cols-1 grid-flow-row-dense auto-rows-min text-black">
                 <p class="col-span-0 text-gray-200 font-semibold text-center mx-auto pt-10">Advertisements</p>
                 <div class="bg-gray-200 p-5 m-5 rounded text-center">
                     advertisement
                 </div>
-            </div>
+            </inc>
             <div class="max-w-full lg:max-w-6xl mx-auto col-span-1 md:col-span-4">
                 @if(isset($featured))
                 <div class="py-12">
                     <div class="grid grid-cols-1 xl:grid-cols-3 gap-2 border rounded p-10 bg-gray-50 text-black">
-                        <div class="h-56 md:h-96 xl:col-span-2 relative overflow-hidden block max-w-96">
+                        <div class="h-56 md:h-96 xl:col-span-2 relative overflow-hidden block max-w-96 rounded">
                         <iframe class="absolute top-0 bottom-0 left-0"
                                 width="100%" height="100%" frameborder="0"
                                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
@@ -44,9 +45,9 @@
                                 src="{{$featured->embed_url()}}" ></iframe>
                         </div>
                         <div class="flex flex-col">
-                            <div class="font-bold text-2xl">Featured Run</div>
-                            <div class="font-semibold text-2xl">{{$featured->time}}s by {{$featured->user->name}}</div>
-                            <div class="text-gray-700 text-lg">{{$featured->category()->title}} - {{$featured->platform()->title}}</div>
+                            <a class="font-bold text-2xl" href="{{url('/speedruns/'.$featured->id)}}">Featured Run</a>
+                            <div class="font-semibold text-2xl">{{$featured->time}}s by <a href="{{url('/runner/'.$featured->user->name)}}">{{$featured->user->name}}</a></div>
+                            <div class="text-gray-700 text-lg"><a href="{{url('/categories/'.$featured->category()->title)}}">{{$featured->category()->title}}</a> - <a href="{{url('/platforms/'.$featured->platform()->title)}}">{{$featured->platform()->title}}</a></div>
                         </div>
                     </div>
                 </div>

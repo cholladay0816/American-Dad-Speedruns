@@ -33,7 +33,11 @@ class SpeedrunController extends Controller
     public function find()
     {
         $speedrun = Speedrun::findOrFail(\request('run'));
-        return view('speedrun.show',['speedrun'=>$speedrun]);
+
+        $ordinal = (new NumberFormatter('en_US', NumberFormatter::ORDINAL))->format($speedrun->placement());
+
+        $title = '['.$ordinal.'] '.$speedrun->category()->title." by ".$speedrun->user->name." in ".$speedrun->time."s";
+        return view('speedrun.show',['speedrun'=>$speedrun, 'title'=>$title]);
     }
 
     public function create()

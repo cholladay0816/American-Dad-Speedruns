@@ -15,6 +15,10 @@ module.exports = {
             colors: {
                 'dark':'#1D1D1D',
             },
+            spacing: {
+                '128': '32rem',
+                '144': '36rem',
+            },
             opacity: {
                 '10': '0.1',
                 '20': '0.2',
