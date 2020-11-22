@@ -6,7 +6,7 @@
 
         @foreach($categories as $category)
             <div class="motion-safe:transition-none motion-reduce:transform-none transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110
-             max-w-sm rounded overflow-hidden shadow-lg bg-white grid grid-cols-2 py-3">
+             rounded overflow-hidden shadow-lg bg-white grid grid-cols-2 py-3">
                 <a href="{{url('/categories/'.$category->title)}}" class="font-bold text-xl mb-2 text-center col-span-2">
                     {{$category->title}}
                 </a>

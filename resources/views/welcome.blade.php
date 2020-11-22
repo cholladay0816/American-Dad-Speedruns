@@ -67,7 +67,7 @@
                 <div class="mx-auto border-white border-t border-dotted">
                     <div class="max-w-7xl max-h-xl mx-auto grid grid-cols-2">
                         <div class="h-100">
-                            <img class="max-w-24" src="https://www.americandadspeedruns.com/public/img/stan_says.png"/>
+                            <img class="max-w-24" src="{{asset('img/stan_says.png')}}"/>
                         </div>
                         <div class=" my-auto flex flex-col">
                             <div class="font-bold text-4xl">Stan Says:</div>
