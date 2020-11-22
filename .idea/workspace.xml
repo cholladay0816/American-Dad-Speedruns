@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d4fe1793-19b3-4d2a-ade4-c7535c261b7c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/Helpers/StrOrdinal.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Providers/HelperServiceProvider.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/American-Dad-Speedruns.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/American-Dad-Speedruns.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/app.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,6 +142,9 @@
       <path value="$PROJECT_DIR$/vendor/dnoegel/php-xdg-base-dir" />
       <path value="$PROJECT_DIR$/vendor/phpoption/phpoption" />
       <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
+      <path value="$PROJECT_DIR$/vendor/symfony/intl" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-icu" />
+      <path value="$PROJECT_DIR$/vendor/symfony/phpunit-bridge" />
     </include_path>
   </component>
   <component name="ProjectId" id="1jqzFP2w3L9R67XvZl5D7RDvGSG" />
@@ -183,7 +192,7 @@
       <workItem from="1604625102205" duration="3396000" />
       <workItem from="1604993311272" duration="21677000" />
       <workItem from="1605464610093" duration="3079000" />
-      <workItem from="1605731364138" duration="24231000" />
+      <workItem from="1605731364138" duration="26230000" />
     </task>
     <servers />
   </component>
@@ -202,34 +211,38 @@
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state x="530" y="184" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1605990874741" />
+    <state x="580" y="355" key="#com.jetbrains.php.lang.intentions.PhpImportClassDialog#" timestamp="1606018175051">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="580" y="355" key="#com.jetbrains.php.lang.intentions.PhpImportClassDialog#/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606018175051" />
     <state x="-1020" y="204" key="FileChooserDialogImpl" timestamp="1604637949799">
       <screen x="-1600" y="0" width="1600" height="860" />
     </state>
     <state x="-1020" y="204" key="FileChooserDialogImpl/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1604637949799" />
-    <state width="1556" height="190" key="GridCell.Tab.0.bottom" timestamp="1606016036736">
+    <state width="1556" height="190" key="GridCell.Tab.0.bottom" timestamp="1606017884423">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state width="1556" height="202" key="GridCell.Tab.0.bottom/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1605413935068" />
-    <state width="1556" height="190" key="GridCell.Tab.0.bottom/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606016036736" />
-    <state width="1556" height="190" key="GridCell.Tab.0.center" timestamp="1606016036736">
+    <state width="1556" height="190" key="GridCell.Tab.0.bottom/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606017884423" />
+    <state width="1556" height="190" key="GridCell.Tab.0.center" timestamp="1606017884422">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state width="1556" height="202" key="GridCell.Tab.0.center/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1605413935068" />
-    <state width="1556" height="190" key="GridCell.Tab.0.center/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606016036736" />
-    <state width="1556" height="190" key="GridCell.Tab.0.left" timestamp="1606016036736">
+    <state width="1556" height="190" key="GridCell.Tab.0.center/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606017884422" />
+    <state width="1556" height="190" key="GridCell.Tab.0.left" timestamp="1606017884422">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state width="1556" height="202" key="GridCell.Tab.0.left/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1605413935068" />
-    <state width="1556" height="190" key="GridCell.Tab.0.left/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606016036736" />
-    <state width="1556" height="190" key="GridCell.Tab.0.right" timestamp="1606016036736">
+    <state width="1556" height="190" key="GridCell.Tab.0.left/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606017884422" />
+    <state width="1556" height="190" key="GridCell.Tab.0.right" timestamp="1606017884423">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state width="1556" height="202" key="GridCell.Tab.0.right/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1605413935068" />
-    <state width="1556" height="190" key="GridCell.Tab.0.right/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606016036736" />
-    <state x="630" y="177" key="NewPhpFileDialog" timestamp="1605999090528">
+    <state width="1556" height="190" key="GridCell.Tab.0.right/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606017884423" />
+    <state x="630" y="177" key="NewPhpFileDialog" timestamp="1606018671374">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
-    <state x="630" y="177" key="NewPhpFileDialog/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1605999090528" />
+    <state x="630" y="177" key="NewPhpFileDialog/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606018671374" />
     <state x="617" y="343" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1604999446071">
       <screen x="0" y="0" width="1600" height="860" />
     </state>

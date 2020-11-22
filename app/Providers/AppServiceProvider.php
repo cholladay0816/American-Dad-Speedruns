@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use NumberFormatter;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -24,10 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         \Blade::directive('th', function ($expression) {
-            return "<?php echo (new NumberFormatter('en_US', NumberFormatter::ORDINAL))->format({$expression}); ?>";
+            return "<?php echo str_ordinal({$expression}); ?>";
         });
-        if(config('app.env') === 'production') {
-            \URL::forceScheme('https');
-        }
     }
 }
