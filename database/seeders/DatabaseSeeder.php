@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\Category::firstOrCreate(['title'=>'Joe%','description'=>'Same rules as Any%, but you must use the Joe character.','url'=>url('img/american_joe_speedrun_logo.png')]);
         \App\Models\Category::firstOrCreate(['title'=>'New%','description'=>'New game content is allowed for this category.','url'=>url('img/american_dad_speedrun_logo.png')]);
         \App\Models\Category::firstOrCreate(['title'=>'JoeSwap%','description'=>'I don\'t remember what this one is.','url'=>url('img/american_joe_speedrun_logo.png')]);
-        \App\Models\Category::firstOrCreate(['title'=>'Glitchless%','description'=>'No glitches or exploits allowed, play the game how God intended.','url'=>url('public/img/american_dad_speedrun_logo.png')]);
+        \App\Models\Category::firstOrCreate(['title'=>'Glitchless%','description'=>'No glitches or exploits allowed, play the game how God intended.','url'=>url('img/american_dad_speedrun_logo.png')]);
         \App\Models\Category::firstOrCreate(['title'=>'MacFarlane%','description'=>'The entire MacFarlane anthology back to back.','url'=>url('img/american_dad_speedrun_logo.png')]);
         \App\Models\Category::firstOrCreate(['title'=>'TAS','description'=>'Tool-Assisted Speedruns: first they came for the jobs, now they\'re after the world record.','url'=>url('img/american_dad_speedrun_logo.png')]);
 

@@ -26,5 +26,8 @@ class AppServiceProvider extends ServiceProvider
         \Blade::directive('th', function ($expression) {
             return "<?php echo (new NumberFormatter('en_US', NumberFormatter::ORDINAL))->format({$expression}); ?>";
         });
+        if(config('app.env') === 'production') {
+            \URL::forceScheme('https');
+        }
     }
 }
