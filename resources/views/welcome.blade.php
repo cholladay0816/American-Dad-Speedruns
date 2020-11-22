@@ -47,7 +47,7 @@
                         <div class="flex flex-col">
                             <a class="font-bold text-2xl" href="{{url('/speedruns/'.$featured->id)}}">Featured Run</a>
                             <div class="font-semibold text-2xl">{{$featured->time}}s by <a href="{{url('/runner/'.$featured->user->name)}}">{{$featured->user->name}}</a></div>
-                            <div class="text-gray-700 text-lg"><a href="{{url('/categories/'.$featured->category()->title)}}">{{$featured->category()->title}}</a> - <a href="{{url('/platforms/'.$featured->platform()->title)}}">{{$featured->platform()->title}}</a></div>
+                            <div class="text-gray-700 text-lg"><a href="{{url('/categories/'.$featured->category()->name)}}">{{$featured->category()->title}}</a> - <a href="{{url('/platforms/'.$featured->platform()->name)}}">{{$featured->platform()->title}}</a></div>
                         </div>
                     </div>
                 </div>

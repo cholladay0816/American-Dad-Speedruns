@@ -45,10 +45,10 @@ Route::get('/watch/{speedrun}', [SpeedrunController::class, 'show']);
 
 
 
-Route::get('/categories/{category:title}', [CategoryController::class, 'show']);
+Route::get('/categories/{category:name}', [CategoryController::class, 'show']);
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
 
-Route::get('/platforms/{platform:title}', [PlatformController::class, 'show']);
+Route::get('/platforms/{platform:name}', [PlatformController::class, 'show']);
 Route::get('/platforms', [PlatformController::class, 'index'])->name('platforms');
 
 

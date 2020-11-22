@@ -47,14 +47,14 @@
                             {{$speedrun->time}}s
                         </td>
                         <td class="hidden md:table-cell sm:px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            <a class="text-center sm:text-left" href="{{$speedrun->category()->title}}">{{$speedrun->category()->title}}</a>
+                            <a class="text-center sm:text-left" href="{{$speedrun->category()->name}}">{{$speedrun->category()->title}}</a>
                         </td>
                         <td class="hidden md:table-cell sm:px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            <a href="{{$speedrun->platform()->title}}">{{$speedrun->platform()->title}}</a>
+                            <a href="{{$speedrun->platform()->name}}">{{$speedrun->platform()->title}}</a>
                         </td>
                         <td class="md:hidden table-cell sm:px-6 py-4 whitespace-no-wrap">
-                            <a href="{{$speedrun->category()->title}}" class="text-sm leading-5 text-gray-900">{{$speedrun->category()->title}}</a>
-                            <a href="{{$speedrun->platform()->title}}" class="text-sm leading-5 text-gray-500">{{$speedrun->platform()->title}}</a>
+                            <a href="{{$speedrun->category()->name}}" class="text-sm leading-5 text-gray-900">{{$speedrun->category()->title}}</a>
+                            <a href="{{$speedrun->platform()->name}}" class="text-sm leading-5 text-gray-500">{{$speedrun->platform()->title}}</a>
                         </td>
                         <td class="hidden md:table-cell sm:px-6 py-4 whitespace-no-wrap">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{$speedrun->disqualified()?'bg-red-200 text-red-800':'text-green-800 bg-green-100'}}">
@@ -66,13 +66,15 @@
 
 
                             @if($speedrun->canDelete())
-                                @if($speedrun->verified==0)
+                                @can('manage_speedruns')
+                                    @if($speedrun->verified==0)
                                     <form method="POST" action="{{url('/speedruns/'.$speedrun->id)}}">
                                         @csrf
                                         @method('PATCH')
                                         <input class="text-green-500 hover:text-green-800 bg-white" type="submit" value="Verify">
                                     </form>
-                                @endif
+                                    @endif
+                                @endcan
                                 <form method="POST" action="{{url('/speedruns/'.$speedrun->id)}}">
                                     @csrf
                                     @method('DELETE')

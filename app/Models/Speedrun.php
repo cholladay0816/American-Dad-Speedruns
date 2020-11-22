@@ -39,6 +39,12 @@ class Speedrun extends Model
             return false;
         return $this->user_id == auth()->user()->id || Gate::allows('manage_speedruns');
     }
+    public function canVerify()
+    {
+        if(auth()->guest())
+            return false;
+        return Gate::allows('manage_speedruns');
+    }
 
     public function videoExists()
     {

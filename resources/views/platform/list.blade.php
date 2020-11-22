@@ -6,10 +6,10 @@
         @foreach($platforms as $platform)
             <div class="motion-safe:transition-none motion-reduce:transform-none transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110
              rounded overflow-hidden shadow-lg bg-white grid grid-cols-1 py-3">
-                <a href="{{url('/platforms/'.$platform->title)}}" class="font-bold text-xl mb-2 text-center ">
+                <a href="{{url('/platforms/'.$platform->name)}}" class="font-bold text-xl mb-2 text-center ">
                     {{$platform->title}}
                 </a>
-                <a href="{{url('/platforms/'.$platform->title)}}" class="px-8 py-4 mx-auto">
+                <a href="{{url('/platforms/'.$platform->name)}}" class="px-8 py-4 mx-auto">
                     <p class="text-gray-700 text-base">
                         {{$platform->description}}
                     </p>
