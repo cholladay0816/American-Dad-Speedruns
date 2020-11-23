@@ -5,11 +5,13 @@
     <form method="POST" class="w-full max-w-4xl mx-auto my-auto">
         @csrf
         @method('POST')
-        <div class="rounded bg-white text-black p-3 mx-auto mt-24">
-            <p class="text-green-500 font-bold text-4xl mx-auto text-center w-full pb-4">Submit Speedrun</p>
+        <div class="rounded p-3 mx-auto mt-24">
+            <p class="text-white font-bold text-4xl mx-auto text-center w-full ">Submit Speedrun</p>
+            <p class="text-gray-200 font-semibold text-lg mx-auto text-center w-full pb-4">Runs typically take a couple hours to be verified, but can take upwards of 2 days.
+                <br/>For any issues or comments, please email <a class="text-blue-500 hover:text-blue-700 transition duration-300" href="mailto:support@americandadspeedruns.com">support@americandadspeedruns.com</a></p>
             <div class="flex flex-wrap -mx-3 mb-6">
                 <div class="w-full px-3 mb-6 md:mb-0">
-                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-url">
+                    <label class="block uppercase tracking-wide text-gray-300 text-xs font-bold mb-2" for="grid-url">
                         URL
                     </label>
                     <input name="url" required pattern="https:\/\/youtu.be\/*(.+)" class="appearance-none block w-full bg-gray-200 text-gray-700
@@ -24,7 +26,7 @@
             </div>
             <div class="flex flex-wrap -mx-3 mb-6">
                 <div class="w-full md:w-1/2 px-3">
-                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-category">
+                    <label class="block uppercase tracking-wide text-gray-300 text-xs font-bold mb-2" for="grid-category">
                         Category
                     </label>
                     <select class="appearance-none block w-full bg-gray-200 text-gray-700
@@ -42,7 +44,7 @@
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2 px-3">
-                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-platform">
+                    <label class="block uppercase tracking-wide text-gray-300 text-xs font-bold mb-2" for="grid-platform">
                         Platform
                     </label>
                     <select class="appearance-none block w-full bg-gray-200 text-gray-700
@@ -61,7 +63,7 @@
                 </div>
 
                 <div class="w-full md:w-1/2 px-3">
-                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-platform-id">
+                    <label class="block uppercase tracking-wide text-gray-300 text-xs font-bold mb-2" for="grid-platform-id">
                         Time
                     </label>
                     <input name="time" required type="number" min="0.0001" step="0.0001" class="appearance-none block w-full bg-gray-200 text-gray-700
@@ -75,10 +77,10 @@
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2 px-3">
-                    <label class="invisible block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-platform-id">
+                    <label class="invisible block uppercase tracking-wide text-gray-300 text-xs font-bold mb-2" for="grid-platform-id">
                         Submit
                     </label>
-                    <button type="submit" class="mx-auto rounded bg-green-500 text-gray-100 text-center py-2 px-3">Submit</button>
+                    <button type="submit" class="mx-auto rounded hover:bg-green-600 bg-green-500 text-gray-100 hover:text-white text-center py-2 px-3">Submit</button>
                 </div>
             </div>
         </div>
