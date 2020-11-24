@@ -4,7 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
+        <meta name="theme-color" content="#0e9f6e">
+        <link rel="icon" type="image/svg+xml" href="{{asset('trophy.svg')}}">
         <title>{{ (isset($title) ? $title.' - ':'').config('app.name', 'Laravel') }}</title>
         <meta name="description" content="{{($description??'The official leaderboards for American Dad Speedruns.')}}"/>
         <!-- Fonts -->
