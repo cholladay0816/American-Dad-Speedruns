@@ -52,9 +52,9 @@ class Speedrun extends Model
 
         return $res;
     }
-    public function disqualify($reason = 'No reason provided.')
+    public function disqualify($reason = 'No reason provided.', $evidence = null)
     {
-        $dq = new Disqualification(['speedrun_id'=>$this->id, 'reason'=>$reason]);
+        $dq = new Disqualification(['speedrun_id'=>$this->id, 'reason'=>$reason, 'evidence'=>$evidence]);
         $dq->save();
     }
 

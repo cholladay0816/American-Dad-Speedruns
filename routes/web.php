@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DisqualificationController;
 use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\RunnerController;
 use App\Http\Controllers\SpeedrunController;
@@ -23,6 +24,17 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     {
         Route::get('/admin', [AdminController::class, 'index']);
         Route::patch('/speedruns/{speedrun}', [SpeedrunController::class, 'verify']);
+
+        Route::middleware('can:manage_speedruns')->group(function() {
+            Route::get('/admin/verify', [AdminController::class, 'verify']);
+            Route::get('/admin/disqualify/{speedrun}', [DisqualificationController::class, 'create']);
+            Route::post('/admin/disqualify/{speedrun}', [DisqualificationController::class, 'store']);
+            Route::get('/admin/disqualifications', [DisqualificationController::class, 'index']);
+            Route::get('/admin/disqualifications/{disqualification}', [DisqualificationController::class, 'view']);
+            Route::put('/admin/disqualifications/{disqualification}', [DisqualificationController::class, 'update']);
+            Route::delete('/admin/disqualifications/{disqualification}', [DisqualificationController::class, 'destroy']);
+        });
+
     });
 
     Route::get('/speedruns/new', [SpeedrunController::class, 'create']);

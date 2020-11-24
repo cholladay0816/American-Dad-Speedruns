@@ -9,7 +9,12 @@ class AdminController extends Controller
 {
     public function index()
     {
+        $count = Speedrun::where('verified','0')->count();
+        return view('admin.index', ['runcount'=>$count]);
+    }
+    public function verify()
+    {
         $speedruns = Speedrun::where('verified','0')->get();
-        return view('admin.index', ['speedruns'=>$speedruns]);
+        return view('admin.verify', ['speedruns'=>$speedruns]);
     }
 }

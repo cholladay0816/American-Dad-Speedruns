@@ -68,12 +68,24 @@
                             @if($speedrun->canDelete())
                                 @can('manage_speedruns')
                                     @if($speedrun->verified==0)
-                                    <form method="POST" action="{{url('/speedruns/'.$speedrun->id)}}">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input class="text-green-500 hover:text-green-800 bg-white" type="submit" value="Verify">
-                                    </form>
+                                        <form method="POST" action="{{url('/speedruns/'.$speedrun->id)}}">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input class="text-green-500 hover:text-green-800 bg-white" type="submit" value="Verify">
+                                        </form>
+
+                                    @elseif(!$speedrun->disqualified())
+                                        <div>
+                                        <a href="{{url('/admin/disqualify/'.$speedrun->id)}}"
+                                           class="text-black hover:text-gray-600 bg-white">Disqualify</a>
+                                        </div>
+                                    @elseif($speedrun->disqualified())
+                                        <div>
+                                            <a href="{{url('/admin/disqualifications/'.$speedrun->disqualification->id)}}"
+                                               class="text-black hover:text-gray-600 bg-white">Manage DQ</a>
+                                        </div>
                                     @endif
+
                                 @endcan
                                 <form method="POST" action="{{url('/speedruns/'.$speedrun->id)}}">
                                     @csrf

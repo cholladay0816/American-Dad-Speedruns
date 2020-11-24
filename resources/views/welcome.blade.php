@@ -89,7 +89,6 @@
                     advertisement
                 </div>
             </inc>
-
         </div>
     </body>
     </x-app-layout>

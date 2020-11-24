@@ -13,6 +13,20 @@
         </h2>
     </x-slot>
     <div class="md:max-w-7xl mx-auto min-h-screen">
+        @if($speedrun->disqualified())
+        <div class="text-red-500 bg-white rounded text-center p-3 mt-10">
+            <a class="text-2xl font-bold">This run was disqualified by the official leaderboard moderation.</a>
+            <br>Reason: <a
+                @if(isset($speedrun->disqualification->evidence))
+                    href="{{$speedrun->disqualification->evidence}}"
+                @endif
+                class="underline
+                @if(isset($speedrun->disqualification->evidence))
+                    text-blue-500
+                @endif
+                ">{{$speedrun->disqualification->reason}}</a>
+        </div>
+        @endif
         <div class="flex items-center justify-center flex-col my-12">
             <div class="w-full md:w-5/6 h-144 relative overflow-hidden block">
                 <iframe class="absolute top-0 bottom-0 left-0"
