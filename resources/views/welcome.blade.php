@@ -54,14 +54,16 @@
                     <div class="rounded-t py-5 text-white bg-green-500 text-center font-semibold text-2xl">
                         Please Consider Supporting Us
                     </div>
-                    <div class="rounded-b pb-8 pt-4 text-black bg-gray-100 text-left text-lg px-8">
+                    <div class="rounded-b pb-8 pt-4 text-black bg-gray-100 text-left text-md px-8">
+                        <div>
                         <p class="">We have been hosting this site for a little over a year since American Dad Speedruns existed.
                         </p>
-                        <p class="my-3">We want to keep it up as an archive of the creations and communities sparked from the meme.
+                        <p class="">We want to keep it up as an archive of the creations and communities sparked from the meme.
                         </p>
-                        <p class="mt-3 mb-5">We recently launched ads on our site to try and make ADSR self-sufficient. If you choose to,
+                        <p class="mb-5">To try and make ADSR self-sufficient, we recently launched ads on our site. If you choose to,
                         even just $1.00 would go a long way in helping us pay for hosting costs and would help keep AmericanDadSpeedruns.com alive and well.
                         </p>
+                        </div>
                         <a href="{{env('PAYPAL_DONATE')}}" class="rounded py-3 px-4 font-bold text-lg text-white bg-green-500 hover:bg-green-400">
                             Donate with PayPal</a>
                     </div>

@@ -47,6 +47,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
 
 Route::get('/', [SpeedrunController::class, 'welcome']);
+Route::get('/dashboard', [SpeedrunController::class, 'welcome'])->name('dashboard');
 
 Route::get('/runner/{user:name}', [RunnerController::class, 'show']);
 
@@ -64,6 +65,3 @@ Route::get('/platforms/{platform:name}', [PlatformController::class, 'show']);
 Route::get('/platforms', [PlatformController::class, 'index'])->name('platforms');
 
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
