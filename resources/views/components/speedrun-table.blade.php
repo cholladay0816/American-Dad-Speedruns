@@ -50,11 +50,11 @@
                             <a class="text-center sm:text-left" href="{{$speedrun->category()->name}}">{{$speedrun->category()->title}}</a>
                         </td>
                         <td class="hidden md:table-cell sm:px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            <a href="{{$speedrun->platform()->name}}">{{$speedrun->platform()->title}}</a>
+                            <a href="{{url('platforms/'.$speedrun->platform()->name)}}">{{$speedrun->platform()->title}}</a>
                         </td>
                         <td class="md:hidden table-cell sm:px-6 py-4 whitespace-no-wrap">
-                            <a href="{{$speedrun->category()->name}}" class="text-sm leading-5 text-gray-900">{{$speedrun->category()->title}}</a>
-                            <a href="{{$speedrun->platform()->name}}" class="text-sm leading-5 text-gray-500">{{$speedrun->platform()->title}}</a>
+                            <a href="{{url('categories/'.$speedrun->category()->name)}}" class="text-sm leading-5 text-gray-900">{{$speedrun->category()->title}}</a>
+                            <a href="{{url('platforms/'.$speedrun->platform()->name)}}" class="text-sm leading-5 text-gray-500">{{$speedrun->platform()->title}}</a>
                         </td>
                         <td class="hidden md:table-cell sm:px-6 py-4 whitespace-no-wrap">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{$speedrun->disqualified()?'bg-red-200 text-red-800':'text-green-800 bg-green-100'}}">
