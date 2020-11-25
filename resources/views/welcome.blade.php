@@ -51,6 +51,20 @@
                         </div>
                     </div>
                 </div>
+                    <div class="rounded-t py-5 text-white bg-green-500 text-center font-semibold text-2xl">
+                        Please Consider Supporting Us
+                    </div>
+                    <div class="rounded-b pb-8 pt-4 text-black bg-gray-100 text-left text-lg px-8">
+                        <p class="">We have been hosting this site for a little over a year since American Dad Speedruns existed.
+                        </p>
+                        <p class="my-3">We want to keep it up as an archive of the creations and communities sparked from the meme.
+                        </p>
+                        <p class="mt-3 mb-5">We recently launched ads on our site to try and make ADSR self-sufficient. If you choose to,
+                        even just $1.00 would go a long way in helping us keep it up and would help keep AmericanDadSpeedruns.com alive and well.
+                        </p>
+                        <a href="{{env('PAYPAL_DONATE')}}" class="rounded py-3 px-4 font-bold text-lg text-white bg-green-500 hover:bg-green-400">
+                            Donate with PayPal</a>
+                    </div>
                 @endif
 
                 @if($speedruns)
@@ -73,7 +87,7 @@
                             <div class="font-bold text-4xl">Stan Says:</div>
                             <div class="font-semibold text-gray-300">You should join the American Dad Speedrunning Discord!</div>
                             <div class="border-l-2 border-yellow-300 text-white bg-opacity-10 hover:bg-opacity-25 bg-yellow-500 px-3">All the cool kids are already <a class="text-indigo-500 font-semibold">@here</a>.</div>
-                            <a href="" class="bg-indigo-500 border-white text-white text-xl rounded px-2 py-2 mr-auto mt-5 ">Click here to Join!</a>
+                            <a href="{{env('DISCORD_INVITE')}}" class="bg-indigo-500 border-white text-white text-xl rounded px-2 py-2 mr-auto mt-5 ">Click here to Join!</a>
                             <div class="text-gray-300 mt-8">Note: we are not affiliated with this server.</div>
                         </div>
                     </div>
