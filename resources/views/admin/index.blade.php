@@ -13,11 +13,11 @@
         @component('components.admin-card', ['link'=>'admin/disqualifications'])
             Manage Disqualifications
         @endcomponent
-        @component('components.admin-card', ['link'=>'admin/manage_users'])
-            Manage Users
-        @endcomponent
         @component('components.admin-card', ['link'=>'speedruns'])
             Manage Speedruns
+        @endcomponent
+        @component('components.admin-card', ['link'=>'admin/manage_users'])
+            Manage Users
         @endcomponent
         @component('components.admin-card', ['link'=>'admin/comments'])
             Manage Comments
