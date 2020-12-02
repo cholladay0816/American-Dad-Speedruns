@@ -2,7 +2,7 @@
             motion-safe:transition-none motion-reduce:transform-none transition
             duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-105
             "
-   href="{{url('/admin/'.$link)}}"
+   href="{{url('/'.$link)}}"
 >
     {{$slot}}
 </a>

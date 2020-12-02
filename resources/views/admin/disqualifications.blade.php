@@ -46,7 +46,7 @@
                                     <div class="flex items-center">
                                         <div class="">
                                             <div class="text-sm leading-5 font-medium text-gray-900">
-                                                <a>{{$disqualification->reason}}</a>
+                                                <a href="{{url('admin/disqualifications/'.$disqualification->id)}}">{{$disqualification->reason}}</a>
                                             </div>
                                         </div>
                                     </div>
