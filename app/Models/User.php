@@ -75,4 +75,12 @@ class User extends Authenticatable
     {
         return $this->abilities()->contains($ability);
     }
+    public function banners()
+    {
+        return $this->belongsToMany(Banner::class);
+    }
+    public function uploadedBanners()
+    {
+        return $this->hasMany(Banner::class);
+    }
 }
