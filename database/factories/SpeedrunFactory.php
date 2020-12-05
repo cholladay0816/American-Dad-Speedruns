@@ -22,7 +22,11 @@ class SpeedrunFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'user_id' => 1,
+            'url' => 'https://youtu.be/' . $this->faker->unique()->regexify('[A-Za-z0-9]{8}'),
+            'time' => $this->faker->numberBetween(1, 30),
+            'created_at' => now(),
+            'updated_at' => now()
         ];
     }
 }
