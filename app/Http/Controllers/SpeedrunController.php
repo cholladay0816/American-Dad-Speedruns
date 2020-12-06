@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Platform;
 use App\Models\Speedrun;
@@ -12,9 +13,13 @@ class SpeedrunController extends Controller
 {
     public function welcome()
     {
+        if(auth()->guest())
+            $banner = Banner::orderBy('created_at', 'DESC')->first();
+        else
+            $banner = auth()->user()->banners()->orderBy('created_at', 'DESC')->first();
         $featured = Speedrun::where('verified',1)->inRandomOrder()->get()->filter(function($run) {return !$run->disqualified();})->first();
         $speedruns = Speedrun::where('verified',1)->latest()->limit(12)->get()->filter(function($run) {return !$run->disqualified();});
-        return view('welcome', ['featured'=>$featured, 'speedruns'=>$speedruns]);
+        return view('welcome', ['featured'=>$featured, 'speedruns'=>$speedruns, 'banner'=>$banner]);
     }
     public function index($category = 'Any%', $platform = '')
     {

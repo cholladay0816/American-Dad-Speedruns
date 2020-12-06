@@ -22,8 +22,8 @@
         @component('components.admin-card', ['link'=>'admin/comments'])
             Manage Comments
         @endcomponent
-        @component('components.admin-card', ['link'=>'admin/bulletins'])
-            Manage Bulletins
+        @component('components.admin-card', ['link'=>'banners'])
+            Manage Banners
         @endcomponent
     </div>
 
