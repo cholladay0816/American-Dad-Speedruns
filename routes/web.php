@@ -35,8 +35,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
             Route::get('/banners/{banner}', [BannerController::class, 'edit']);
             Route::put('/banners/{banner}', [BannerController::class, 'update']);
 
-
-            Route::delete('/banners', [BannerController::class, 'destroy']);
+            Route::delete('/banners/{banner}', [BannerController::class, 'destroy']);
 
         });
 

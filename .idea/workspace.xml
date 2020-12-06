@@ -2,9 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d4fe1793-19b3-4d2a-ade4-c7535c261b7c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/tests/Feature/SpeedrunTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Livewire/Banner.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/banners/edit.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/banners/list.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/banners/new.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/livewire/banner.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/SpeedrunFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/SpeedrunFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SpeedrunController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SpeedrunController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Banner.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Banner.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_12_05_192541_create_banners_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_05_192541_create_banners_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/welcome.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/welcome.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,7 +202,8 @@
       <workItem from="1606328108562" duration="4845000" />
       <workItem from="1606415044718" duration="608000" />
       <workItem from="1606508498247" duration="692000" />
-      <workItem from="1606934508421" duration="8835000" />
+      <workItem from="1606934508421" duration="12779000" />
+      <workItem from="1607199761647" duration="12818000" />
     </task>
     <servers />
   </component>
@@ -200,57 +212,5 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="361" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1605998448815">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="361" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1605998448815" />
-    <state x="530" y="184" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1605990874741">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="530" y="184" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1605990874741" />
-    <state x="580" y="355" key="#com.jetbrains.php.lang.intentions.PhpImportClassDialog#" timestamp="1606018175051">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="580" y="355" key="#com.jetbrains.php.lang.intentions.PhpImportClassDialog#/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606018175051" />
-    <state x="580" y="204" key="FileChooserDialogImpl" timestamp="1606416061759">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="-1020" y="204" key="FileChooserDialogImpl/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1604637949799" />
-    <state x="580" y="204" key="FileChooserDialogImpl/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606416061759" />
-    <state width="1556" height="201" key="GridCell.Tab.0.bottom" timestamp="1607195251061">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state width="1556" height="202" key="GridCell.Tab.0.bottom/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1605413935068" />
-    <state width="1556" height="201" key="GridCell.Tab.0.bottom/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1607195251061" />
-    <state width="1556" height="201" key="GridCell.Tab.0.center" timestamp="1607195251061">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state width="1556" height="202" key="GridCell.Tab.0.center/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1605413935068" />
-    <state width="1556" height="201" key="GridCell.Tab.0.center/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1607195251061" />
-    <state width="1556" height="201" key="GridCell.Tab.0.left" timestamp="1607195251061">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state width="1556" height="202" key="GridCell.Tab.0.left/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1605413935068" />
-    <state width="1556" height="201" key="GridCell.Tab.0.left/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1607195251061" />
-    <state width="1556" height="201" key="GridCell.Tab.0.right" timestamp="1607195251061">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state width="1556" height="202" key="GridCell.Tab.0.right/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1605413935068" />
-    <state width="1556" height="201" key="GridCell.Tab.0.right/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1607195251061" />
-    <state x="630" y="177" key="NewPhpFileDialog" timestamp="1606177893375">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="630" y="177" key="NewPhpFileDialog/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606177893375" />
-    <state x="617" y="343" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1604999446071">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="617" y="343" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1604999446071" />
-    <state x="-1144" y="200" width="672" height="677" key="run.anything.popup" timestamp="1606934511578">
-      <screen x="-1600" y="0" width="1600" height="860" />
-    </state>
-    <state x="-1144" y="200" width="672" height="677" key="run.anything.popup/-1600.0.1600.860/0.0.1600.860@-1600.0.1600.860" timestamp="1606934511578" />
-    <state x="456" y="200" width="672" height="677" key="run.anything.popup/-1600.0.1600.860/0.0.1600.860@0.0.1600.860" timestamp="1606328193195" />
   </component>
 </project>

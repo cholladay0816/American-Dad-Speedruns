@@ -18,8 +18,9 @@ class CreateBannersTable extends Migration
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users')
                 ->cascadeOnDelete();
-            $table->string('title', 64);
-            $table->string('color', 32)->nullable();
+            $table->string('title', 256);
+            $table->string('bcolor', 32)->default('white');
+            $table->string('tcolor', 32)->default('black');
             $table->string('url', 128)->nullable();
             $table->dateTime('expiration')->default(now()->addDays(7)->toDateTimeString());
             $table->timestamps();

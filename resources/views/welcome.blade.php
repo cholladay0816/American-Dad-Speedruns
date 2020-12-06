@@ -23,7 +23,10 @@
     <x-app-layout>
     <body>
         <h1 class="text-center font-bold mx-auto text-5xl mt-4">American Dad Speedruns</h1>
-        <h2 class="text-center mx-auto text-lg  text-gray-200">The official leaderboards for all American Dad Speedruns.</h2>
+        <h2 class="text-center mx-auto text-lg mb-4 text-gray-200">The official leaderboards for all American Dad Speedruns.</h2>
+        @if(isset($banner))
+            @livewire('banner', ['banner'=>$banner])
+        @endif
         <div class="grid grid-cols-1 lg:grid-cols-6">
 
             <inc

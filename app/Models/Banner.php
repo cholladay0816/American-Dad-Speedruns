@@ -11,12 +11,17 @@ class Banner extends Model
 
     use HasFactory;
 
-    public function uploader()
-    {
-        return $this->hasOne(User::class);
-    }
-    public function users()
+
+    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class);
+    }
+    public function uploader()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    public function detach()
+    {
+        $this->users()->detach(auth()->user());
     }
 }
