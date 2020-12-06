@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DisqualificationController;
 use App\Http\Controllers\PlatformController;
@@ -25,6 +26,19 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
         Route::get('/admin', [AdminController::class, 'index']);
         Route::patch('/speedruns/{speedrun}', [SpeedrunController::class, 'verify']);
 
+        Route::middleware('can:manage_banners')->group(function() {
+
+            Route::get('/banners', [BannerController::class, 'index']);
+            Route::get('/banners/new', [BannerController::class, 'create']);
+            Route::post('/banners/new', [BannerController::class, 'store']);
+
+            Route::get('/banners/{banner}', [BannerController::class, 'edit']);
+            Route::put('/banners/{banner}', [BannerController::class, 'update']);
+
+            Route::delete('/banners/{banner}', [BannerController::class, 'destroy']);
+
+        });
+
         Route::middleware('can:manage_speedruns')->group(function() {
             Route::get('/admin/verify', [AdminController::class, 'verify']);
             Route::get('/admin/disqualify/{speedrun}', [DisqualificationController::class, 'create']);
@@ -42,6 +56,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     Route::put('/speedruns/{speedrun}', [SpeedrunController::class, 'update']);
     Route::delete('/speedruns/{speedrun}', [SpeedrunController::class, 'delete']);
+
+    Route::patch('/banners/{banner}', [BannerController::class, 'desync']);
 
 });
 
