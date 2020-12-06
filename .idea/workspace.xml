@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d4fe1793-19b3-4d2a-ade4-c7535c261b7c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/livewire/banner.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/livewire/banner.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/banners/new.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/banners/new.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/welcome.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/welcome.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

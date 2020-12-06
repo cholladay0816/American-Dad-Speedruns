@@ -105,7 +105,7 @@
                 class="invisible col-span-1 grid grid-cols-1 grid-flow-row-dense auto-rows-min text-black">
                 <p class="col-span-0 text-gray-200 font-semibold text-center mx-auto pt-10"></p>
                 <div class="bg-gray-200 p-5 m-5 rounded text-center">
-                    
+
                 </div>
             </inc>
         </div>
