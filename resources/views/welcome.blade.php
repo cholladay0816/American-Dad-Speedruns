@@ -28,9 +28,9 @@
 
             <inc
                 class="invisible col-span-1 grid grid-cols-1 grid-flow-row-dense auto-rows-min text-black">
-                <p class="col-span-0 text-gray-200 font-semibold text-center mx-auto pt-10">Advertisements</p>
+                <p class="col-span-0 text-gray-200 font-semibold text-center mx-auto pt-10"></p>
                 <div class="bg-gray-200 p-5 m-5 rounded text-center">
-                    advertisement
+
                 </div>
             </inc>
             <div class="max-w-full lg:max-w-6xl mx-auto col-span-1 md:col-span-4">
@@ -60,8 +60,8 @@
                         </p>
                         <p class="">We want to keep it up as an archive of the creations and communities sparked from the meme.
                         </p>
-                        <p class="mb-5">To try and make ADSR self-sufficient, we recently launched ads on our site. If you choose to,
-                        even just $1.00 would go a long way in helping us pay for hosting costs and would help keep AmericanDadSpeedruns.com alive and well.
+                        <p class="mb-5">To try and make ADSR self-sufficient, we recently started accepting donations. If you choose to,
+                        even just $1.00 would go a long way in helping us pay for hosting costs and would help keep americandadspeedruns.com alive and well.
                         </p>
                         </div>
                         <a href="{{env('PAYPAL_DONATE')}}" class="rounded py-3 px-4 font-bold text-lg text-white bg-green-500 hover:bg-green-400">
@@ -100,9 +100,9 @@
             </div>
             <inc
                 class="invisible col-span-1 grid grid-cols-1 grid-flow-row-dense auto-rows-min text-black">
-                <p class="col-span-0 text-gray-200 font-semibold text-center mx-auto pt-10">Advertisements</p>
+                <p class="col-span-0 text-gray-200 font-semibold text-center mx-auto pt-10"></p>
                 <div class="bg-gray-200 p-5 m-5 rounded text-center">
-                    advertisement
+                    
                 </div>
             </inc>
         </div>
