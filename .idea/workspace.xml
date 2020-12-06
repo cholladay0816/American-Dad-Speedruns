@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d4fe1793-19b3-4d2a-ade4-c7535c261b7c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Http/Livewire/Banner.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/banners/edit.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/banners/list.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/banners/new.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/livewire/banner.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SpeedrunController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SpeedrunController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Banner.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Banner.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_12_05_192541_create_banners_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_05_192541_create_banners_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/welcome.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/welcome.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/livewire/banner.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/livewire/banner.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,7 +191,7 @@
       <workItem from="1606415044718" duration="608000" />
       <workItem from="1606508498247" duration="692000" />
       <workItem from="1606934508421" duration="12779000" />
-      <workItem from="1607199761647" duration="12818000" />
+      <workItem from="1607199761647" duration="13103000" />
     </task>
     <servers />
   </component>
