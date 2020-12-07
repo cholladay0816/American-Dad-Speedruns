@@ -8,10 +8,15 @@
         This run was performed on the {{$speedrun->platform()->title}} platform.
     </x-slot>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-white leading-tight">
+        <h1 class="font-semibold text-xl text-white leading-tight">
             [@th($speedrun->placement())] {{$speedrun->category()->title." by ".$speedrun->user->name." in ".$speedrun->time."s [".$speedrun->platform()->title."]"  }}
-        </h2>
+        </h1>
     </x-slot>
+    <h2 class="sr-only text-center py-2 mx-auto ">
+        {{$speedrun->user->name}} completed this speedrun in {{$speedrun->time}} seconds,
+        placing @th($speedrun->placement()) in the {{$speedrun->category()->title}} category.
+        This run was performed on the {{$speedrun->platform()->title}} platform.
+    </h2>
     <div class="md:max-w-7xl mx-auto min-h-screen">
         @if($speedrun->disqualified())
         <div class="text-red-500 bg-white rounded text-center p-3 mt-10">
