@@ -22,7 +22,7 @@
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.js" defer></script>
     </head>
     <body class="font-sans antialiased">
-        <div class="fixed w-full p-5 text-center mx-auto mt-16 z-100 flex flex-col">
+        <div class="fixed w-full p-5 text-center mx-auto mt-16 z-100 flex flex-col pointer-events-none">
             @if($err = Session::get('error'))
                 @component('components.alert', ['color'=>'red-300', 'text'=>'red-500', 'id'=>'error'])
                     Error: {{$err}}

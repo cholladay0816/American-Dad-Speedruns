@@ -2,14 +2,23 @@
 
 namespace App\Models;
 
+use App\Mail\DisqualifiedRun;
+use App\Mail\DisqualifiedRuns;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class Speedrun extends Model
 {
     use HasFactory;
     protected $guarded = ['verified'];
+
+    public function title()
+    {
+        return '['.str_ordinal($this->placement()).'] '.$this->category()->title." by ".$this->user->name." in ".$this->time."s";
+    }
+
     public function categories()
     {
         return $this->belongsToMany(Category::class);
@@ -54,8 +63,11 @@ class Speedrun extends Model
     }
     public function disqualify($reason = 'No reason provided.', $evidence = null)
     {
+
         $dq = new Disqualification(['speedrun_id'=>$this->id, 'reason'=>$reason, 'evidence'=>$evidence]);
         $dq->save();
+        Mail::to($this->user->email)
+            ->queue(new DisqualifiedRun($this));
     }
 
     public function user()
@@ -84,9 +96,6 @@ class Speedrun extends Model
         {
             if($run->disqualified())
                 continue;
-
-            //if($run->category()->id == $this->category()->id && $run->platform()->id == $this->platform()->id)
-            //    $count++;
 
             if($run->category()->id == $this->category()->id)
                 $count++;
