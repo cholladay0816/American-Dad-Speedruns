@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ElectionStarted;
 use App\Mail\RunApproved;
 use App\Mail\RunCreated;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Election;
 use App\Models\Platform;
+use App\Models\Role;
 use App\Models\Speedrun;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -71,7 +73,6 @@ class SpeedrunController extends Controller
     {
         if(Gate::allows('manage_speedruns'))
         {
-
             $speedrun->verified = 1;
             Mail::to($speedrun->user->email)
                 ->queue(new RunApproved($speedrun));
@@ -79,6 +80,12 @@ class SpeedrunController extends Controller
             $election = new Election();
             $election->speedrun_id = $speedrun->id;
             $election->save();
+            $members = Role::where('name', 'council')->firstOrFail()->users;
+            foreach ($members as $user)
+            {
+                Mail::to($user->email)->queue(new ElectionStarted($election, $user));
+            }
+
             return redirect()->back()->with(['success'=>'Speedrun Verified']);
         }
         else {

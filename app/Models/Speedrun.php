@@ -57,13 +57,10 @@ class Speedrun extends Model
 
     public function videoExists()
     {
-        $res = @file_get_contents('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=' . $this->video_id());
-
-        return $res;
+        return @file_get_contents('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=' . $this->video_id());
     }
     public function disqualify($reason = 'No reason provided.', $evidence = null)
     {
-
         $dq = new Disqualification(['speedrun_id'=>$this->id, 'reason'=>$reason, 'evidence'=>$evidence]);
         $dq->save();
         Mail::to($this->user->email)

@@ -29,6 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('banner:expire')->daily();
         $schedule->command('council:expire')->daily();
         $schedule->command('suspensions:expire')->daily();
+        $schedule->command('elections:expire')->daily();
     }
 
     /**

@@ -5,6 +5,7 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouncilController;
 use App\Http\Controllers\DisqualificationController;
+use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\RunnerController;
 use App\Http\Controllers\SpeedrunController;
@@ -74,6 +75,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
 
 Route::get('/council', [CouncilController::class, 'index'])->name('council');
+
+Route::get('/elections', [ElectionController::class, 'index'])->name('elections');
+Route::get('/elections/{election}', [ElectionController::class, 'show']);
 
 Route::get('/', [SpeedrunController::class, 'welcome'])->name('home');
 Route::get('/dashboard', [SpeedrunController::class, 'welcome'])->name('dashboard');
