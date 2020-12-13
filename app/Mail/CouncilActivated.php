@@ -2,13 +2,12 @@
 
 namespace App\Mail;
 
-use App\Models\Speedrun;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class DisqualifiedRuns extends Mailable
+class CouncilActivated extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,20 +16,19 @@ class DisqualifiedRuns extends Mailable
      *
      * @return void
      */
-    public function __construct($speedruns)
+    public function __construct()
     {
-        $this->speedruns = $speedruns;
+        //
     }
 
     /**
      * Build the message.
      *
-     * @param $speedruns
      * @return $this
      */
     public function build()
     {
-        return $this->from('noreply@'.config('APP_DOMAIN'))
-            ->view('email.runs-disqualified', ['speedruns'=>$this->speedruns]);
+        return $this->markdown('emails.council-activated', ['user'=>auth()->user()])
+            ->subject('ADSR Council Membership Active');
     }
 }

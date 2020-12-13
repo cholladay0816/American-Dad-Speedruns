@@ -21,13 +21,18 @@ class DatabaseSeeder extends Seeder
         $m_runs = Ability::firstOrCreate(['name'=>'manage_speedruns','title'=>'Manage Speedruns']);
         $m_banners = Ability::firstOrCreate(['name'=>'manage_banners','title'=>'Manage Banners']);
         $v_admin = Ability::firstOrCreate(['name'=>'view_admin','title'=>'View Administrator Dashboard']);
+        $v_council = Ability::firstOrCreate(['name'=>'access_council', 'title'=>'Access the ADSR Council']);
+        $vote = Ability::firstOrCreate(['name'=>'vote', 'title'=>'Vote on Council Elections']);
 
         $admin = Role::firstOrCreate(['name'=>'administrator','title'=>'Administrator']);
         $mod = Role::firstOrCreate(['name'=>'moderator','title'=>'Moderator']);
+        $council = Role::firstOrCreate(['name'=>'council','title'=>'Council Member']);
 
-        $admin->abilities()->sync([$m_users->id, $m_runs->id, $m_banners, $v_admin->id]);
+        $admin->abilities()->attach([$m_users->id, $m_runs->id, $m_banners->id, $v_admin->id]);
 
-        $mod->abilities()->sync([$m_runs->id, $m_banners, $v_admin->id]);
+        $mod->abilities()->attach([$m_runs->id, $m_banners->id, $v_admin->id]);
+
+        $council->abilities()->attach([$v_council->id, $vote->id]);
 
         Category::firstOrCreate(['name'=>'any','title'=>'Any%','description'=>'Simple: beat the game from start to finish by any means available.','url'=>url('img/american_dad_speedrun_logo.png')]);
         Category::firstOrCreate(['name'=>'joe','title'=>'Joe%','description'=>'Same rules as Any%, but you must use the Joe character.','url'=>url('img/american_joe_speedrun_logo.png')]);

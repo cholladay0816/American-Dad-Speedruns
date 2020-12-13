@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ElectionStarted;
+use App\Mail\RunApproved;
+use App\Mail\RunCreated;
 use App\Models\Banner;
 use App\Models\Category;
+use App\Models\Election;
 use App\Models\Platform;
+use App\Models\Role;
 use App\Models\Speedrun;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class SpeedrunController extends Controller
 {
@@ -28,19 +34,13 @@ class SpeedrunController extends Controller
     }
     public function show(Speedrun $speedrun)
     {
-        $ordinal = str_ordinal($speedrun->placement());
-
-        $title = '['.$ordinal.'] '.$speedrun->category()->title." by ".$speedrun->user->name." in ".$speedrun->time."s";
-        return view('speedrun.show',['speedrun'=>$speedrun, 'title'=>$title]);
+        return view('speedrun.show',['speedrun'=>$speedrun, 'title'=>$speedrun->title()]);
     }
     public function find()
     {
         $speedrun = Speedrun::findOrFail(\request('run'));
 
-        $ordinal = str_ordinal($speedrun->placement());
-
-        $title = '['.$ordinal.'] '.$speedrun->category()->title." by ".$speedrun->user->name." in ".$speedrun->time."s";
-        return view('speedrun.show',['speedrun'=>$speedrun, 'title'=>$title]);
+        return view('speedrun.show',['speedrun'=>$speedrun, 'title'=>$speedrun->title()]);
     }
 
     public function create()
@@ -63,7 +63,8 @@ class SpeedrunController extends Controller
         $speedrun->save();
         $speedrun->platforms()->sync([$request['platform']]);
         $speedrun->categories()->sync([$request['category']]);
-
+        Mail::to('support@americandadspeedruns.com')
+            ->queue(new RunCreated($speedrun));
 
         return redirect('/runner/'.auth()->user()->name)->with(['success'=>'Speedrun Submitted']);
     }
@@ -73,7 +74,18 @@ class SpeedrunController extends Controller
         if(Gate::allows('manage_speedruns'))
         {
             $speedrun->verified = 1;
+            Mail::to($speedrun->user->email)
+                ->queue(new RunApproved($speedrun));
             $speedrun->save();
+            $election = new Election();
+            $election->speedrun_id = $speedrun->id;
+            $election->save();
+            $members = Role::where('name', 'council')->firstOrFail()->users;
+            foreach ($members as $user)
+            {
+                Mail::to($user->email)->queue(new ElectionStarted($election, $user));
+            }
+
             return redirect()->back()->with(['success'=>'Speedrun Verified']);
         }
         else {
