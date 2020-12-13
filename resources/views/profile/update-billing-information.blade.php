@@ -11,7 +11,7 @@
         <div class="mt-3 max-w-xl text-sm text-gray-600">
             <p>
                 {{ __('You can visit Stripe using the button below to create or update payment details at any time.
-                       This is used to manage payment for premium upgrades like the Council subscription plan.') }}
+                       This is used to manage payment for and cancel the Council subscription plan.') }}
             </p>
         </div>
 
