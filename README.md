@@ -7,7 +7,15 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## About American Dad Speedruns ##
+
+American Dad Speedruns is a parody speedrunning website, inspired by sites such as speedrun.com, designed to poke fun at the speedrunning community by supporting parodies, fakes, and runs that would never be accepted on a normal speedrunning platform.  We happily accept these runs and encourage members to call each other out for 'splicing' or 'editing' their fake runs, and providing incredibly in-depth technical breakdowns and analyses.
+
+### Setup ###
+
+To get this app running, clone the repository and configure your `.env` file accordingly.  Next, run `composer require` to import the vendor files followed by `php artisan migrate --seed` to migrate the database and seed the required categories, platforms, and administrative abilities and roles.  Lastly, run `npm install`, followed by `npm run dev`.
+
+## About Laravel ##
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 

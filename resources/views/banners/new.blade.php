@@ -40,7 +40,7 @@
                 border-red-600 border-2
             @enderror
             rounded-lg font-semibold px-3 py-2 text-black bg-gray-300" id="url" type="text" name="expiration" placeholder=""
-                   value="{{old('expiration') ?? $banner->expiration ?? now()->addDays(7)->toDateString()}}"
+                   value="{{old('expiration') ?? $banner->expiration ?? now()->addDays(7)->toDateTimeString()}}"
             >
             @error('expiration')
             <span class="text-center text-red-600 font-semibold text-sm pt-1">{{$message}}</span>
