@@ -30,10 +30,12 @@ class AuthServiceProvider extends ServiceProvider
         Gate::before(function ($user, $ability) {
             if($ability == 'use_site')
             {
-                if($user->suspended())
+                if($user->isSuspended())
                     return false;
+                else
+                    return true;
             }
-            if($user->hasAbility($ability))
+            else if($user->hasAbility($ability))
             {
                 return true;
             }

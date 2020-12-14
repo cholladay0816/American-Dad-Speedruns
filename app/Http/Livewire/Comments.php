@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Speedrun;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 
 class Comments extends Component
@@ -16,6 +17,10 @@ class Comments extends Component
 
     public function store()
     {
+        if(auth()->guest())
+            return;
+        if(Gate::denies('use_site'))
+            return;
         $comment = new \App\Models\Comment();
         $comment->message = $this->message;
         $comment->user_id = auth()->user()->id;
@@ -28,6 +33,11 @@ class Comments extends Component
         $comment = \App\Models\Comment::find($comment_id);
         if($comment == null)
             return;
+        if(auth()->guest())
+            return;
+        if(!$comment->canDelete())
+            return;
+
         $comment->delete();
         $this->reload();
     }
