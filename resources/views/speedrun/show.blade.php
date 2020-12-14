@@ -43,12 +43,7 @@
             </div>
         </div>
         <div class="mx-auto text-2xl font-semibold text-center">Comments</div>
-        <div class="py-5 text-gray-200 mx-auto text-lg font-semibold text-center">Coming soon!</div>
-
-        @foreach($speedrun->comments as $comment)
-            @component('components.comment', ['comment' => $comment])
-            @endcomponent
-        @endforeach
+        @livewire('comments', ['speedrun'=>$speedrun])
     </div>
 
 </x-app-layout>
