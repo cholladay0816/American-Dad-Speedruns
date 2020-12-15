@@ -23,7 +23,7 @@
     <x-app-layout>
     <body>
         <h1 class="text-center font-bold mx-auto text-5xl mt-4">American Dad Speedruns</h1>
-        <h2 class="text-center mx-auto text-lg mb-4 text-gray-200">The official leaderboards for all American Dad Speedruns.</h2>
+        <p class="text-center mx-auto text-lg mb-4 text-gray-200">The official leaderboards for all American Dad Speedruns.</p>
         @if(isset($banner))
             @livewire('banner', ['banner'=>$banner])
         @endif
@@ -48,34 +48,34 @@
                                 src="{{$featured->embed_url()}}" ></iframe>
                         </div>
                         <div class="flex flex-col">
-                            <a class="font-bold text-2xl" href="{{url('/speedruns/'.$featured->id)}}">Featured Run</a>
-                            <div class="font-semibold text-2xl">{{$featured->time}}s by <a href="{{url('/runner/'.$featured->user->name)}}">{{$featured->user->name}}</a></div>
-                            <div class="text-gray-700 text-lg"><a href="{{url('/categories/'.$featured->category()->name)}}">{{$featured->category()->title}}</a> - <a href="{{url('/platforms/'.$featured->platform()->name)}}">{{$featured->platform()->title}}</a></div>
+                            <h2 class="font-bold text-2xl" href="{{url('/speedruns/'.$featured->id)}}">Featured Run</h2>
+                            <p class="font-semibold text-2xl">{{$featured->time}}s by <a href="{{url('/runner/'.$featured->user->name)}}">{{$featured->user->name}}</a></p>
+                            <p class="text-gray-700 text-lg"><a href="{{url('/categories/'.$featured->category()->name)}}">{{$featured->category()->title}}</a> - <a href="{{url('/platforms/'.$featured->platform()->name)}}">{{$featured->platform()->title}}</a></p>
                         </div>
                     </div>
                 </div>
-                    <div class="rounded-t py-5 text-white bg-green-500 text-center font-semibold text-2xl">
+                    <h2 class="rounded-t py-5 text-white bg-green-500 text-center font-bold text-2xl">
                         Please Consider Supporting Us
-                    </div>
-                    <div class="rounded-b pb-8 pt-4 text-black bg-gray-100 text-left text-md px-8">
-                        <div>
-                        <p class="">We have been hosting this site for a little over a year since American Dad Speedruns existed.
+                    </h2>
+                    <div class="rounded-b pb-8 pt-4 text-black bg-gray-100 text-left text-md px-8 flex flex-col">
+                        <p class="text-lg">
+                            AmericanDadSpeedruns may be the greatest speedrunning site of all time,
+                            but the server costs are not cheap.
+                            If you are interested in supporting our project, please consider donating to our PayPal.
+                            Every dollar helps keep the servers online for the next generation of American Dad Speedrunners.
                         </p>
-                        <p class="">We want to keep it up as an archive of the creations and communities sparked from the meme.
-                        </p>
-                        <p class="mb-5">To try and make ADSR self-sufficient, we recently started accepting donations. If you choose to,
-                        even just $1.00 would go a long way in helping us pay for hosting costs and would help keep americandadspeedruns.com alive and well.
-                        </p>
+                        <div class="mt-4">
+                            <a href="{{env('PAYPAL_DONATE')}}" class="rounded-md py-3 px-4 font-bold text-lg text-white bg-green-500 hover:bg-green-400">
+                                Donate with PayPal
+                            </a>
                         </div>
-                        <a href="{{env('PAYPAL_DONATE')}}" class="rounded py-3 px-4 font-bold text-lg text-white bg-green-500 hover:bg-green-400">
-                            Donate with PayPal</a>
                     </div>
                 @endif
 
                 @if($speedruns)
                     <div class="max-w-full lg:max-w-6xl mx-auto py-12">
                         <div class="border rounded py-10 md:p-10 bg-gray-50 text-black">
-                            <div class="font-bold text-2xl mb-10">Recently Submitted Speedruns</div>
+                            <h2 class="font-bold text-2xl mb-10">Recently Submitted Speedruns</h2>
                             <div class="md:-mx-10">
                             @component('components.speedrun-table', ['speedruns'=>$speedruns])
                             @endcomponent
