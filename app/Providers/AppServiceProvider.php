@@ -24,9 +24,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if(config('app.env') === 'production') {
-            URL::forceScheme('https');
-        }
 
         Blade::directive('th', function ($expression) {
             return "<?php echo str_ordinal({$expression}); ?>";
