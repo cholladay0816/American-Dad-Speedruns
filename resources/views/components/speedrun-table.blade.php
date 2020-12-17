@@ -47,7 +47,7 @@
                             {{$speedrun->time}}s
                         </td>
                         <td class="hidden md:table-cell sm:px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            <a class="text-center sm:text-left" href="{{$speedrun->category()->name}}">{{$speedrun->category()->title}}</a>
+                            <a class="text-center sm:text-left" href="{{url($speedrun->category()->name)}}">{{$speedrun->category()->title}}</a>
                         </td>
                         <td class="hidden md:table-cell sm:px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
                             <a href="{{url('platforms/'.$speedrun->platform()->name)}}">{{$speedrun->platform()->title}}</a>
