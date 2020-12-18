@@ -12,6 +12,7 @@ class UpdateBillingInformation extends Component
     }
     public function billing()
     {
+        auth()->user()->createOrGetStripeCustomer();
         return redirect(auth()->user()->billingPortalUrl());
     }
 }
