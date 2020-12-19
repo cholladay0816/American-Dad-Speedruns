@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout >
     <h1 class="text-center font-bold mx-auto text-5xl mt-4">American Dad Speedruns</h1>
     <p class="text-center mx-auto text-lg mb-4 text-gray-200">The official leaderboards for all American Dad Speedruns.</p>
     @if(isset($banner))
@@ -42,22 +42,22 @@
             @endif
 
             @if($speedruns)
+
                 <div class="max-w-full lg:max-w-6xl mx-auto py-12">
                     <div class="border rounded py-10 md:p-10 bg-gray-50 text-black">
                         <h2 class="font-bold text-2xl mb-10">Recently Submitted Speedruns</h2>
                         <div class="md:-mx-10">
-                        @component('components.speedrun-table', ['speedruns'=>$speedruns])
-                        @endcomponent
+                            @livewire('speedrun-table', ['speedruns'=>$speedruns])
                         </div>
                     </div>
                 </div>
             @endif
             <div class="mx-auto border-white border-t border-dotted">
-                <div class="max-w-7xl max-h-xl mx-auto grid grid-cols-2">
-                    <div class="h-100">
+                <div class="max-w-7xl max-h-xl mx-auto grid md:grid-cols-2">
+                    <div class="order-2 md:h-100">
                         <img class="max-w-24" src="{{asset('img/stan_says.png')}}"/>
                     </div>
-                    <div class=" my-auto flex flex-col">
+                    <div class="my-auto flex flex-col">
                         <div class="font-bold text-4xl">Stan Says:</div>
                         <div class="font-semibold text-gray-300">You should join the American Dad Speedrunning Discord!</div>
                         <div class="border-l-2 border-yellow-300 text-white bg-opacity-10 hover:bg-opacity-25 bg-yellow-500 px-3">All the cool kids are already <a class="text-indigo-500 font-semibold">@here</a>.</div>

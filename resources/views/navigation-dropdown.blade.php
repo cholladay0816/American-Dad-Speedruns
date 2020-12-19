@@ -42,6 +42,12 @@
                             {{ __('Manage Account') }}
                         </div>
 
+                        @can('view_admin')
+                            <x-jet-dropdown-link href="{{ route('admin') }}">
+                                {{ __('Admin Dashboard') }}
+                            </x-jet-dropdown-link>
+                        @endcan
+
                         <x-jet-dropdown-link href="{{ route('profile.show') }}">
                             {{ __('Profile') }}
                         </x-jet-dropdown-link>
@@ -121,10 +127,10 @@
                 {{ __('Platforms') }}
             </x-jet-responsive-nav-link>
         </div>
-        @if(auth()->user())
+        @can('view_admin')
             <div class="pt-2 pb-3 space-y-1">
-                <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
+                <x-jet-responsive-nav-link href="{{ route('admin') }}" :active="request()->routeIs('admin')">
+                    {{ __('Admin Dashboard') }}
                 </x-jet-responsive-nav-link>
             </div>
         <!-- Responsive Settings Options -->
@@ -145,7 +151,6 @@
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
                     <x-jet-responsive-nav-link href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
@@ -156,14 +161,14 @@
         </div>
         @else
             <div class="pt-2 pb-3 space-y-1">
-            <a class="block pl-3 pr-4 py-2 border-l-4 border-green-500 text-base font-medium text-indigo-700 bg-gray-50
-            focus:outline-none focus:text-indigo-800 focus:bg-indigo-100 focus:border-indigo-700
+            <a class="block pl-3 pr-4 py-2 border-l-4 border-green-500 text-base font-medium text-green-700 bg-gray-50
+            focus:outline-none focus:text-green-800 focus:bg-green-100 focus:border-green-700
             transition duration-150 ease-in-out"
                href="{{ route('login') }}" :active="request()->routeIs('login')">
                 {{ __('Login') }}
             </a>
-            <a class="block pl-3 pr-4 py-2 border-l-4 border-green-500 text-base font-medium text-indigo-700 bg-gray-50
-            focus:outline-none focus:text-indigo-800 focus:bg-indigo-100 focus:border-indigo-700
+            <a class="block pl-3 pr-4 py-2 border-l-4 border-green-500 text-base font-medium text-green-700 bg-gray-50
+            focus:outline-none focus:text-green-800 focus:bg-green-100 focus:border-green-700
             transition duration-150 ease-in-out"
                href="{{ route('register') }}" :active="request()->routeIs('register')">
                 {{ __('Register') }}
