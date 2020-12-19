@@ -4,8 +4,7 @@
     </x-slot>
 
     @if($speedruns->count() > 0)
-    @component('components.speedrun-table', ['speedruns' =>$speedruns])
-    @endcomponent
+    @livewire('speedrun-table', ['speedruns' =>$speedruns])
     @else
     <div class="mx-auto text-center h-144 flex object-center justify-center">
         <div class="font-semibold text-3xl my-auto mx-auto text-gray-200 text-center">

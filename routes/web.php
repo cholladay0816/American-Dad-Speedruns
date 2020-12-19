@@ -35,7 +35,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     Route::middleware('can:view_admin')->group(function()
     {
-        Route::get('/admin', [AdminController::class, 'index']);
+        Route::get('/admin', [AdminController::class, 'index'])->name('admin');
         Route::patch('/speedruns/{speedrun}', [SpeedrunController::class, 'verify']);
 
         Route::middleware('can:manage_banners')->group(function() {

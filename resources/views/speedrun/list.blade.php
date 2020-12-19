@@ -5,8 +5,7 @@
       Read the documentation to get started: https://tailwindui.com/documentation
     -->
     <div class="flex flex-col">
-        @component('components.speedrun-table', ['speedruns'=>$speedruns])
-        @endcomponent
+        @livewire('speedrun-table', ['speedruns'=>$speedruns])
     </div>
 
 </x-app-layout>
