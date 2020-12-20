@@ -27,7 +27,7 @@
                 made up of {{env('COUNCIL_SIZE')}} members.
                 </p>
             </div>
-            <div class="pl-1 italic text-md font-thin pt-2 pb-4">
+            <div class="pl-1 italic text-md font-thin pt-2 pb-4 text-gray-500">
                 Election end{{$election->expired()?'ed':'s'}} <span>{{ $election->timeleft() }}</span>
             </div>
         </div>
@@ -48,15 +48,17 @@
                 </div>
             </div>
             @else
-                <div class="grid sm:grid-cols-2 gap-5 h-32">
+                <div class="grid sm:grid-cols-2 gap-5 h-48">
                     <a wire:click="for" class="border-2 border-green-{{$positive == 1 ?'500':'200'}} cursor-pointer group flex flex-col rounded-lg bg-green-{{$positive == 1?'400':'100'}} p-3 text-center transform translate hover:scale-110 duration-150">
-                        <h4 class="my-auto text-center font-semibold text-4xl duration-150">Approve</h4>
+                        <h4 class="my-auto text-center font-semibold sm:text-4xl duration-150">Approve</h4>
                     </a>
                     <a wire:click="against" class="border-2  border-red-{{$positive == 0 ?'500':'200'}} cursor-pointer group flex flex-col rounded-lg bg-red-{{$positive == 0?'400':'100'}} p-3 text-center transform translate hover:scale-110 duration-150">
-                        <h4 class="my-auto font-semibold text-4xl duration-150">Disqualify</h4>
+                        <h4 class="my-auto font-semibold sm:text-4xl duration-150">Disqualify</h4>
                     </a>
+                    <textarea max="1024" placeholder="(Optional) Enter your reasoning here."
+                              wire:model.defer="message" class="col-span-2 rounded-lg w-full mt-4 p-3 bg-gray-100"></textarea>
+
                 </div>
-                <textarea max="1024" placeholder="(Optional) Enter your reasoning here." wire:model.defer="message" class="rounded-lg w-full mt-4 p-3 bg-gray-100"></textarea>
                 <div class="flex w-full justify-end my-3">
                     @if($positive != -1)
                     <button wire:loading.attr="disabled" wire:click="vote" class="text-xl text-white px-4 py-2 rounded-lg bg-blue-600">
@@ -93,11 +95,13 @@
 
                         <div class="italic font-thin text-gray-600 md:block hidden">
                             {{$vote->humanReadable()}}
-                            @if($vote->user_id == auth()->user()->id && !$election->expired())
-                            <svg wire:click="deleteVote" class="cursor-pointer inline w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                            @endif
+                            @auth()
+                                @if($vote->user_id == auth()->user()->id && !$election->expired())
+                                <svg wire:click="deleteVote" class="cursor-pointer inline w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                @endif
+                            @endauth
                         </div>
                         </div></h3>
                     @if(isset($vote->comment))

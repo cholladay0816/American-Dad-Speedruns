@@ -83,19 +83,19 @@ class Speedrun extends Model
 
     public function placement()
     {
-        if($this->disqualified())
-            return Speedrun::where('verified','1')->get()->count();
         if($this->verified == 0)
-            return Speedrun::where('verified','1')->get()->count();
-        $runs = Speedrun::where('time', '<' ,$this->time)->where('verified','1')->get();
+            return Speedrun::where('verified','1')->count();
+        if($this->disqualified())
+            return Speedrun::where('verified','1')->count();
+
+        $runs = Category::where('name', $this->category()->name)->firstOrFail()
+            ->speedruns->where('time', '<' ,$this->time)->where('verified','1');
         $count = 0;
         foreach ($runs as $run)
         {
             if($run->disqualified())
                 continue;
-
-            if($run->category()->id == $this->category()->id)
-                $count++;
+            $count++;
         }
         return $count + 1;
     }

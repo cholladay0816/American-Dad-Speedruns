@@ -14,10 +14,11 @@
 
                 <!-- Navigation Links -->
                 <div class="text-white hidden space-x-4 sm:-my-px sm:ml-4 sm:flex">
-                    <a href="{{url('/')}}" class="font-bold md:text-xl sm:text-md text-white text-center my-auto pr-4">American Dad Speedruns</a>
+                    <a href="{{url('/')}}" class="font-bold lg:text-xl md:text-md text-xs text-white text-center my-auto pr-4">{{env('APP_NAME')}}</a>
                     <a href="{{url('/categories')}}" class="px-1 text-md text-gray-100 text-center my-auto">Categories</a>
                     <a href="{{url('/platforms')}}" class="px-1 text-md text-gray-100 text-center my-auto">Platforms</a>
                     <a href="{{url('/speedruns/new')}}" class="px-1 text-md text-gray-100 text-center my-auto">Submit Run</a>
+                    <a href="{{url('/council')}}" class="px-1 text-md text-gray-100 text-center my-auto">Council</a>
                 </div>
             </div>
             @if(auth()->user())
@@ -126,6 +127,12 @@
             <x-jet-responsive-nav-link href="{{ route('platforms') }}" :active="request()->routeIs('platforms')">
                 {{ __('Platforms') }}
             </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('submit-speedrun') }}" :active="request()->routeIs('submit-speedrun')">
+                {{ __('Submit Run') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('council') }}" :active="request()->routeIs('council')">
+                {{ __('Council') }}
+            </x-jet-responsive-nav-link>
         </div>
         @can('view_admin')
             <div class="pt-2 pb-3 space-y-1">
@@ -161,18 +168,14 @@
         </div>
         @else
             <div class="pt-2 pb-3 space-y-1">
-            <a class="block pl-3 pr-4 py-2 border-l-4 border-green-500 text-base font-medium text-green-700 bg-gray-50
-            focus:outline-none focus:text-green-800 focus:bg-green-100 focus:border-green-700
-            transition duration-150 ease-in-out"
+            <x-jet-responsive-nav-link
                href="{{ route('login') }}" :active="request()->routeIs('login')">
                 {{ __('Login') }}
-            </a>
-            <a class="block pl-3 pr-4 py-2 border-l-4 border-green-500 text-base font-medium text-green-700 bg-gray-50
-            focus:outline-none focus:text-green-800 focus:bg-green-100 focus:border-green-700
-            transition duration-150 ease-in-out"
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link
                href="{{ route('register') }}" :active="request()->routeIs('register')">
                 {{ __('Register') }}
-            </a>
+            </x-jet-responsive-nav-link>
             </div>
             @endif
     </div>

@@ -63,7 +63,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     });
 
-    Route::get('/speedruns/new', [SpeedrunController::class, 'create']);
+    Route::get('/speedruns/new', [SpeedrunController::class, 'create'])->name('submit-speedrun');
     Route::post('/speedruns/new', [SpeedrunController::class, 'store']);
 
     Route::put('/speedruns/{speedrun}', [SpeedrunController::class, 'update']);

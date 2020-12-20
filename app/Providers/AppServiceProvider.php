@@ -28,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('th', function ($expression) {
             return "<?php echo str_ordinal({$expression}); ?>";
         });
+
     }
 }

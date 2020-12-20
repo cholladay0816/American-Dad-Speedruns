@@ -13,15 +13,15 @@ class CouncilController extends Controller
     public function index()
     {
 
-        $council = Role::where('name', 'council')->first()->users;
+        $judges = Role::where('name', 'council')->first()->users;
         //show current elections live
         $now = now()->toDateTimeString();
-        $elections = Election::orderBy('created_at', 'DESC')->get();
+        $elections = Election::where('expiration', '>', now()->toDateTimeString())->orderBy('created_at', 'DESC')->get();
         //get all council members
         //get all elections
         return view('council.index',
             [
-            'council'=>$council,
+            'judges'=>$judges,
             'elections'=>$elections
             ]);
     }
