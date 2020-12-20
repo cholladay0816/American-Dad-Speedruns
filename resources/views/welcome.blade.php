@@ -34,7 +34,7 @@
                         Every dollar helps keep the servers online for the next generation of American Dad Speedrunners.
                     </p>
                     <div class="mt-4">
-                        <a href="{{env('PAYPAL_DONATE')}}" class="rounded-md py-3 px-4 font-bold text-lg text-white bg-green-500 hover:bg-green-400">
+                        <a href="{{config('adsr.paypaldonate')}}" class="rounded-md py-3 px-4 font-bold text-lg text-white bg-green-500 hover:bg-green-400">
                             Donate with PayPal
                         </a>
                     </div>
@@ -61,7 +61,7 @@
                         <div class="font-bold text-4xl">Stan Says:</div>
                         <div class="font-semibold text-gray-300">You should join the American Dad Speedrunning Discord!</div>
                         <div class="border-l-2 border-yellow-300 text-white bg-opacity-10 hover:bg-opacity-25 bg-yellow-500 px-3">All the cool kids are already <a class="text-indigo-500 font-semibold">@here</a>.</div>
-                        <a href="{{env('DISCORD_INVITE')}}" class="bg-indigo-500 border-white text-white text-xl rounded px-2 py-2 mr-auto mt-5 ">Click here to Join!</a>
+                        <a href="{{config('adsr.discordinvite')}}" class="bg-indigo-500 border-white text-white text-xl rounded px-2 py-2 mr-auto mt-5 ">Click here to Join!</a>
                         <div class="text-gray-300 mt-8">Note: we are not affiliated with this server.</div>
                     </div>
                 </div>

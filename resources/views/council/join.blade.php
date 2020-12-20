@@ -12,7 +12,7 @@
         @method('POST')
         <h1 class="sm:text-left text-center text-2xl font-bold">Join the American Dad Speedrunning Council!</h1>
         <p class="pb-4">Become a member of the official American Dad Speedrunning Council and decide the fate of every speedrun submitted.
-            This is a limited time offer, only <span class="font-bold text-green-500">{{env('COUNCIL_SIZE')}}</span> seats are given out and there {{$seats!=1?'are':'is'}} <span class="font-bold text-red-500">{{$seats}}</span> left!
+            This is a limited time offer, only <span class="font-bold text-green-500">{{config('adsr.councilsize')}}</span> seats are given out and there {{$seats!=1?'are':'is'}} <span class="font-bold text-red-500">{{$seats}}</span> left!
         </p>
         <div class="flex flex-col w-1/2 py-2">
             <label for="cardholder-name">Cardholder's name</label>
@@ -34,7 +34,7 @@
     </form>
     </div>
     <script>
-        const stripe = Stripe('{{env('STRIPE_KEY')}}');
+        const stripe = Stripe('{{config('adsr.stripekey')}}');
 
         const elements = stripe.elements();
         const cardElement = elements.create('card');

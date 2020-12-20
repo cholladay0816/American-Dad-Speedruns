@@ -14,7 +14,7 @@
 
                 <!-- Navigation Links -->
                 <div class="text-white hidden space-x-4 sm:-my-px sm:ml-4 sm:flex">
-                    <a href="{{url('/')}}" class="font-bold lg:text-xl md:text-md text-xs text-white text-center my-auto pr-4">{{env('APP_NAME')}}</a>
+                    <a href="{{url('/')}}" class="font-bold lg:text-xl md:text-md text-xs text-white text-center my-auto pr-4">{{config('app.name')}}</a>
                     <a href="{{url('/categories')}}" class="px-1 text-md text-gray-100 text-center my-auto">Categories</a>
                     <a href="{{url('/platforms')}}" class="px-1 text-md text-gray-100 text-center my-auto">Platforms</a>
                     <a href="{{url('/speedruns/new')}}" class="px-1 text-md text-gray-100 text-center my-auto">Submit Run</a>

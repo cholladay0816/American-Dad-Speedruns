@@ -31,14 +31,18 @@ class CouncilController extends Controller
         auth()->user()->createOrGetStripeCustomer();
         if(auth()->user()->subscribed())
             return redirect(url('/council'))->with(['info'=>'You are already subscribed!']);
-        $seats = env('COUNCIL_SIZE') - Role::where('name', 'council')->first()->users()->count();
+        $seats = config('adsr.councilsize') - Role::where('name', 'council')->first()->users()->count();
+        if($seats <= 0)
+        {
+            return redirect()->back()->with(['error'=>'Council is full.']);
+        }
         return view('council.join', ['intent' => auth()->user()->createSetupIntent(), 'seats'=>$seats]);
     }
     public function store(Request $request)
     {
         $res = $request->validate(['paymentMethod'=>'required']);
         auth()->user()->createOrGetStripeCustomer();
-        auth()->user()->newSubscription('default', env('SUBSCRIPTION_COUNCIL'))->create($res['paymentMethod']);
+        auth()->user()->newSubscription('default', config('adsr.subscriptioncouncil'))->create($res['paymentMethod']);
         Mail::to(auth()->user()->email)->queue(new CouncilActivated());
         Role::where('name', 'council')->first()->users()->attach([auth()->user()->id]);
         return redirect(url('/council'))->with(['success'=>'Council Upgrade applied!']);
