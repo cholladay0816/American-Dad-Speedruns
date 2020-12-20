@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Mail\DisqualifiedRun;
-use App\Mail\DisqualifiedRuns;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
@@ -57,7 +56,8 @@ class Speedrun extends Model
 
     public function videoExists()
     {
-        return @file_get_contents('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=' . $this->video_id());
+        $file = @file_get_contents('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=' . $this->video_id());
+        return $file != 'Not Found';
     }
     public function disqualify($reason = 'No reason provided.', $evidence = null)
     {

@@ -51,6 +51,7 @@ class DisqualifyBrokenVideos extends Command
             if(!$speedrun->videoExists())
             {
                 $this->info('Speedrun #'.$speedrun->id . ' is no longer visible, disqualifying...');
+
                 $speedrun->disqualify('YouTube video no longer listed.');
                 array_push($disqualified, $speedrun);
             }
