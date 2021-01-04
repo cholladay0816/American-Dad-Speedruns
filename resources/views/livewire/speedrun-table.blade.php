@@ -33,6 +33,7 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                     @foreach($speedruns as $speedrun)
                         <tr>
+                            @cache($speedrun)
                             <td class="sm:px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
                                 @th($speedrun->placement())
                             </td>
@@ -63,6 +64,7 @@
                                       {{$speedrun->status()}}
                                     </span>
                             </td>
+                            @endcache
                             <td class="sm:px-2 py-4 whitespace-no-wrap text-left text-sm leading-5 font-medium">
                                 <a href="{{url('/watch/'.$speedrun->id)}}" class="text-indigo-600 hover:text-indigo-900">Watch</a>
                                 @if($speedrun->canDelete())
