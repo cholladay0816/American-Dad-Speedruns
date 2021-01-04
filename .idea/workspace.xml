@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d4fe1793-19b3-4d2a-ade4-c7535c261b7c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/tests/Unit/CommentTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/Feature/SpeedrunTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Unit/SpeedrunTest.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,7 +170,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../InertiaTest" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
@@ -182,6 +184,7 @@
       <recent name="E:\Users\Chris\Documents\GitHub\American-Dad-Speedruns\public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Users\Chris\Documents\GitHub\American-Dad-Speedruns\tests\Unit" />
       <recent name="E:\Users\Chris\Documents\GitHub\American-Dad-Speedruns\resources\views\profile" />
     </key>
   </component>
@@ -216,6 +219,9 @@
       <workItem from="1606934508421" duration="12779000" />
       <workItem from="1607199761647" duration="13103000" />
       <workItem from="1607963996931" duration="10825000" />
+      <workItem from="1609013457895" duration="85000" />
+      <workItem from="1609123111583" duration="2267000" />
+      <workItem from="1609186624989" duration="15000" />
     </task>
     <servers />
   </component>
