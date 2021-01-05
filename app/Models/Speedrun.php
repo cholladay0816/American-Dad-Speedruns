@@ -15,8 +15,6 @@ class Speedrun extends Model
     use HasFactory;
     protected $guarded = ['verified'];
 
-    protected $touches = ['categories', 'platforms'];
-
     public function title()
     {
         return '['.str_ordinal($this->placement()).'] '.$this->category()->title." by ".$this->user->name." in ".$this->time."s";
@@ -67,6 +65,9 @@ class Speedrun extends Model
     {
         $dq = new Disqualification(['speedrun_id'=>$this->id, 'reason'=>$reason, 'evidence'=>$evidence]);
         $dq->save();
+        $category = $this->category();
+        $category->updated_at = now()->toDateTimeString();
+        $category->save();
         Mail::to($this->user->email)
             ->queue(new DisqualifiedRun($this));
     }

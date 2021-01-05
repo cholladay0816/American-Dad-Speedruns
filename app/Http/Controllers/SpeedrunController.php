@@ -77,6 +77,11 @@ class SpeedrunController extends Controller
             Mail::to($speedrun->user->email)
                 ->queue(new RunApproved($speedrun));
             $speedrun->save();
+
+            $category = $speedrun->category();
+            $category->updated_at = now()->toDateTimeString();
+            $category->save();
+
             $election = new Election();
             $election->speedrun_id = $speedrun->id;
             $election->save();
@@ -101,8 +106,12 @@ class SpeedrunController extends Controller
     public function delete(Speedrun $speedrun)
     {
         //Delete if user is the creator or if user has manager permissions
-        if($speedrun->user_id == auth()->user()->id || Gate::allows('manage_speedruns'))
+        if($speedrun->user_id == auth()->user()->id || Gate::allows('manage_speedruns')) {
+            $category = $speedrun->category();
+            $category->updated_at = now()->toDateTimeString();
+            $category->save();
             $speedrun->delete();
+        }
         else
             abort(401);
 

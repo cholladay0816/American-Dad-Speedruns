@@ -9,6 +9,8 @@ class Category extends Model
 {
     use HasFactory;
 
+    protected $touches = ['speedruns'];
+
     public function speedruns()
     {
         return $this->belongsToMany(Speedrun::class);
