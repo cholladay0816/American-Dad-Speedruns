@@ -29,7 +29,9 @@ class SpeedrunController extends Controller
     }
     public function index()
     {
-        $speedruns = Speedrun::where('verified',1)->orderBy('time', 'asc')->get()->filter(function($run) {return !$run->disqualified();});
+        $speedruns = Speedrun::where('verified',1)->get()->sortBy(function ($speedrun, $key) {
+            return $speedrun->disqualified()?INF:$speedrun->time;
+        });
         return view('speedrun.list',['speedruns'=>$speedruns]);
     }
     public function show(Speedrun $speedrun)
