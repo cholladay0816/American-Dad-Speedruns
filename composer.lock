@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8554233dc941a227d45663af0f91b1ac",
+    "content-hash": "8449b72d5d53e63f98d5267c43ad768b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2699,6 +2699,57 @@
                 "serialize"
             ],
             "time": "2020-11-07T02:01:34+00:00"
+        },
+        {
+            "name": "orchid/experiment",
+            "version": "2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tabuna/experiment.git",
+                "reference": "3f8827a66e21c25cea56504553c369c60d6924bc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tabuna/experiment/zipball/3f8827a66e21c25cea56504553c369c60d6924bc",
+                "reference": "3f8827a66e21c25cea56504553c369c60d6924bc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "laravel/framework": "^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~6.0",
+                "phpunit/php-code-coverage": "^9.0",
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Orchid\\Experiment\\ExperimentServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Orchid\\Experiment\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandr Chernyaev",
+                    "email": "bliz48rus@gmail.com",
+                    "homepage": "https://tabuna.github.io",
+                    "role": "Developer"
+                }
+            ],
+            "description": "AB tests for Laravel",
+            "time": "2020-09-08T18:39:14+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
