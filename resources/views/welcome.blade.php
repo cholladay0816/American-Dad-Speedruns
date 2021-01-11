@@ -17,7 +17,7 @@
                             src="{{$featured->embed_url()}}" ></iframe>
                     </div>
                     <div class="flex flex-col">
-                        <h2 class="font-bold text-2xl" href="{{url('/speedruns/'.$featured->id)}}">Featured Run</h2>
+                        <h2 class="font-bold text-2xl"><a href="{{url('/watch/'.$featured->id)}}">Featured Run</a></h2>
                         <p class="font-semibold text-2xl">{{$featured->time}}s by <a href="{{url('/runner/'.$featured->user->name)}}">{{$featured->user->name}}</a></p>
                         <p class="text-gray-700 text-lg"><a href="{{url('/categories/'.$featured->category()->name)}}">{{$featured->category()->title}}</a> - <a href="{{url('/platforms/'.$featured->platform()->name)}}">{{$featured->platform()->title}}</a></p>
                     </div>

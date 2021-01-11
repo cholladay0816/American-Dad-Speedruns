@@ -1,16 +1,22 @@
 <div class="max-w-4xl mx-auto pt-4 pb-24">
     @auth()
-        <div class="w-full flex flex-col pb-12">
-            <textarea maxlength="4096" placeholder="Write your comment here..." rows="4" class="p-2 rounded-md bg-darker w-full"
+        <form wire:submit.prevent="store" class="w-full flex flex-col pb-12">
+            <textarea name="message" required maxlength="4096" placeholder="Write your comment here..." rows="4" class="p-2 rounded-md bg-darker w-full"
                       wire:model.lazy="message"></textarea>
             @error('message')
                 <span class="text-red-500">Error: {{$message}}</span>
             @enderror
             <div class="flex flex-row justify-end">
-                <a class="cursor-pointer bg-green-400 text-white text-xl rounded-lg px-3 py-2 my-2"
-                   wire:click="store">Submit</a>
+                <button type="submit" class="transition-colors duration-100
+                @if($message=='')
+                    cursor-default opacity-0
+                @else
+                    cursor-pointer opacity-100 opacity-100
+                @endif
+                    bg-green-400 hover:bg-green-500 text-white text-xl rounded-lg px-3 py-2 my-2"
+                >Submit</button>
             </div>
-        </div>
+        </form>
     @endauth
     @foreach($speedrun->comments as $comment)
             @if(isset($comment))

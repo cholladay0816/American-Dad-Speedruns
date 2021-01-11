@@ -7,7 +7,7 @@ This comment was made by **{{$commentor->name}}**:
 > *{{$comment->message}}*
 <br>
 @component('mail::button', ['url' => url('/watch/'.$speedrun->id), 'color' => 'primary'])
-    View Comment
+    View
 @endcomponent
 
 @endcomponent
