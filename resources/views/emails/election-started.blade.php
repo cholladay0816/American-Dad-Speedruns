@@ -1,5 +1,5 @@
 @component('mail::message')
-#Election started!#
+# Election started! #
 {{$user->name}},<br>
 an election has started to decide if run #{{$election->speedrun_id}}, also known as "{{$election->speedrun->title()}}"
 is to be accepted or disqualified.

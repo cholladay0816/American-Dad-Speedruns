@@ -2,8 +2,10 @@
 
 namespace App\Http\Livewire;
 
+use App\Mail\CommentPosted;
 use App\Models\Speedrun;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class Comments extends Component
@@ -26,6 +28,7 @@ class Comments extends Component
         $comment->user_id = auth()->user()->id;
         $comment->speedrun_id = $this->speedrun->id;
         $comment->save();
+        Mail::to($this->speedrun->user->email)->queue(new CommentPosted($comment));
         $this->reload();
     }
     public function delete($comment_id)

@@ -24,7 +24,7 @@ class CreateCommentsTable extends Migration
             $table->foreign('speedrun_id')->references('id')->on('speedruns')
                 ->cascadeOnDelete();
 
-            $table->string('message',4096);
+            $table->string('message',8192);
 
             $table->timestamps();
         });
