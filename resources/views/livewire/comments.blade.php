@@ -1,7 +1,7 @@
 <div class="max-w-4xl mx-auto pt-4 pb-24">
     @auth()
         <div class="w-full flex flex-col pb-12">
-            <textarea placeholder="Write your comment here..." class="p-2 rounded-md bg-darker w-full"
+            <textarea maxlength="4096" placeholder="Write your comment here..." class="p-2 rounded-md bg-darker w-full"
                       wire:model.lazy="message"></textarea>
             @error('message')
                 <span class="text-red-500">Error: {{$message}}</span>

@@ -46,7 +46,7 @@ class DisqualifyBrokenVideos extends Command
             //Only show qualifying speedruns
             if($speedrun->disqualified())
                 continue;
-
+            $this->info('Scanning run: #' . $speedrun->id);
             //If the video is not found on YouTube, disqualify it.
             if(!$speedrun->videoExists())
             {
