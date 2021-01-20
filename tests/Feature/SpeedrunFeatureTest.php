@@ -7,13 +7,12 @@ use App\Models\Comment;
 use App\Models\Platform;
 use App\Models\Speedrun;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class SpeedrunFeatureTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     public function getUser()
     {
