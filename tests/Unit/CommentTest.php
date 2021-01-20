@@ -13,6 +13,7 @@ use Tests\TestCase;
 class CommentTest extends TestCase
 {
     use DatabaseTransactions;
+
     public $user;
     public $speedrun;
     public $category;

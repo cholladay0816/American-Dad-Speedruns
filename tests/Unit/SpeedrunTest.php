@@ -20,23 +20,21 @@ class SpeedrunTest extends TestCase
      *
      * @return void
      */
-
+    public $user;
     public $speedrun;
     public $category;
     public $platform;
 
     public function createRun()
     {
-        $user = User::factory()->create();
-        $platform = Platform::firstOrCreate(['name'=>'xbox'], ['title'=>'Xbox', 'name'=>'xbox', 'url'=>'']);
-        $category = Category::firstOrCreate(['name'=>'any'], ['title'=>'Any%', 'name'=>'any', 'url'=>'']);
-        $speedrun = new Speedrun(['time'=>'0.5', 'user_id'=>$user->id, 'url'=>'']);
-        $speedrun->save();
-        $speedrun->platforms()->sync($platform);
-        $speedrun->categories()->sync($category);
-        $this->speedrun = $speedrun;
-        $this->category = $category;
-        $this->platform = $platform;
+        $this->user = User::factory()->create();
+        $this->platform = Platform::firstOrCreate(['name'=>'xbox'], ['title'=>'Xbox', 'name'=>'xbox', 'url'=>'']);
+        $this->category = Category::firstOrCreate(['name'=>'any'], ['title'=>'Any%', 'name'=>'any', 'url'=>'']);
+        $this->speedrun = new Speedrun(['time'=>'0.5', 'user_id'=>$this->user->id, 'url'=>'']);
+        $this->speedrun->save();
+        $this->speedrun->platforms()->sync($this->platform);
+        $this->speedrun->categories()->sync($this->category);
+
     }
 
     /** @test */
@@ -50,5 +48,11 @@ class SpeedrunTest extends TestCase
     {
         $this->createRun();
         $this->assertEquals($this->speedrun->platform()->id, $this->platform->id);
+    }
+    /** @test */
+    public function a_speedrun_has_an_owner()
+    {
+        $this->createRun();
+        $this->assertEquals($this->speedrun->user->id, $this->user->id);
     }
 }
