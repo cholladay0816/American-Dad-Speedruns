@@ -25,7 +25,7 @@ class SpeedrunFeatureTest extends TestCase
         $response = $this->get('/speedruns/new');
         $response->assertStatus(302);
         $response = $this->post('/speedruns/new',
-            ['_token'=>csrf_token(), 'url'=>'https://youtu.be/a', 'time'=>0.1, 'category'=>Category::first()->id, 'platform'=>Platform::first()->id]);
+            ['url'=>'https://youtu.be/a', 'time'=>0.1, 'category'=>Category::first()->id, 'platform'=>Platform::first()->id]);
         $response->assertStatus(302);
 
     }
