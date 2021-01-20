@@ -8,33 +8,35 @@ use App\Models\Platform;
 use App\Models\Speedrun;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class CommentTest extends TestCase
 {
     use DatabaseTransactions;
+    public $user;
     public $speedrun;
     public $category;
     public $platform;
+
     public function createSpeedruns()
     {
-        $user = User::factory()->create();
-        $platform = Platform::firstOrCreate(['name'=>'xbox'], ['title'=>'Xbox', 'name'=>'xbox', 'url'=>'']);
-        $category = Category::firstOrCreate(['name'=>'any'], ['title'=>'Any%', 'name'=>'any', 'url'=>'']);
-        $speedrun = new Speedrun(['time'=>'0.5', 'user_id'=>$user->id, 'url'=>'']);
-        $speedrun->save();
-        $speedrun->platform()->sync($platform);
-        $speedrun->category()->sync($category);
+        $this->user = User::factory()->create();
+        $this->platform = Platform::firstOrCreate(['title'=>'Xbox'], ['title'=>'Xbox', 'name'=>'xbox', 'url'=>'']);
+        $this->category = Category::firstOrCreate(['title'=>'Any%'], ['title'=>'Any%', 'name'=>'any', 'url'=>'']);
+        $this->speedrun = new Speedrun(['time'=>'0.5', 'user_id'=>$this->user->id, 'url'=>'']);
+        $this->speedrun->save();
+        $this->speedrun->platforms()->sync([$this->platform->id]);
+        $this->speedrun->categories()->sync([$this->category->id]);
     }
 
-    /** test */
+    /** @test */
     public function a_user_can_comment_on_a_speedrun()
     {
-        $user = User::factory()->create();
+        $this->createSpeedruns();
 
-        $comment = Comment::factory()->create(['user_id'=>$user->id]);
+        $comment = Comment::factory()->create(['user_id'=>$this->user->id, 'speedrun_id'=>$this->speedrun->id]);
 
-        self::assertContains($comment, $this->speedrun->fresh()->comments);
+        $this->assertContains($comment->message, $this->speedrun->fresh()->comments->pluck('message'));
 
     }
 }
