@@ -22,7 +22,7 @@ class CommentTest extends TestCase
     public function createSpeedruns()
     {
         $this->user = User::factory()->create();
-        $this->platform = Platform::firstOrCreate(['title'=>'Xbox'], ['title'=>'Xbox', 'name'=>'xbox', 'url'=>'']);
+        $this->platform = Platform::firstOrCreate(['title'=>'Xbox'], ['title'=>'Xbox', 'name'=>'xbox']);
         $this->category = Category::firstOrCreate(['title'=>'Any%'], ['title'=>'Any%', 'name'=>'any', 'url'=>'']);
         $this->speedrun = new Speedrun(['time'=>'0.5', 'user_id'=>$this->user->id, 'url'=>'']);
         $this->speedrun->save();
