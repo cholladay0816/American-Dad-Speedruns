@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use App\Models\Category;
 use App\Models\Platform;
@@ -21,38 +21,34 @@ class SpeedrunTest extends TestCase
      * @return void
      */
 
+    public $speedrun;
+    public $category;
+    public $platform;
 
-    public function testSpeedruns()
+    public function createRun()
     {
-        # Logged in
-        $this->actingAs(User::first());
+        $user = User::factory()->create();
+        $platform = Platform::firstOrCreate(['name'=>'xbox'], ['title'=>'Xbox', 'name'=>'xbox', 'url'=>'']);
+        $category = Category::firstOrCreate(['name'=>'any'], ['title'=>'Any%', 'name'=>'any', 'url'=>'']);
+        $speedrun = new Speedrun(['time'=>'0.5', 'user_id'=>$user->id, 'url'=>'']);
+        $speedrun->save();
+        $speedrun->platforms()->sync($platform);
+        $speedrun->categories()->sync($category);
+        $this->speedrun = $speedrun;
+        $this->category = $category;
+        $this->platform = $platform;
+    }
 
-        $response = $this->get('/speedruns/new');
-        $response->assertStatus(200);
-
-        $response = $this->post('/speedruns/new',
-            ['url'=>'', 'time'=>0.1, 'category'=>Category::first()->id, 'platform'=>Platform::first()->id]);
-        $response->assertSessionHasErrors();
-
-        $response = $this->post('/speedruns/new',
-            ['url'=>'https://youtu.be/a', 'time'=>0.1, 'category'=>Category::first()->id, 'platform'=>Platform::first()->id]);
-        $response->assertRedirect('/runner/' . User::first()->name);
-        $response->assertSessionHas('success');
-
-        $last = Speedrun::orderBy('created_at', 'DESC')->first();
-
-        $response = $this->patch('/speedruns/' . $last->id);
-        $response->assertSessionHas('success');
-
-        $response = $this->get('admin/disqualify/' . $last->id);
-        $response->assertOk();
-
-        $response = $this->post('admin/disqualify/' . $last->id, ['reason'=>'Testing']);
-        $response->assertSessionHasNoErrors();
-        $response->assertSessionHas('success');
-
-        $response = $this->delete('/speedruns/' . $last->id);
-        $response->assertSessionHas('success');
-
+    /** @test */
+    public function a_speedrun_has_a_category()
+    {
+        $this->createRun();
+        $this->assertEquals($this->speedrun->category()->id, $this->category->id);
+    }
+    /** @test */
+    public function a_speedrun_has_a_platform()
+    {
+        $this->createRun();
+        $this->assertEquals($this->speedrun->platform()->id, $this->platform->id);
     }
 }
