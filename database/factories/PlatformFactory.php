@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Platform;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class PlatformFactory extends Factory
 {
@@ -21,8 +22,10 @@ class PlatformFactory extends Factory
      */
     public function definition()
     {
+        $name = $this->faker->unique()->sentence(3);
         return [
-            //
+            'title' => $name,
+            'name' => Str::slug($name),
         ];
     }
 }

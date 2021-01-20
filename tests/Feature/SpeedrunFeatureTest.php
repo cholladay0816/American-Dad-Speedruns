@@ -25,7 +25,7 @@ class SpeedrunFeatureTest extends TestCase
         $response = $this->get('/speedruns/new');
         $response->assertStatus(302);
         $response = $this->post('/speedruns/new',
-            ['url'=>'https://youtu.be/a', 'time'=>0.1, 'category'=>Category::first()->id, 'platform'=>Platform::first()->id]);
+            ['url'=>'https://youtu.be/a', 'time'=>0.1, 'category'=>Category::factory()->create()->id, 'platform'=>Platform::factory()->create()->id]);
         $response->assertStatus(302);
 
     }
@@ -43,10 +43,10 @@ class SpeedrunFeatureTest extends TestCase
         $this->actingAs($this->getUser());
 
         $response = $this->post('/speedruns/new',
-            ['url'=>'', 'time'=>0.1, 'category'=>Category::first()->id, 'platform'=>Platform::first()->id]);
+            ['url'=>'', 'time'=>0.1, 'category'=>Category::factory()->create()->id, 'platform'=>Platform::factory()->create()->id]);
         $response->assertSessionHasErrors('url');
         $response = $this->post('/speedruns/new',
-            ['url'=>'a', 'time'=>0.1, 'category'=>Category::first()->id, 'platform'=>Platform::first()->id]);
+            ['url'=>'a', 'time'=>0.1, 'category'=>Category::factory()->create()->id, 'platform'=>Platform::factory()->create()->id]);
         $response->assertSessionHasErrors('url');
     }
 
@@ -57,7 +57,7 @@ class SpeedrunFeatureTest extends TestCase
         $this->actingAs($user);
 
         $response = $this->post('/speedruns/new',
-            ['url'=>'https://youtu.be/a', 'time'=>0.1, 'category'=>Category::first()->id, 'platform'=>Platform::first()->id]);
+            ['url'=>'https://youtu.be/a', 'time'=>0.1, 'category'=>Category::factory()->create()->id, 'platform'=>Platform::factory()->create()->id]);
         $response->assertRedirect('/runner/' . $user->name);
         $response->assertSessionHas('success');
     }
@@ -68,8 +68,8 @@ class SpeedrunFeatureTest extends TestCase
         $user = $this->getUser();
         $this->actingAs($user);
         $response = $this->post('/speedruns/new',
-            ['url'=>'https://youtu.be/a', 'time'=>0.1, 'category'=>Category::first()->id, 'platform'=>Platform::first()->id]);
-        $run = Speedrun::orderBy('created_at', 'DESC')->first();
+            ['url'=>'https://youtu.be/a', 'time'=>0.1, 'category'=>Category::factory()->create()->id, 'platform'=>Platform::factory()->create()->id]);
+        $run = Speedrun::first();
 
         $response = $this->get('/watch/' . $run->id);
         $response->assertSeeText($user->name);
@@ -81,8 +81,8 @@ class SpeedrunFeatureTest extends TestCase
         $user = $this->getUser();
         $this->actingAs($user);
         $response = $this->post('/speedruns/new',
-            ['url'=>'https://youtu.be/a', 'time'=>0.1, 'category'=>Category::first()->id, 'platform'=>Platform::first()->id]);
-        $speedrun = $user->fresh()->speedruns->sortByDesc('created_at')->first();
+            ['url'=>'https://youtu.be/a', 'time'=>0.1, 'category'=>Category::factory()->create()->id, 'platform'=>Platform::factory()->create()->id]);
+        $speedrun = $user->fresh()->speedruns->first();
 
         $this->delete('/speedruns/' . $speedrun->id);
 
@@ -91,25 +91,5 @@ class SpeedrunFeatureTest extends TestCase
         $response->assertNotFound();
 
     }
-
-    public function a_speedrun_can_have_crud_performed_by_its_owner()
-    {
-        $this->actingAs($this->getUser());
-
-        $last = Speedrun::orderBy('created_at', 'DESC')->first();
-
-        $response = $this->patch('/speedruns/' . $last->id);
-        $response->assertSessionHas('success');
-
-        $response = $this->get('admin/disqualify/' . $last->id);
-        $response->assertOk();
-
-        $response = $this->post('admin/disqualify/' . $last->id, ['reason'=>'Testing']);
-        $response->assertSessionHasNoErrors();
-        $response->assertSessionHas('success');
-
-        $response = $this->delete('/speedruns/' . $last->id);
-        $response->assertSessionHas('success');
-
-    }
+    // Disqualify, Undo, and Remove (Admin)
 }

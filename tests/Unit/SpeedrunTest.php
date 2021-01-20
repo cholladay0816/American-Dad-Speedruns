@@ -27,9 +27,9 @@ class SpeedrunTest extends TestCase
     public function createRun()
     {
         $this->user = User::factory()->create();
-        $this->platform = Platform::firstOrCreate(['name'=>'xbox'], ['title'=>'Xbox', 'name'=>'xbox']);
-        $this->category = Category::firstOrCreate(['name'=>'any'], ['title'=>'Any%', 'name'=>'any', 'url'=>'']);
-        $this->speedrun = new Speedrun(['time'=>'0.5', 'user_id'=>$this->user->id, 'url'=>'']);
+        $this->platform = Platform::factory()->create(['title'=>'Xbox', 'name'=>'xbox']);
+        $this->category = Category::factory()->create(['title'=>'Any%', 'name'=>'any']);
+        $this->speedrun = Speedrun::factory()->create(['time'=>'0.5', 'user_id'=>$this->user->id]);
         $this->speedrun->save();
         $this->speedrun->platforms()->sync($this->platform);
         $this->speedrun->categories()->sync($this->category);
