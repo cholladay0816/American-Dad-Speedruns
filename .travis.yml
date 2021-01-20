@@ -10,7 +10,7 @@ before_script:
 
 script:
   - php artisan key:generate
-  - vendor/bin/phpunit
+  - php artisan test -c phpunit.xml
 
 cache:
   directories:
