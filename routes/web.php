@@ -53,8 +53,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
         Route::middleware('can:manage_speedruns')->group(function() {
             Route::get('/admin/verify', [AdminController::class, 'verify']);
-            Route::get('/admin/disqualify/{speedrun}', [DisqualificationController::class, 'create']);
-            Route::post('/admin/disqualify/{speedrun}', [DisqualificationController::class, 'store']);
+            Route::get('/admin/disqualify/{speedrun}', [DisqualificationController::class, 'create'])
+                ->name('disqualify.new');
+            Route::post('/admin/disqualify/{speedrun}', [DisqualificationController::class, 'store'])
+                ->name('disqualify.store');
             Route::get('/admin/disqualifications', [DisqualificationController::class, 'index']);
             Route::get('/admin/disqualifications/{disqualification}', [DisqualificationController::class, 'view']);
             Route::put('/admin/disqualifications/{disqualification}', [DisqualificationController::class, 'update']);
