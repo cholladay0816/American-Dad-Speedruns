@@ -11,6 +11,8 @@ class Category extends Model
 
     protected $touches = ['speedruns'];
 
+    protected $guarded = [];
+
     public function speedruns()
     {
         return $this->belongsToMany(Speedrun::class);

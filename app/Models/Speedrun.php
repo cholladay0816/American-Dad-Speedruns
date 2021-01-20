@@ -13,7 +13,7 @@ class Speedrun extends Model
 {
     use Cacheable;
     use HasFactory;
-    protected $guarded = ['verified'];
+    protected $guarded = [];
 
     public function title()
     {

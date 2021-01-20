@@ -11,6 +11,8 @@ class Election extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function votes()
     {
         return $this->hasMany(Vote::class);

@@ -9,6 +9,8 @@ class Platform extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function speedruns()
     {
         return $this->belongsToMany(Speedrun::class);

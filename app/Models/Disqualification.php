@@ -10,6 +10,7 @@ class Disqualification extends Model
     use HasFactory;
 
     protected $guarded = [];
+
     protected $touches = ['speedrun'];
 
     public function speedrun()
