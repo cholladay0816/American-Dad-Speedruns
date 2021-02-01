@@ -22,7 +22,7 @@ class SpeedrunFeatureTest extends TestCase
     }
 
     /** @test */
-    public function guests_cannot_view_or_create_speedruns()
+    public function guests_cannot_create_or_store_speedruns()
     {
         // (As a guest) attempt to visit the create speedrun route
         $response = $this->get('/speedruns/new');
