@@ -36,11 +36,19 @@ class Speedrun extends Model
             $this->categories()->attach(1);
         return $this->categories()->first();
     }
+    public function getCategoryAttribute()
+    {
+        return $this->category();
+    }
     public function platform()
     {
         if($this->platforms->count() == 0)
             $this->platforms()->attach(1);
         return $this->platforms()->first();
+    }
+    public function getPlatformAttribute()
+    {
+        return $this->platform();
     }
 
     public function canDelete()
