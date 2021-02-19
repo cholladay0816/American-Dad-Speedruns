@@ -56,5 +56,8 @@ class DatabaseSeeder extends Seeder
         Platform::firstOrCreate(['name'=>'3ds','title'=>'3DS', 'description'=>'For the game\'s 5 year anniversary, the devs ported it to the 3DS to be enjoyed on the go.']);
         Platform::firstOrCreate(['name'=>'gameandwatch','title'=>'Game and Watch', 'description'=>'Primitive precursor to the 2005 release.']);
 
+        $this->call([
+            SpeedrunSeeder::class
+        ]);
     }
 }
