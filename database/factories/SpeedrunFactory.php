@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Speedrun;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SpeedrunFactory extends Factory
@@ -22,7 +23,7 @@ class SpeedrunFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => 1,
+            'user_id' => $user = User::factory()->create()->id,
             'url' => 'https://youtu.be/' . $this->faker->unique()->regexify('[A-Za-z0-9]{8}'),
             'time' => $this->faker->numberBetween(1, 30),
             'created_at' => now(),
