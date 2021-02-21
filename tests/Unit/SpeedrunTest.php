@@ -54,4 +54,11 @@ class SpeedrunTest extends TestCase
         $this->createRun();
         $this->assertEquals($this->speedrun->user->id, $this->user->id);
     }
+    /** @test */
+    public function it_has_a_cache_key() {
+        $this->createRun();
+        $actual = 'App\Models\Speedrun/' . $this->speedrun->id . '-' . $this->speedrun->updated_at->timestamp;
+        $this->assertEquals($this->speedrun->getCacheKey(), $actual);
+    }
+
 }
