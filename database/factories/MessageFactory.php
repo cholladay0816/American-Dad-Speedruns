@@ -23,7 +23,7 @@ class MessageFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => $user = User::factory()->create()->id,
+            'user_id' => ($user = User::factory()->create())->id,
             'body' => $this->faker->sentence,
         ];
     }
