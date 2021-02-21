@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
         Platform::firstOrCreate(['name'=>'gameandwatch','title'=>'Game and Watch', 'description'=>'Primitive precursor to the 2005 release.']);
 
         $this->call([
-            SpeedrunSeeder::class,
+            // SpeedrunSeeder::class,
             MessageSeeder::class
         ]);
     }
