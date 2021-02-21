@@ -21,7 +21,7 @@ class RussianCaching
 
         $html = ob_get_clean();
 
-        return Cache::remember($key, now()->addDays(31), function() use ($html) {
+        return Cache::remember($key, now()->addDays(365), function() use ($html) {
             return $html;
         });
     }
