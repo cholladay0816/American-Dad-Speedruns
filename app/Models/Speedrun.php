@@ -6,6 +6,7 @@ use App\Cacheable;
 use App\Mail\DisqualifiedRun;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 
@@ -101,16 +102,12 @@ class Speedrun extends Model
         if($this->disqualified())
             return Speedrun::where('verified','1')->count();
 
-        $runs = Category::where('name', $this->category()->name)->firstOrFail()
-            ->speedruns->where('time', '<' ,$this->time)->where('verified','1');
-        $count = 0;
-        foreach ($runs as $run)
-        {
-            if($run->disqualified())
-                continue;
-            $count++;
-        }
-        return $count + 1;
+        return Category::where('name', $this->category()->name)->firstOrFail()
+            ->speedruns->where('time', '<' ,$this->time)->where('verified','1')
+            ->filter(function($speedrun) { return !$speedrun->disqualified(); })->count() + 1;
+    }
+    public function getPlacementAttribute() {
+        return $this->placement();
     }
 
     public function disqualification()
@@ -133,5 +130,12 @@ class Speedrun extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    protected static function booted()
+    {
+        static::updating(function ($speedrun) {
+            Cache::forget($speedrun->getCacheKey());
+        });
     }
 }
