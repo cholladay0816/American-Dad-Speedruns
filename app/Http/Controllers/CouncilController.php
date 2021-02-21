@@ -21,8 +21,8 @@ class CouncilController extends Controller
         //get all elections
         return view('council.index',
             [
-            'judges'=>$judges,
-            'elections'=>$elections
+                'judges'=>$judges,
+                'elections'=>$elections
             ]);
     }
 

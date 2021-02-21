@@ -74,8 +74,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::patch('/banners/{banner}', [BannerController::class, 'desync']);
 
 });
-
-
+// Route::get('/council/chat', \App\Http\Livewire\CouncilChatroom::class)->name('chat');
 Route::get('/council', [CouncilController::class, 'index'])->name('council');
 
 Route::get('/elections', [ElectionController::class, 'index'])->name('elections');
