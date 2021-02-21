@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\Livewire\SpeedrunTable;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Platform;
@@ -9,6 +10,8 @@ use App\Models\Role;
 use App\Models\Speedrun;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class SpeedrunFeatureTest extends TestCase
@@ -149,4 +152,54 @@ class SpeedrunFeatureTest extends TestCase
     }
 
     // TODO: Undo DQ, and Remove (Admin)
+
+
+    /** @test */
+    public function it_can_generate_a_cache() {
+        $this->seed();
+        $speedrun = Speedrun::factory()->create();
+        $speedrun->categories()->attach(Category::first());
+        $speedrun->platforms()->attach(Platform::first());
+
+        Livewire::test(SpeedrunTable::class)
+            ->set('speedruns', [$speedrun])
+            ->call('loadRuns')
+            ->assertSee($speedrun->user->name);
+
+        $this->assertTrue(Cache::has($speedrun->getCacheKey()));
+
+    }
+
+    /** @test */
+    public function it_can_revoke_a_cache_on_update() {
+        $this->seed();
+        $speedrun = Speedrun::factory()->create();
+        $speedrun->categories()->attach(Category::first());
+        $speedrun->platforms()->attach(Platform::first());
+
+        Livewire::test(SpeedrunTable::class)
+            ->set('speedruns', [$speedrun])
+            ->call('loadRuns')
+            ->assertSee($speedrun->user->name);
+
+        $oldKey = $speedrun->getCacheKey();
+
+        $this->assertTrue(Cache::has($speedrun->getCacheKey()));
+
+        $speedrun->time = 5;
+        $speedrun->save();
+
+        $newKey = $speedrun->getCacheKey();
+
+        $this->assertFalse(Cache::has($oldKey));
+
+        Livewire::test(SpeedrunTable::class)
+            ->set('speedruns', [$speedrun])
+            ->call('loadRuns')
+            ->assertSee($speedrun->user->name);
+
+        $this->assertTrue(Cache::has($newKey));
+
+    }
+
 }
