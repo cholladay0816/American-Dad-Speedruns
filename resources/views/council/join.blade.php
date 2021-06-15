@@ -35,7 +35,7 @@
     </form>
     </div>
     <script>
-        const stripe = Stripe('{{config('adsr.stripekey')}}');
+        const stripe = Stripe('{{config('stripe.key')}}');
 
         const elements = stripe.elements();
         const cardElement = elements.create('card');

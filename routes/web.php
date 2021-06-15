@@ -33,6 +33,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/council/join', [CouncilController::class, 'join']);
     Route::post('/council/join', [CouncilController::class, 'store']);
 
+    Route::delete('/council', [CouncilController::class, 'destroy'])
+        ->middleware('vote')
+        ->name('council.destroy');
+
     Route::middleware('can:view_admin')->group(function()
     {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin');
