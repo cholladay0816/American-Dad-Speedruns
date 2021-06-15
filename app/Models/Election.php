@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
 class Election extends Model
@@ -13,15 +14,15 @@ class Election extends Model
 
     protected $guarded = [];
 
-    public function votes()
+    public function votes(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Vote::class);
     }
-    public function voters()
+    public function voters() : Collection
     {
         return $this->votes()->pluck('user_id')->flatten()->unique();
     }
-    public function canVote()
+    public function canVote() : bool
     {
         if($this->expired())
             return false;
@@ -31,9 +32,8 @@ class Election extends Model
             return false;
         if(Gate::denies('vote'))
             return false;
-        if($this->voters()->contains(auth()->user()->id))
-            return false;
-        return true;
+
+        return $this->voters()->contains(auth()->user()->id);
     }
 
     public function positive()
