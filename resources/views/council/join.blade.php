@@ -12,7 +12,7 @@
         @method('POST')
         <h1 class="sm:text-left text-center text-2xl font-bold">Join the American Dad Speedrunning Council!</h1>
         <p class="pb-4">Become a member of the official American Dad Speedrunning Council for <span class="font-bold text-green-500">$4.99</span>/mo and decide the fate of every speedrun submitted.
-            <br>This is a limited time offer, only <span class="font-bold text-blue-500">{{config('adsr.councilsize')}}</span> seats are given out and there {{$seats!=1?'are':'is'}} <span class="font-bold text-red-500">{{$seats}}</span> left!
+            <br>This is a limited time offer, only <span class="font-bold text-blue-500">{{config('adsr.council.size')}}</span> seats are given out and there {{$seats!=1?'are':'is'}} <span class="font-bold text-red-500">{{$seats}}</span> left!
             All proceeds go towards this site and future sites like it.
         </p>
         <div class="flex flex-col w-1/2 py-2">

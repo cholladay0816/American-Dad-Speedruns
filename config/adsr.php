@@ -1,8 +1,9 @@
 <?php
 
 return [
-
-    'councilsize' => env('COUNCIL_SIZE', 20),
+    'council' => [
+        'size' => env('COUNCIL_SIZE', 20),
+    ],
     'paypaldonate' => env('PAYPAL_DONATE'),
     'discordinvite' => env('DISCORD_INVITE'),
 

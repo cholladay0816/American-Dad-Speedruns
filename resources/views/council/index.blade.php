@@ -3,13 +3,13 @@
         <h1 class="text-center text-5xl font-bold">Welcome to THE COUNCIL</h1>
         <p class="text-gray-600 text-xl md:px-8">This is an elite group of hardened American Dad Speedrunning judges, who have been bestowed divine power
         to deliver justice to any and all speedruns submitted to this site.</p>
-        <p class="text-gray-600 text-xl md:px-8 mt-8">This group is so selective, in fact, that only {{config('adsr.councilsize')}} seats are given out.
+        <p class="text-gray-600 text-xl md:px-8 mt-8">This group is so selective, in fact, that only {{config('adsr.council.size')}} seats are given out.
         If you aren't a member after all available seats are taken, you'll need to wait for a seat to become available.
         After all, only a select group of gifted individuals are worthy to sit in THE COUNCIL.</p>
         <div class="my-4 mx-auto text-center">
-            @if($judges->count() < config('adsr.councilsize'))
+            @if($judges->count() < config('adsr.council.size'))
                 <a href="{{url('council/join')}}" class="duration-300 text-2xl mx-auto px-3 py-2 bg-green-400 hover:bg-green-300 text-white font-semibold rounded-xl font-semibold">
-                    Sign up ({{config('adsr.councilsize') - $judges->count()}} seats remain!)
+                    Sign up ({{config('adsr.council.size') - $judges->count()}} seats remain!)
                 </a>
             @else
                 <a class="cursor-not-allowed disabled text-2xl mx-auto px-3 py-2 bg-red-300 text-white font-semibold rounded-xl font-semibold">

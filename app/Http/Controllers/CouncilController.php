@@ -30,7 +30,7 @@ class CouncilController extends Controller
         auth()->user()->createOrGetStripeCustomer();
         if(auth()->user()->subscribed())
             return redirect(url('/council'))->with(['info'=>'You are already subscribed!']);
-        $seats = config('adsr.councilsize') - Role::where('name', 'council')->first()->users()->count();
+        $seats = config('adsr.council.size') - Role::where('name', 'council')->first()->users()->count();
         if($seats <= 0)
         {
             return redirect()->back()->with(['error'=>'Council is full.']);

@@ -24,7 +24,7 @@
                 </p>
                 <p class="pt-2">
                 This election is being held by the official <a class="font-semibold text-gray-600" href="{{url('/council/join')}}">American Dad Speedrunning Council</a>,
-                made up of {{config('adsr.councilsize')}} members.
+                made up of {{config('adsr.council.size')}} members.
                 </p>
             </div>
             <div class="pl-1 italic text-md font-thin pt-2 pb-4 text-gray-500">
