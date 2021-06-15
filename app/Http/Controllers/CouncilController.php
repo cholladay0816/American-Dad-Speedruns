@@ -49,7 +49,9 @@ class CouncilController extends Controller
     public function destroy()
     {
         auth()->user()->createOrGetStripeCustomer();
+
         auth()->user()->subscription('default')->cancel();
-        return redirect(url('/council'))->with(['success' => 'Council Subscription Canceled']);
+
+        return redirect(route('council'))->with(['success' => 'Council Subscription Canceled']);
     }
 }
