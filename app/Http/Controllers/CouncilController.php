@@ -15,7 +15,6 @@ class CouncilController extends Controller
 
         $judges = Role::where('name', 'council')->first()->users;
         //show current elections live
-        $now = now()->toDateTimeString();
         $elections = Election::where('expiration', '>', now()->toDateTimeString())->orderBy('created_at', 'DESC')->get();
         //get all council members
         //get all elections
@@ -42,9 +41,15 @@ class CouncilController extends Controller
     {
         $res = $request->validate(['paymentMethod'=>'required']);
         auth()->user()->createOrGetStripeCustomer();
-        auth()->user()->newSubscription('default', config('adsr.subscriptioncouncil'))->create($res['paymentMethod']);
+        auth()->user()->newSubscription('default', config('stripe.subscription.council'))->create($res['paymentMethod']);
         Mail::to(auth()->user()->email)->queue(new CouncilActivated());
         Role::where('name', 'council')->first()->users()->attach([auth()->user()->id]);
         return redirect(url('/council'))->with(['success'=>'Council Upgrade applied!']);
+    }
+    public function destroy()
+    {
+        auth()->user()->createOrGetStripeCustomer();
+        auth()->user()->subscription('default')->cancel();
+        return redirect(url('/council'))->with(['success' => 'Council Subscription Canceled']);
     }
 }
