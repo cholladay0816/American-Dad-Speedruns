@@ -47,7 +47,7 @@
                                 </div>
                             </td>
                             <td class="text-center sm:text-left sm:px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                                {{$speedrun->time}}s
+                                {{number_format($speedrun->time, config('adsr.speedrun.decimals'))}}s
                             </td>
                             <td class="hidden md:table-cell sm:px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
                                 <a class="text-center sm:text-left" href="{{url('categories/'.$speedrun->category()->name)}}">{{$speedrun->category()->title}}</a>
