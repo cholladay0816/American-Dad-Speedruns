@@ -16,6 +16,6 @@ class SpeedrunTable extends Component
     }
     public function render()
     {
-        return view('livewire.speedrun-table', ['runs'=> $this->speedruns, 'readyToLoad'=>$this->readyToLoad]);
+        return view('livewire.speedrun-table', ['speedruns'=> $this->speedruns, 'readyToLoad'=>$this->readyToLoad]);
     }
 }
