@@ -56,7 +56,7 @@ class SpeedrunController extends Controller
         $request->validate(
             [
                 'url'=>'required|url|unique:speedruns,url|max:28|starts_with:https://youtu.be/',
-                'time'=>'numeric|required|min:0.0001',
+                'time'=>'numeric|required|min:0.' . str_repeat(0, config('adsr.speedrun.decimals')-1) . '1',
                 'platform'=>'integer|required|exists:platforms,id',
                 'category'=>'integer|required|exists:categories,id'
             ]);

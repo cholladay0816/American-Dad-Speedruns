@@ -66,7 +66,7 @@
                     <label class="block uppercase tracking-wide text-gray-300 text-xs font-bold mb-2" for="grid-platform-id">
                         Time
                     </label>
-                    <input name="time" required type="number" min="0.0001" step="0.0001" class="appearance-none block w-full bg-gray-200 text-gray-700
+                    <input name="time" required type="number" min="0.{{str_repeat(0, config('adsr.speedrun.decimals')-1)}}1" step="0.{{str_repeat(0, config('adsr.speedrun.decimals')-1)}}1" class="appearance-none block w-full bg-gray-200 text-gray-700
                         @error('time')
                             border border-red-500
                         @enderror
