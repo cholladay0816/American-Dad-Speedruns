@@ -21,7 +21,6 @@
             <h2 class="text-center text-3xl font-semibold">Our honorable judges:</h2>
             <div class="flex flex-col">
                 @foreach($judges as $judge)
-                    @continue(!$judge->subscribed('default'))
                     @component('components.judge', ['judge'=>$judge])
                     @endcomponent
                 @endforeach

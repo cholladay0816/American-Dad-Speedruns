@@ -40,21 +40,23 @@ class ExpireCouncil extends Command
      */
     public function handle()
     {
-        $council = Role::where('name', 'council')->first();
-        $members = $council->users->unique();
-        foreach ($members as $user)
-        {
-            if ($user->subscribed('default'))
-            {
-                $this->comment($user->name . ' no longer has a subscription, removing..');
-                $council->users()->detach($user);
-                Mail::to($user->email)->queue(new SubscriptionExpired($user));
-            }
-            else
-            {
-                $this->comment($user->name . ' still has a valid subscription.');
-            }
-        }
+        // Does nothing
+
+        // $council = Role::where('name', 'council')->first();
+        // $members = $council->users->unique();
+        // foreach ($members as $user)
+        // {
+        //     if ($user->subscribed('default'))
+        //     {
+        //         $this->comment($user->name . ' no longer has a subscription, removing..');
+        //         $council->users()->detach($user);
+        //         Mail::to($user->email)->queue(new SubscriptionExpired($user));
+        //     }
+        //     else
+        //     {
+        //         $this->comment($user->name . ' still has a valid subscription.');
+        //     }
+        // }
         return 0;
     }
 }

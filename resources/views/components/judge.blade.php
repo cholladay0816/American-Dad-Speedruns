@@ -4,7 +4,4 @@
 <div class="my-auto text-left">
     {{$judge->name}}
 </div>
-    <div class="font-thin text-sm md:text-right my-auto">
-    Judge since: {{\Illuminate\Support\Carbon::createFromTimestamp($judge->subscription('default')->asStripeSubscription()->start_date)->format("m/d/Y")}}
-    </div>
 </a>

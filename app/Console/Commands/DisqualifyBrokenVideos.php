@@ -41,6 +41,7 @@ class DisqualifyBrokenVideos extends Command
         //Get all verified runs
         $speedruns = Speedrun::where('verified',1)->get()->filter(function($run) {return !$run->disqualified();});
         $disqualified = [];
+        /** @var Speedrun $speedrun */
         foreach ($speedruns as $speedrun)
         {
             //Only show qualifying speedruns
