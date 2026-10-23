@@ -30,7 +30,7 @@ class CommentTest extends TestCase
         $this->speedrun->categories()->sync([$this->category->id]);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_user_can_comment_on_a_speedrun()
     {
         $this->createSpeedruns();

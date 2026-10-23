@@ -1,0 +1,148 @@
+{
+  "baselineCommit": "44917962a8f644a1e05a20e66fb19db7bf9851b1",
+  "status": "Executed: 60 surface browser cases (40 pass/20 retirement failures), 6 Chromium auth cases (5 pass/1 retirement failure), 7 SQLite smoke pass, backend gates/scheduler 20 pass/1 retirement failure. Coverage incomplete; see artifacts/checkpoint.json.",
+  "roles": [
+    "guest",
+    "unverified-user",
+    "verified-user",
+    "owner",
+    "other-user",
+    "suspended-user",
+    "moderator",
+    "administrator",
+    "view-admin-only",
+    "manage-speedruns-only",
+    "manage-banners-only"
+  ],
+  "activeSurfaces": [
+    {
+      "surface": "public",
+      "paths": [
+        "/",
+        "/dashboard",
+        "/speedruns",
+        "/speedruns/{id}",
+        "/watch",
+        "/watch/{id}",
+        "/runner/{name}",
+        "/categories",
+        "/categories/{name}",
+        "/platforms",
+        "/platforms/{name}"
+      ],
+      "cases": [
+        "navigation",
+        "rankings and decimal ties",
+        "empty",
+        "missing",
+        "external video unavailable"
+      ]
+    },
+    {
+      "surface": "auth-profile",
+      "paths": [
+        "/login",
+        "/register",
+        "/forgot-password",
+        "/reset-password/{token}",
+        "/user/profile"
+      ],
+      "cases": [
+        "validation",
+        "sessions",
+        "password reset",
+        "profile update",
+        "account deletion",
+        "live verification and 2FA divergence"
+      ]
+    },
+    {
+      "surface": "speedruns-comments",
+      "paths": [
+        "/speedruns/new",
+        "/speedruns/{id}"
+      ],
+      "cases": [
+        "valid and duplicate URL",
+        "decimal boundaries",
+        "ownership",
+        "suspension",
+        "comments",
+        "cache invalidation"
+      ]
+    },
+    {
+      "surface": "moderation-banners",
+      "paths": [
+        "/admin",
+        "/admin/verify",
+        "/admin/disqualify/{id}",
+        "/admin/disqualifications",
+        "/banners"
+      ],
+      "cases": [
+        "independent abilities",
+        "direct unauthorized request",
+        "verify without election side effects",
+        "disqualify and reinstate",
+        "banner CRUD and dismiss"
+      ]
+    }
+  ],
+  "retiredSurfaces": [
+    "billing-portal",
+    "profile billing component",
+    "council and join/leave",
+    "elections/voting",
+    "council chat",
+    "Stripe webhook routes",
+    "council/election scheduled side effects"
+  ],
+  "retirementAssertions": [
+    "no navigation links",
+    "direct routes unavailable",
+    "Livewire invocation unavailable",
+    "zero payment/customer calls",
+    "zero council mail",
+    "no membership/vote changes",
+    "no new elections from run verification",
+    "historical data retained"
+  ],
+  "preExistingDiscrepancies": [
+    "Master still registers billing/council/election routes and profile billing component.",
+    "Master enables verification and TwoFactorAuthenticatable; observed live model disables them.",
+    "Speedrun verification creates elections and sends council mail.",
+    "election:expire mutates historical elections/runs; council:expire is a no-op.",
+    "Profile photos, API UI and teams are disabled: test nonavailability, do not enable.",
+    "Speedrun update controller is empty: record behavior, do not infer working edit feature.",
+    "Banner controller stores URL/color metadata, not uploaded image files."
+  ],
+  "evidenceRequired": [
+    "route-to-test mapping",
+    "before/after screenshots",
+    "videos",
+    "traces",
+    "JUnit and HTML reports",
+    "runtime/browser/lock versions",
+    "commit SHA",
+    "CI URL",
+    "explicit skips/flakes/coverage gaps"
+  ],
+  "runtimeSafety": [
+    "synthetic SQLite only",
+    "fake mail",
+    "no production env or credentials",
+    "block external browser traffic",
+    "block server network",
+    "no live payment providers"
+  ],
+  "upgradeEvidence": {
+    "fullMatrix": "175:153passed22visualfail0skip",
+    "gapDatabase": "20passed0failed0skip",
+    "gapFile": "15passed5harness-failed, then corrected deletion/keyboard5passed0failed",
+    "backend": "28passed109assertions",
+    "video": "Mock200/404/410/403/429/500/connection failures; scheduler idempotence; database worker array transport",
+    "rollback": "Synthetic byte-identical restore;28tables integrityOK0FK violations;old-runtime boot not verified",
+    "allSurfacesVerified": false
+  }
+}

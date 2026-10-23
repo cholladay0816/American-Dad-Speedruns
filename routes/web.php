@@ -25,17 +25,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
-    Route::get('/billing-portal', function (Request $request) {
-        $request->user()->createOrGetStripeCustomer();
-        return $request->user()->redirectToBillingPortal();
-    });
-
-    Route::get('/council/join', [CouncilController::class, 'join']);
-    Route::post('/council/join', [CouncilController::class, 'store']);
-
-    Route::delete('/council', [CouncilController::class, 'destroy'])
-        ->name('council.destroy');
-
     Route::middleware('can:view_admin')->group(function()
     {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin');
@@ -77,12 +66,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::patch('/banners/{banner}', [BannerController::class, 'desync']);
 
 });
-// Route::get('/council/chat', \App\Http\Livewire\CouncilChatroom::class)->name('chat');
-Route::get('/council', [CouncilController::class, 'index'])->name('council');
-
-Route::get('/elections', [ElectionController::class, 'index'])->name('elections');
-Route::get('/elections/{election}', [ElectionController::class, 'show']);
-
+// Billing, council and election routes are retired; historical data is retained.
 Route::get('/', [SpeedrunController::class, 'welcome'])->name('home');
 Route::get('/dashboard', [SpeedrunController::class, 'welcome'])->name('dashboard');
 
@@ -100,5 +84,3 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 
 Route::get('/platforms/{platform:name}', [PlatformController::class, 'show']);
 Route::get('/platforms', [PlatformController::class, 'index'])->name('platforms');
-
-

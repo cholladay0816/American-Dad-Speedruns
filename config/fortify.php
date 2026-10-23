@@ -118,12 +118,10 @@ return [
     'features' => [
         Features::registration(),
         Features::resetPasswords(),
-        Features::emailVerification(),
+        // Email verification is disabled to preserve observed live behavior.
         Features::updateProfileInformation(),
         Features::updatePasswords(),
-        Features::twoFactorAuthentication([
-            'confirmPassword' => true,
-        ]),
+        // Two-factor enrollment remains disabled; the live model did not use its trait.
     ],
 
 ];

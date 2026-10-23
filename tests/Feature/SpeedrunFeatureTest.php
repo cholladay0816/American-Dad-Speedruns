@@ -24,7 +24,7 @@ class SpeedrunFeatureTest extends TestCase
         return User::factory()->create(['email_verified_at'=>now()]);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function guests_cannot_create_or_store_speedruns()
     {
         // (As a guest) attempt to visit the create speedrun route
@@ -39,7 +39,7 @@ class SpeedrunFeatureTest extends TestCase
         $response->assertStatus(302);
 
     }
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_logged_in_verified_user_can_view_create_speedruns()
     {
         // Create and login as a user
@@ -50,7 +50,7 @@ class SpeedrunFeatureTest extends TestCase
         // Assert that the user visits the page successfully
         $response->assertStatus(200);
     }
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_speedrun_must_have_a_working_url()
     {
         // Create and login as a user
@@ -71,7 +71,7 @@ class SpeedrunFeatureTest extends TestCase
         $response->assertSessionHasErrors('url');
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_speedrun_can_be_created()
     {
         // Create and login as a user
@@ -87,7 +87,7 @@ class SpeedrunFeatureTest extends TestCase
         $response->assertRedirect('/runner/' . $user->name);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_speedrun_can_be_viewed()
     {
         // Create and login as a user
@@ -104,7 +104,7 @@ class SpeedrunFeatureTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_speedrun_can_be_disqualified()
     {
         // Create and login as user
@@ -130,7 +130,7 @@ class SpeedrunFeatureTest extends TestCase
         $response->assertSeeText('Test Disqualification');
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_speedrun_can_be_removed()
     {
         // Create and login as a user
@@ -154,7 +154,7 @@ class SpeedrunFeatureTest extends TestCase
     // TODO: Undo DQ, and Remove (Admin)
 
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_generate_a_cache() {
         $this->seed();
         $speedrun = Speedrun::factory()->create();
@@ -170,7 +170,7 @@ class SpeedrunFeatureTest extends TestCase
 
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_revoke_a_cache_on_update() {
         $this->seed();
         $speedrun = Speedrun::factory()->create();

@@ -4,7 +4,7 @@
 has been approved and is currently ranking {{str_ordinal($speedrun->placement())}}
 in the {{$speedrun->category()->title}} category!
 <br>
-The Council will confirm this decision with an election this week, where the ultimate fate of your run will be decided.
+Your run has been verified by a moderator.
 <br>
 @component('mail::button', ['url' => url('/watch/'.$speedrun->id), 'color' => 'success'])
 View Speedrun

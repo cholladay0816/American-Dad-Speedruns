@@ -1,0 +1,1 @@
+{"name":"adsr-baseline-regression","private":true,"scripts":{"test":"playwright test","inventory":"playwright test --list"},"devDependencies":{"@axe-core/playwright":"4.14.0","@playwright/test":"1.64.1","alpinejs":"2.7.3"}}

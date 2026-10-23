@@ -67,8 +67,8 @@ class Speedrun extends Model
 
     public function videoExists()
     {
-        $file = @file_get_contents('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=' . $this->video_id());
-        return $file != 'Not Found';
+        // Ambiguous responses are retained. The scheduler additionally checks batch health.
+        return app(\App\Services\VideoAvailability::class)->inspect($this->video_id())['state'] !== 'candidate';
     }
     public function disqualify($reason = 'No reason provided.', $evidence = null)
     {

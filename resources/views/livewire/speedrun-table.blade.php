@@ -73,7 +73,7 @@
                                             <form method="POST" action="{{url('/speedruns/'.$speedrun->id)}}">
                                                 @csrf
                                                 @method('PATCH')
-                                                <input class="text-green-500 hover:text-green-800 bg-white" type="submit" value="Verify">
+                                                <input class="text-green-700 hover:text-green-800 bg-white" type="submit" value="Verify">
                                             </form>
 
                                         @elseif(!$speedrun->disqualified())
@@ -92,7 +92,7 @@
                                     <form method="POST" action="{{url('/speedruns/'.$speedrun->id)}}">
                                         @csrf
                                         @method('DELETE')
-                                        <input class="text-red-500 hover:text-red-800 bg-white" type="submit" value="Delete">
+                                        <input class="text-red-700 hover:text-red-800 bg-white" type="submit" value="Delete">
                                     </form>
                                 @endif
                             </td>

@@ -56,7 +56,7 @@
                         <h4 class="my-auto font-semibold sm:text-4xl duration-150">Disqualify</h4>
                     </a>
                     <textarea max="1024" placeholder="(Optional) Enter your reasoning here."
-                              wire:model.defer="message" class="col-span-2 rounded-lg w-full mt-4 p-3 bg-gray-100"></textarea>
+                              wire:model="message" class="col-span-2 rounded-lg w-full mt-4 p-3 bg-gray-100"></textarea>
 
                 </div>
                 <div class="flex w-full justify-end my-3">

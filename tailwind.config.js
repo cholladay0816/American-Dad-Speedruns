@@ -1,18 +1,24 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
+const colors = require('tailwindcss/colors');
 
 module.exports = {
-    purge: [
+    content: [
         './vendor/laravel/jetstream/**/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
     ],
 
+    safelist: [{pattern: /^(bg|text|border)-(red|green|blue|yellow|indigo|purple|pink|gray)-(50|100|200|300|400|500|600|700|800|900)$/}],
+    corePlugins: { aspectRatio: false },
     theme: {
         extend: {
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
             colors: {
+                green: colors.emerald,
+                yellow: colors.amber,
+                purple: colors.violet,
                 'dark':'#1D1D1D',
                 'darker':'#101010',
                 'darkest':'#0D0D0D',

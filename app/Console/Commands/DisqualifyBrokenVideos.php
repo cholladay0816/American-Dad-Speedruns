@@ -38,27 +38,23 @@ class DisqualifyBrokenVideos extends Command
      */
     public function handle()
     {
-        //Get all verified runs
-        $speedruns = Speedrun::where('verified',1)->get()->filter(function($run) {return !$run->disqualified();});
-        $disqualified = [];
-        /** @var Speedrun $speedrun */
-        foreach ($speedruns as $speedrun)
-        {
-            //Only show qualifying speedruns
-            if($speedrun->disqualified())
-                continue;
-            $this->info('Scanning run: #' . $speedrun->id);
-            //If the video is not found on YouTube, disqualify it.
-            if(!$speedrun->videoExists())
-            {
-                $this->info('Speedrun #'.$speedrun->id . ' is no longer visible, disqualifying...');
-
-                $speedrun->disqualify('YouTube video no longer listed.');
-                array_push($disqualified, $speedrun);
-            }
+        $checker=app(\App\Services\VideoAvailability::class);
+        $runs=Speedrun::where('verified',1)->whereDoesntHave('disqualification')->get();
+        $results=[];$healthy=false;$providerFailure=false;
+        foreach($runs as $run){
+            $result=$checker->inspect($run->video_id());$results[$run->id]=$result;
+            $healthy=$healthy || $result['state']==='available';
+            $providerFailure=$providerFailure || $result['state']==='provider_failure';
         }
-        //If a run was disqualified, send an update email informing staff.
-
+        // No mutations until the batch is assessed. A uniform auth/not-found failure
+        // or a provider-wide quota/transport failure must not disqualify every run.
+        if(!$healthy || $providerFailure){$this->warn('Video scan deferred: provider health is not established.');return 0;}
+        foreach($runs as $run){
+            $result=$results[$run->id];
+            if($result['state']!=='candidate')continue;
+            \Illuminate\Support\Facades\Log::info('Video availability evidence',['run_id'=>$run->id]+$result);
+            $run->disqualify($checker->reason($result),$result['url']);
+        }
         return 0;
     }
 }
