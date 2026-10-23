@@ -25,6 +25,13 @@ class JetstreamServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Preserve the application's published Jetstream UI instead of replacing its design.
+        $this->loadViewsFrom(resource_path('views/vendor/jetstream'), 'jetstream');
+        foreach (glob(resource_path('views/vendor/jetstream/components/*.blade.php')) as $view) {
+            $component = basename($view, '.blade.php');
+            \Illuminate\Support\Facades\Blade::component('jetstream::components.'.$component, 'jet-'.$component);
+        }
+        \Livewire\Livewire::component('navigation-dropdown', \App\Http\Livewire\NavigationDropdown::class);
         $this->configurePermissions();
 
         Jetstream::deleteUsersUsing(DeleteUser::class);

@@ -34,7 +34,7 @@
         @endif
         <div class="flex items-center justify-center flex-col my-12">
             <div class="w-full md:w-5/6 h-144 relative overflow-hidden block">
-                <iframe class="absolute top-0 bottom-0 left-0"
+                <iframe title="Speedrun video" class="absolute top-0 bottom-0 left-0"
                         width="100%" height="100%" frameborder="0"
                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen=""

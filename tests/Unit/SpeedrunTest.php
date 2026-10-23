@@ -36,25 +36,25 @@ class SpeedrunTest extends TestCase
 
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_speedrun_has_a_category()
     {
         $this->createRun();
         $this->assertEquals($this->speedrun->category()->id, $this->category->id);
     }
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_speedrun_has_a_platform()
     {
         $this->createRun();
         $this->assertEquals($this->speedrun->platform()->id, $this->platform->id);
     }
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_speedrun_has_an_owner()
     {
         $this->createRun();
         $this->assertEquals($this->speedrun->user->id, $this->user->id);
     }
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_has_a_cache_key() {
         $this->createRun();
         $actual = 'App\Models\Speedrun/' . $this->speedrun->id . '-' . $this->speedrun->updated_at->timestamp;

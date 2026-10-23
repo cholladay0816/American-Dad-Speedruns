@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class SpeedrunTable extends Component
 {
-    public $speedruns;
+    public $speedruns = [];
     public $runs = [];
     public $readyToLoad = false;
     public $count = 1;

@@ -11,7 +11,7 @@ class CouncilTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_has_a_user()
     {
         $this->seed();

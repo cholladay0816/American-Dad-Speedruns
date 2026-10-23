@@ -1,35 +1,46 @@
-name: Laravel
-
+name: Isolated upgrade regression
 on:
-  push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
-
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  laravel-tests:
-
+  regression:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 45
     steps:
-    - uses: shivammathur/setup-php@b7d1d9c9a92d8d8463ce36d7f60da34d461724f8
-      with:
-        php-version: '8.0'
-    - uses: actions/checkout@v2
-    - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Generate key
-      run: php artisan key:generate
-    - name: Directory Permissions
-      run: chmod -R 777 storage bootstrap/cache
-    - name: Create Database
-      run: |
-        mkdir -p database
-        touch database/database.sqlite
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
-      run: vendor/bin/phpunit
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install locked frontend and browser harness dependencies
+        run: docker run --rm --memory=2g --memory-swap=2g --cpus=2 -v "$PWD:/app" -w /app node:26.3.0-bookworm-slim sh -c 'npm ci --ignore-scripts && npm audit && npm run build && cd tests/baseline && npm ci --ignore-scripts && npm audit'
+      - name: Prepare single capped PHP and browser runtime
+        run: |
+          docker build -t adsr-single:base -f tests/upgrade/Dockerfile.single tests/upgrade
+          docker run --name adsr-ci-setup --memory=3g --memory-swap=3g --cpus=2 -v "$PWD/tests/baseline/node_modules/playwright-core:/opt/playwright-core:ro" -v "$PWD/tests/upgrade:/setup:ro" adsr-single:base sh /setup/setup-single.sh
+          docker commit adsr-ci-setup adsr-single:ready
+      - name: Install and audit locked PHP dependencies
+        run: docker run --rm --memory=3g --memory-swap=3g --cpus=2 -v "$PWD:/app" adsr-single:ready sh -c 'composer install --no-interaction --no-scripts --no-plugins --prefer-dist && composer validate --strict --no-check-publish && composer audit --locked'
+      - name: Backend and five-project browser matrix in one isolated container
+        run: |
+          mkdir -p tests/baseline/artifacts
+          full_status=0
+          docker run --rm --network none --memory=3g --memory-swap=3g --cpus=2 --shm-size=512m -v "$PWD:/app" --tmpfs /app/storage --tmpfs /app/bootstrap/cache -e ADSR_EVIDENCE=upgrade-ci adsr-single:ready sh tests/upgrade/run-single.sh || full_status=$?
+          gap_status=0
+          docker run --rm --network none --memory=3g --memory-swap=3g --cpus=2 --shm-size=512m -v "$PWD:/app" --tmpfs /app/storage --tmpfs /app/bootstrap/cache -e ADSR_EVIDENCE=upgrade-ci-database -e ADSR_SESSION_DRIVER=database adsr-single:ready sh tests/upgrade/run-single.sh browser/gaps.spec.ts || gap_status=$?
+          ranking_status=0
+          docker run --rm --network none --memory=3g --memory-swap=3g --cpus=2 --shm-size=512m -v "$PWD:/app" --tmpfs /app/storage --tmpfs /app/bootstrap/cache -e ADSR_EVIDENCE=upgrade-ci-ranking -e ADSR_RANKING_FIXTURE=1 adsr-single:ready sh tests/upgrade/run-single.sh browser/ranking.spec.ts || ranking_status=$?
+          test "$full_status" -eq 0 && test "$gap_status" -eq 0 && test "$ranking_status" -eq 0
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: upgrade-regression-evidence
+          path: |
+            tests/baseline/artifacts/*.xml
+            tests/baseline/artifacts/*.log
+            tests/baseline/upgrade-ci/
+            tests/baseline/upgrade-ci-report/
+            tests/baseline/upgrade-ci-database/
+            tests/baseline/upgrade-ci-database-report/
+            tests/baseline/upgrade-ci-ranking/
+            tests/baseline/upgrade-ci-ranking-report/
+          retention-days: 14

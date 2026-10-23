@@ -1,0 +1,6 @@
+<?php
+// Compare both databases with one PDO runtime: Laravel 8 and 13 hydrate numeric values differently.
+$a=new PDO('sqlite:/fixture/legacy-original.sqlite');$b=new PDO('sqlite:/fixture/populated.sqlite');
+$changed=[];$tables=$a->query("SELECT name,sql FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+foreach($tables as $t){$name=$t['name'];if(!preg_match('/^[a-z_]+$/',$name))exit(2);$q='SELECT * FROM "'.$name.'" ORDER BY rowid';$s=$b->prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name=?");$s->execute([$name]);if($s->fetchColumn()!==$t['sql']||$a->query($q)->fetchAll(PDO::FETCH_ASSOC)!==$b->query($q)->fetchAll(PDO::FETCH_ASSOC))$changed[]=$name;}
+$integrity=$b->query('PRAGMA integrity_check')->fetchColumn();$fk=count($b->query('PRAGMA foreign_key_check')->fetchAll());$result=['tablesCompared'=>count($tables),'changedLegacyTables'=>$changed,'integrity'=>$integrity,'foreignKeyViolations'=>$fk,'passed'=>!$changed&&$integrity==='ok'&&$fk===0];file_put_contents('/fixture/canonical-comparison.json',json_encode($result,JSON_PRETTY_PRINT));echo json_encode($result,JSON_PRETTY_PRINT),PHP_EOL;exit($result['passed']?0:1);

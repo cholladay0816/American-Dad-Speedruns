@@ -1,0 +1,5 @@
+FROM php:8.5.12-cli-bookworm
+COPY --from=node:26.3.0-bookworm-slim /usr/local/bin/node /usr/local/bin/node
+COPY --from=composer:2.8 /usr/bin/composer /usr/local/bin/composer
+WORKDIR /app
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright APP_ENV=testing APP_DEBUG=false DB_CONNECTION=sqlite DB_DATABASE=:memory: MAIL_MAILER=array QUEUE_CONNECTION=sync CACHE_DRIVER=array SESSION_DRIVER=array

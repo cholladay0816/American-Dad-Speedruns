@@ -84,15 +84,7 @@ class SpeedrunController extends Controller
             $category->updated_at = now()->toDateTimeString();
             $category->save();
 
-            $election = new Election();
-            $election->speedrun_id = $speedrun->id;
-            $election->save();
-            $members = Role::where('name', 'council')->firstOrFail()->users;
-            foreach ($members as $user)
-            {
-                Mail::to($user->email)->queue(new ElectionStarted($election, $user));
-            }
-
+            // Verification no longer starts retired council elections.
             return redirect()->back()->with(['success'=>'Speedrun Verified']);
         }
         else {

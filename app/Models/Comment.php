@@ -40,7 +40,7 @@ class Comment extends Model
         if($this->user_id == auth()->user()->id)
             return true;
         //Uploader can
-        if($this->speedrun->user_id = auth()->user()->id)
+        if($this->speedrun->user_id == auth()->user()->id)
             return true;
 
         return false;

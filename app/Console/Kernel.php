@@ -26,9 +26,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('speedruns:disqualifybrokenvideos')->daily();
         $schedule->command('banner:expire')->daily();
-        $schedule->command('council:expire')->daily();
         $schedule->command('suspensions:expire')->daily();
-        $schedule->command('election:expire')->daily();
     }
 
     /**

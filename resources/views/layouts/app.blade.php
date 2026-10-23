@@ -16,27 +16,26 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
         <!-- Styles -->
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        @vite('resources/css/app.css')
 
         @livewireStyles
 
         <!-- Scripts -->
-        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.js" defer></script>
     </head>
     <body class="font-sans antialiased">
         <div class="fixed w-full p-5 text-center mx-auto mt-16 z-100 flex flex-col pointer-events-none">
             @if($err = Session::get('error'))
-                @component('components.alert', ['color'=>'red-300', 'text'=>'red-500', 'id'=>'error'])
+                @component('components.alert', ['color'=>'red-300', 'text'=>'red-900', 'id'=>'error'])
                     Error: {{$err}}
                 @endcomponent
             @endif
             @if($success = Session::get('success'))
-                @component('components.alert', ['color'=>'green-300', 'text'=>'green-500', 'id'=>'success'])
+                @component('components.alert', ['color'=>'green-300', 'text'=>'green-900', 'id'=>'success'])
                     {{$success}}
                 @endcomponent
             @endif
             @if($info = Session::get('info'))
-                @component('components.alert', ['color'=>'indigo-300', 'text'=>'indigo-500', 'id'=>'info'])
+                @component('components.alert', ['color'=>'indigo-300', 'text'=>'indigo-900', 'id'=>'info'])
                     {{$info}}
                 @endcomponent
             @endif
@@ -45,7 +44,7 @@
             @livewire('navigation-dropdown')
             <!-- Page Heading -->
             @if(isset($header))
-            <header class="bg-green-500 shadow text-white">
+            <header class="bg-green-700 shadow text-white">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>

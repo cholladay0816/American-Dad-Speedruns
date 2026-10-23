@@ -2,7 +2,7 @@
     @auth()
         <form wire:submit.prevent="store" class="w-full flex flex-col pb-12">
             <textarea name="message" required maxlength="4096" placeholder="Write your comment here..." rows="4" class="p-2 rounded-md bg-darker w-full"
-                      wire:model.lazy="message"></textarea>
+                      wire:model.blur="message"></textarea>
             @error('message')
                 <span class="text-red-500">Error: {{$message}}</span>
             @enderror

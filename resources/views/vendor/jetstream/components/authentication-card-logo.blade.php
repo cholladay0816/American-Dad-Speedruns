@@ -1,4 +1,4 @@
-<a href="/">
+<a href="/" aria-label="American Dad Speedruns home">
 <svg class="w-24 h-24 rounded-3xl bg-green-400 p-4" version="1.1" id="Trophy" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
      viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve">
 <g>

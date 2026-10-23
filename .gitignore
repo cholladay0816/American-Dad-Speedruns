@@ -12,3 +12,6 @@ npm-debug.log
 yarn-error.log
 sitemap.xml
 .idea
+
+/public/build/
+/public/hot

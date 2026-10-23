@@ -10,7 +10,7 @@
             <div class="py-12">
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-2 border rounded p-10 bg-gray-50 text-black">
                     <div class="h-56 md:h-96 xl:col-span-2 relative overflow-hidden block max-w-96 rounded">
-                    <iframe class="absolute top-0 bottom-0 left-0"
+                    <iframe title="Featured speedrun video" class="absolute top-0 bottom-0 left-0"
                             width="100%" height="100%" frameborder="0"
                             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen=""
@@ -23,7 +23,7 @@
                     </div>
                 </div>
             </div>
-                <h2 class="rounded-t py-5 text-white bg-green-500 text-center font-bold text-2xl">
+                <h2 class="rounded-t py-5 text-white bg-green-700 text-center font-bold text-2xl">
                     Please Consider Supporting Us
                 </h2>
                 <div class="rounded-b pb-8 pt-4 text-black bg-gray-100 text-left text-md px-8 flex flex-col">
@@ -34,7 +34,7 @@
                         Every dollar helps keep the servers online for the next generation of American Dad Speedrunners.
                     </p>
                     <div class="mt-4">
-                        <a href="{{config('adsr.paypaldonate')}}" class="rounded-md py-3 px-4 font-bold text-lg text-white bg-green-500 hover:bg-green-400">
+                        <a href="{{config('adsr.paypaldonate')}}" class="rounded-md py-3 px-4 font-bold text-lg text-white bg-green-700 hover:bg-green-600">
                             Donate with PayPal
                         </a>
                     </div>
@@ -55,13 +55,13 @@
             <div class="mx-auto border-white border-t border-dotted">
                 <div class="max-w-7xl max-h-xl mx-auto grid md:grid-cols-2">
                     <div class="order-2 md:h-100">
-                        <img class="max-w-24" src="{{asset('img/stan_says.png')}}"/>
+                        <img alt="Stan Smith" class="max-w-full" src="{{asset('img/stan_says.png')}}"/>
                     </div>
                     <div class="my-auto flex flex-col">
                         <div class="font-bold text-4xl">Stan Says:</div>
                         <div class="font-semibold text-gray-300">You should join the American Dad Speedrunning Discord!</div>
-                        <div class="border-l-2 border-yellow-300 text-white bg-opacity-10 hover:bg-opacity-25 bg-yellow-500 px-3">All the cool kids are already <a class="text-indigo-500 font-semibold">@here</a>.</div>
-                        <a href="{{config('adsr.discordinvite')}}" class="bg-indigo-500 border-white text-white text-xl rounded px-2 py-2 mr-auto mt-5 ">Click here to Join!</a>
+                        <div class="border-l-2 border-yellow-300 text-white bg-opacity-10 hover:bg-opacity-25 bg-yellow-500 px-3">All the cool kids are already <a class="text-indigo-300 font-semibold">@here</a>.</div>
+                        <a href="{{config('adsr.discordinvite')}}" class="bg-indigo-700 border-white text-white text-xl rounded px-2 py-2 mr-auto mt-5 ">Click here to Join!</a>
                         <div class="text-gray-300 mt-8">Note: we are not affiliated with this server.</div>
                     </div>
                 </div>

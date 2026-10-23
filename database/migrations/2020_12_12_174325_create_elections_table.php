@@ -18,7 +18,7 @@ class CreateElectionsTable extends Migration
             $table->foreignId('speedrun_id');
             $table->foreign('speedrun_id')->references('id')->on('speedruns')
                 ->cascadeOnDelete();
-            $table->dateTime('expiration')->default(now()->addDays('7')->toDateTimeString());
+            $table->dateTime('expiration')->default(now()->addDays(7)->toDateTimeString());
             $table->tinyInteger('active')->default('1');
             $table->timestamps();
         });
