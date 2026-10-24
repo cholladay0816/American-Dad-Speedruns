@@ -26,6 +26,17 @@ switch ($maxWidth ?? '2xl') {
 <div
     x-data="{
         show: @entangle($attributes->wire('model')).live,
+        init() {
+            this.$watch('show', visible => {
+                if (! visible) return
+
+                // Wait for Alpine's x-show update, not a fixed delay after a
+                // Livewire event which may arrive before the dialog is visible.
+                this.$nextTick(() => requestAnimationFrame(() => {
+                    if (this.show) this.$el.querySelector('[data-dialog-autofocus]')?.focus()
+                }))
+            })
+        },
         focusables() {
             // All focusable element types...
             let selector = 'a, button, input, textarea, select, details, [tabindex]:not([tabindex=\'-1\'])'
