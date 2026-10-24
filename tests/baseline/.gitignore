@@ -28,6 +28,7 @@ webkit-sequential-report/
 vendor-php80/
 
 upgrade-*/
+ci-auth-*/
 *.sqlite
 *.sqlite-*
 *.sql
