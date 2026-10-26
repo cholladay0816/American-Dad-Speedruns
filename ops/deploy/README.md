@@ -62,17 +62,21 @@ it must persist through all preview deployments. Preserve the vhost's
 `X-ADSR-Preview: snapshot; final-resync-required` and `X-Robots-Tag: noindex, nofollow`
 headers. No application schedule/worker or certificate timer was installed.
 
-The parent is applying PR #73 head `e1fda1b0ab7e69d1b132464dc964c32217c869d9`
-as a pinned homepage-controller overlay on the archive. **That overlay is not
-merged source provenance.** Record it as an `overlay` object in both private active
-metadata and the generated release manifest. Installation/activation and every
-deployment refuse any nonempty overlay. Do not falsely label the overlaid tree
-as plain `e97f98c`, drop the overlay during an unattended update, fetch an untrusted
-branch for deployment, or merge either PR automatically. Before activation, the
-parent must reconcile the overlay into an exact trusted merged source tree in a
-fresh release, independently verify its provenance and update baseline metadata.
-The baseline example below applies only to an **unmodified** original archive;
-use the reconciled release's actual immutable identity after the overlay changes.
+PR #73's homepage title filter was rejected and closed unmerged. The parent is
+restoring the original `e97f98c` controller and applying the owner's targeted banner
+expiration update to SQLite instead. **Do not merge, preserve or resurrect that
+filter.** The original source fingerprint must match the restored `e97f98c` release;
+the approved banner row expiration is persistent application data, outside source
+fingerprints and unrelated to the unchanged migration ledger.
+
+Generic overlay protection remains: record any unreconciled source overlay as an
+`overlay` object in private active metadata and the generated release manifest.
+Installation/activation and every deployment refuse a nonempty overlay. After the
+parent restores source and verifies its exact original fingerprint, it may remove
+the obsolete overlay metadata and retain the true `e97f98c` baseline identity.
+This requires no new PR merge or fresh source release. Do not falsely label a
+modified tree as plain `e97f98c`, silently discard an unreviewed overlay, fetch an
+untrusted deployment branch, or merge this deployment PR automatically.
 Additionally, a root-owned `.adsr-source.json` fingerprint manifest must match the
 actual baseline files, so omitting overlay metadata cannot bypass reconciliation.
 Generate it from an **independently verified original Git archive**, never from the
@@ -202,7 +206,7 @@ root `0600` `approvals/<master-merge-sha>.json` under the private state director
 
 ```json
 {
-  "pr": 73,
+  "pr": 74,
   "head": "<40-hex reviewed and CI-tested PR head>",
   "tree": "<40-hex tree shared by PR head and master merge>",
   "compatible_without_migrations": true
