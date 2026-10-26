@@ -139,6 +139,31 @@ def verify_source(release, expected):
                 "build changed approved source: " + relative)
 
 
+def publish_assets(release, destination):
+    """Append immutable generated assets; Apache Alias preserves both sides of rollback."""
+    private(destination)
+    require(destination.is_dir(), "reviewed shared Vite asset store required")
+    gid = pwd.getpwnam("www-data").pw_gid
+    source = release / "public/build/assets"
+    require(source.is_dir() and not source.is_symlink(), "missing regular Vite assets")
+    for asset in source.iterdir():
+        require(asset.is_file() and not asset.is_symlink()
+                and re.fullmatch(r"[A-Za-z0-9_.-]+\.(js|css|woff2?|ttf|png|jpe?g|svg|webp|gif|ico|map)", asset.name)
+                and asset.stat().st_size <= 20_000_000, "unexpected Vite asset needs review")
+        target = destination / asset.name
+        if target.exists() or target.is_symlink():
+            require(target.is_file() and not target.is_symlink()
+                    and hashlib.sha256(target.read_bytes()).digest() == hashlib.sha256(asset.read_bytes()).digest(),
+                    "immutable Vite asset collision")
+        else:
+            with target.open("xb") as stream:
+                stream.write(asset.read_bytes())
+                stream.flush()
+                os.fsync(stream.fileno())
+            os.chown(target, 0, gid)
+            os.chmod(target, 0o640)
+
+
 def api(path):
     require(path.startswith("/") and ".." not in path, "invalid API path")
     request = urllib.request.Request("https://api.github.com/repos/" + REPO + path,
@@ -246,6 +271,13 @@ class Controller:
             "-c", "protocol.file.allow=never", "-c", "credential.helper=", "--git-dir=" + str(self.repo), *args],
             env={"GIT_CONFIG_NOSYSTEM": "1", "GIT_CONFIG_GLOBAL": "/dev/null",
                  "GIT_TERMINAL_PROMPT": "0", "GIT_NO_REPLACE_OBJECTS": "1"}, capture=capture)
+
+    def orphan_gate(self):
+        result = subprocess.run(["/usr/bin/systemctl", "list-units", "adsr-deploy-*",
+            "--state=activating,active,deactivating", "--plain", "--no-legend", "--no-pager"],
+            capture_output=True, timeout=10, text=True, check=True)
+        require(not result.stdout.strip(),
+                "orphan deployment process still active: inspect/stop its cgroup before another operation")
 
     def validate_current(self):
         active = read_json(self.state / "active.json")
@@ -407,6 +439,7 @@ class Controller:
             env={"COMPOSER_MEMORY_LIMIT": "224M", "COMPOSER_MAX_PARALLEL_HTTP": "1",
                  "COMPOSER_MAX_PARALLEL_PROCESSES": "1", "HOME": "/nonexistent"})
         migration_gate(release, previous, self.shared / "database/preview.sqlite")
+        publish_assets(release, self.shared / "vite-assets")
         return release
 
     def validate_app(self, app):
@@ -492,6 +525,7 @@ def main():
         if not acquired:
             return 0
         if action == "clear-failure":
+            controller.orphan_gate()
             require(not (STATE / "transaction.json").exists(), "recover interrupted switch before clearing latch")
             controller.validate_current()
             controller.health(Path(read_json(STATE / "active.json")["release"]))
@@ -506,6 +540,7 @@ def main():
         elif action != "recover":
             require(not (STATE / "failure.json").exists(), "failure latch set; inspect and clear-failure after review")
         try:
+            controller.orphan_gate()
             result = controller.recover() if action == "recover" else controller.run()
             atomic_json(STATE / "last-result.json", {**result, "at": controller.run_id})
         except Exception as error:

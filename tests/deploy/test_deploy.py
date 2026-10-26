@@ -199,6 +199,25 @@ class Filesystem(unittest.TestCase):
         with self.assertRaises(d.Stop):
             d.verify_source(self.root, expected)
 
+    def test_shared_assets_preserve_old_new_and_reject_collisions_or_links(self):
+        assets = self.new / 'public/build/assets'
+        assets.mkdir(parents=True)
+        store = self.root / 'vite-assets'
+        store.mkdir()
+        (store / 'app-old.js').write_text('old browser page')
+        (assets / 'app-new.js').write_text('new browser page')
+        d.publish_assets(self.new, store)
+        self.assertEqual((store / 'app-old.js').read_text(), 'old browser page')
+        self.assertEqual((store / 'app-new.js').read_text(), 'new browser page')
+        d.publish_assets(self.new, store)
+        (assets / 'app-new.js').write_text('hash collision')
+        with self.assertRaises(d.Stop):
+            d.publish_assets(self.new, store)
+        (assets / 'app-new.js').unlink()
+        (assets / 'bad.php').write_text('forbidden')
+        with self.assertRaises(d.Stop):
+            d.publish_assets(self.new, store)
+
     def test_unsafe_archive_links_and_paths_rejected(self):
         for name, kind in [("../escape", tarfile.REGTYPE), ("/absolute", tarfile.REGTYPE), ("link", tarfile.SYMTYPE)]:
             archive = self.root / "unsafe.tar"

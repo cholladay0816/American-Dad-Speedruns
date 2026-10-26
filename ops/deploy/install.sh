@@ -50,6 +50,13 @@ assert gate.stat().st_uid == 0 and not gate.stat().st_mode & 0o077 and not gate.
 assert (release / 'public/_adsr-health.php').read_bytes() == pathlib.Path('health.php').read_bytes()
 assert pathlib.Path('/srv/adsr-preview/shared/database/preview.sqlite').is_file()
 assert pathlib.Path('/srv/adsr-preview/shared/.env').is_file()
+assets = pathlib.Path('/srv/adsr-preview/shared/vite-assets')
+assert assets.is_dir() and not assets.is_symlink() and assets.stat().st_uid == 0 and not assets.stat().st_mode & 0o022
+import hashlib
+for asset in (release / 'public/build/assets').iterdir():
+    target = assets / asset.name
+    assert asset.is_file() and not asset.is_symlink() and target.is_file() and not target.is_symlink()
+    assert hashlib.sha256(asset.read_bytes()).digest() == hashlib.sha256(target.read_bytes()).digest()
 PY
 install -d -o root -g root -m 0755 /usr/local/lib/adsr-deploy
 install -o root -g root -m 0644 deploy.py caps_guard.py jobs.py preflight.php health.php /usr/local/lib/adsr-deploy/

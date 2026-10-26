@@ -5,3 +5,5 @@
 CHANGELOG.md export-ignore
 
 *.sh text eol=lf
+ops/deploy/** text eol=lf
+tests/deploy/*.py text eol=lf

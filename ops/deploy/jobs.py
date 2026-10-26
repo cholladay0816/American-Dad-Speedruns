@@ -54,6 +54,7 @@ def main():
                 ('failure.json', 'job-failure.json', 'transaction.json')):
             return 0
         try:
+            controller.orphan_gate()
             run_jobs(controller)
             d.atomic_json(d.STATE / 'last-jobs.json', {'status': 'completed', 'at': controller.run_id})
             return 0

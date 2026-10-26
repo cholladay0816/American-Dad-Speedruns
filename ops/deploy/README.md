@@ -28,6 +28,7 @@ run as root. No IAM/key/firewall/account privilege changes are performed.
 | `/srv/adsr-preview/shared/storage/app` | Persistent uploads, including `public/` |
 | `/srv/adsr-preview/shared/storage/logs` | Existing application logs, never exported by this controller |
 | `/srv/adsr-preview/shared/storage/framework/sessions` | Persistent preview sessions |
+| `/srv/adsr-preview/shared/vite-assets` | Root-owned append-only generated assets, served by Apache Alias across switch/rollback |
 | `/etc/adsr-deploy` | Root-owned reviewed config and public TLS trust certificate |
 | `/var/lib/adsr-deploy` | Root `0700`; locks, approvals, transaction journal, failure latch, results and `0600` run log |
 
@@ -114,15 +115,20 @@ after review; none have been executed by this coding task.
 1. Create `/etc/adsr-deploy` root `0755` and `/var/lib/adsr-deploy` root `0700`.
    Create root `0600` `preview-required.json` containing `{"required":true}`.
    Copy `config.example.json` to `config.json` root `0600`, retain `mode=preview`,
-   and replace the two zero workflow IDs using the repository's verified Actions
-   workflow records. Require exactly `laravel.yml` → `regression` and
-   `guarded-deploy.yml` → `deployment-guards`, `effective-limits`. IDs are intentionally
-   not guessed. The public trust certificate at `preview-ca.pem` must be readable
+   and reverify the included workflow IDs against the repository's Actions records:
+   `5698625` for `laravel.yml`, `396712994` for `guarded-deploy.yml` (read via the
+   authenticated owner API on 2026-10-26). Require exactly `laravel.yml` → `regression` and
+   `guarded-deploy.yml` → `deployment-guards`, `effective-limits`. A deleted/recreated
+   workflow requires fresh review. The public trust certificate at `preview-ca.pem` must be readable
    by `www-data` (`0644`), must validate the existing certificate for `3.89.97.195`,
    and must not contain any private key. No insecure TLS option or renewal exists.
 2. Bootstrap `current` to the existing reviewed `e97f98c674f5` release, then point
    only the new Apache SSL vhost at `current/public`, retaining its PHP handler.
-   Include `apache-health.conf`'s local restriction. Existing HTTP redirects and TLS
+   Include `apache-health.conf`'s local restriction and immutable asset Alias. Seed
+   root:`www-data` `0750` `shared/vite-assets` with the verified baseline's generated
+   `public/build/assets` files, preserving names/bytes, root:`www-data` `0640`.
+   The installer verifies this seed; it never rewrites or deletes asset versions.
+   Existing HTTP redirects and TLS
    stay in the parent-reviewed vhost. Do not change the old server or static IP.
 3. The baseline needs the same generated identity/health metadata as future
    releases. After verifying its archive provenance, copy this reviewed `health.php`
@@ -228,7 +234,9 @@ compiled cache/view directories and approved shared paths are web-writable.
 
 The shared host lock spans lookup, build, switch, checks and recovery; all prepared
 application job invocations use it too. New source never runs inside the serving
-tree. Preflight checks effective configuration, platform and unchanged migration
+tree. A startup check refuses leftover active deployment cgroups after a killed
+controller, preserving one operation at a time even after its file lock is released.
+Preflight checks effective configuration, platform and unchanged migration
 ledger; previous HTTP health must pass before building. A durable transaction
 journal precedes atomic symlink rename, Apache config check/graceful reload and
 loopback HTTPS health. The endpoint boots Laravel, performs only `SELECT 1`, and
@@ -236,6 +244,11 @@ reports resolved release/commit without session middleware. Five bounded probes
 require the new PHP/OPcache path; stale identities fail. There may be old requests
 draining while new requests start, which is why explicit compatibility review is
 required. This is not a write freeze or a schema migration mechanism.
+New generated Vite assets are appended to the root-owned shared asset store before
+switching; identical names must have identical bytes. The reviewed Apache Alias
+serves that store, so pages opened on either release retain their hashed assets
+through a switch or rollback. Assets are never automatically deleted or overwritten.
+Unexpected asset types, links, nested layouts or hash collisions stop deployment.
 
 Failure after switching restores the previous code link, reloads Apache and
 checks its exact identity. **DB, uploads and sessions remain the same objects**;

@@ -3,6 +3,7 @@ import importlib.util
 import os
 from pathlib import Path
 import subprocess
+import shutil
 import tempfile
 import time
 import uuid
@@ -45,8 +46,18 @@ else:
     time.sleep(60)
 ''')
     script.chmod(0o644)
-    controller = d.Controller({'root': str(root), 'build_user': 'nobody'}, state, LIB)
-    result = controller.step('real-effective-caps', ['/usr/bin/python3', script, scratch, 'ok'], capture=True)
+    # GitHub runner home may be private; reproduce the public installed helper path.
+    installed = root / 'lib'
+    installed.mkdir(mode=0o755)
+    shutil.copyfile(LIB / 'caps_guard.py', installed / 'caps_guard.py')
+    (installed / 'caps_guard.py').chmod(0o644)
+    controller = d.Controller({'root': str(root), 'build_user': 'nobody'}, state, installed)
+    try:
+        result = controller.step('real-effective-caps', ['/usr/bin/python3', script, scratch, 'ok'], capture=True)
+    except Exception:
+        # Synthetic fixture only; this file contains no app config, credentials or user data.
+        print((state / 'run.log').read_text())
+        raise
     assert result == 'effective caps verified; uid=65534', result
     try:
         controller.step('real-oom-kills-group', ['/usr/bin/python3', script, scratch, 'oom'])
