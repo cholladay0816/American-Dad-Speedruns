@@ -86,8 +86,8 @@ class RealPrepare(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
-    def process(self, argv, cwd=None):
-        account = pwd.getpwnam('nobody')
+    def process(self, argv, cwd=None, user='nobody'):
+        account = pwd.getpwnam(user)
         def unprivileged():
             os.setgroups([])
             os.setgid(account.pw_gid)
@@ -98,6 +98,7 @@ class RealPrepare(unittest.TestCase):
                                 capture_output=True, timeout=10)
         self.assertEqual(result.returncode, 0,
                          'synthetic process failed: ' + result.stderr.decode(errors='replace')[:2000])
+        return result.stdout
 
     def archive_command(self, *args, **kwargs):
         destination = next(value.removeprefix('--output=') for value in args if value.startswith('--output='))
@@ -160,6 +161,15 @@ class RealPrepare(unittest.TestCase):
         self.assertEqual((prepared / '.editorconfig').stat().st_mode & 0o022, 0)
         self.assertTrue((prepared / 'node_modules/.bin/vite').is_symlink())
         self.assertTrue((prepared / 'storage/app').is_symlink())
+        identity = prepared / '.adsr-release.json'
+        readback = self.process(['/usr/bin/python3', '-c',
+            'import pathlib,sys; print(pathlib.Path(sys.argv[1]).read_text())', identity],
+            cwd=prepared, user=self.controller.web_user)
+        self.assertEqual(json.loads(readback), {'commit': A, 'tree': TREE})
+        self.assertEqual(identity.stat().st_uid, 0)
+        self.assertEqual(identity.stat().st_gid, pwd.getpwnam(self.controller.web_user).pw_gid)
+        self.assertEqual(identity.stat().st_mode & 0o777, 0o640)
+        self.assertEqual((self.state / 'schema-approved.json').stat().st_mode & 0o777, 0o600)
         d.installed_source(prepared, A)
         self.unchanged()
 

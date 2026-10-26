@@ -62,13 +62,16 @@ def read_json(path, maximum=65536):
     return json.loads(path.read_text())
 
 
-def atomic_json(path, value):
+def atomic_json(path, value, read_group=None):
     temporary = path.with_name(path.name + ".tmp-" + uuid.uuid4().hex)
     fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     with os.fdopen(fd, "w") as stream:
         json.dump(value, stream, sort_keys=True)
         stream.write("\n")
         stream.flush()
+        if read_group is not None:
+            os.fchown(stream.fileno(), 0, read_group)
+            os.fchmod(stream.fileno(), 0o640)
         os.fsync(stream.fileno())
     os.replace(temporary, path)
     fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
@@ -644,7 +647,8 @@ class Controller:
         for relative in ["storage/framework/cache/data", "storage/framework/views", "bootstrap/cache"]:
             (release / relative).mkdir(parents=True, exist_ok=True)
         generated_health(release, self.lib / "health.php", pwd.getpwnam(self.web_user).pw_gid)
-        atomic_json(release / ".adsr-release.json", {"commit": candidate, "tree": tree})
+        atomic_json(release / ".adsr-release.json", {"commit": candidate, "tree": tree},
+                    read_group=pwd.getpwnam(self.web_user).pw_gid)
         atomic_json(release / ".adsr-source.json", {"commit": candidate, "files": {
             name: digest for name, digest in expected.items() if not name.startswith("storage/")}})
         self.permissions(release)
