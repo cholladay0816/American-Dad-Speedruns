@@ -154,6 +154,13 @@ class Filesystem(unittest.TestCase):
         with self.assertRaises(d.Stop):
             d.migration_gate(self.new, self.old, self.db)
 
+    def test_schema_drift_stops_even_with_unchanged_migrations_and_ledger(self):
+        approved = d.schema_fingerprint(self.db)
+        with sqlite3.connect(self.db) as database:
+            database.execute('CREATE TABLE unexpected_manual_schema(value TEXT)')
+        with self.assertRaisesRegex(d.Stop, 'schema drift'):
+            d.migration_gate(self.new, self.old, self.db, approved)
+
     def test_unknown_or_missing_ledger_and_missing_database_stop(self):
         with sqlite3.connect(self.db) as db:
             db.execute("INSERT INTO migrations VALUES('unreviewed')")
@@ -270,7 +277,7 @@ class Transactions(unittest.TestCase):
             (path / 'fixture.txt').write_text('approved source')
             d.atomic_json(path / ".adsr-release.json", {"commit": commit})
             d.atomic_json(path / '.adsr-source.json', {'commit': commit, 'files': {
-                'fixture.txt': d.hashlib.sha256(b'approved source').hexdigest()}})
+                'fixture.txt': {'sha256': d.hashlib.sha256(b'approved source').hexdigest(), 'size': 15}}})
         self.current = self.root / "current"
         self.current.symlink_to(self.old)
         self.db = self.root / "persistent.sqlite"
@@ -280,6 +287,9 @@ class Transactions(unittest.TestCase):
         self.upload.write_text("accepted upload")
         d.atomic_json(self.state / "active.json", {"release": str(self.old), "commit": A})
         d.atomic_json(self.state / "preview-required.json", {"required": True})
+        d.atomic_json(self.state / 'host-rehearsal-approved.json', {
+            **{name: True for name in ('apache_modphp_switch', 'opcache_release_identity', 'write_preserving_rollback', 'shared_paths')},
+            'controller_sha256': d.fingerprint_file(SOURCE, 'deploy.py')['sha256']})
         self.controller = d.Controller({"root": str(self.root), "build_user": "nobody", "mode": "preview"}, self.state, SOURCE)
         self.reloads = []
         self.controller.reload = lambda: self.reloads.append(self.current.resolve())
@@ -409,8 +419,15 @@ class Transactions(unittest.TestCase):
 
     def test_unrecorded_overlay_fails_source_fingerprint_before_remote_lookup(self):
         (self.old / 'fixture.txt').write_text('unmerged homepage overlay')
-        with self.assertRaisesRegex(d.Stop, 'differs from approved source'):
+        with self.assertRaisesRegex(d.Stop, 'source (size differs|differs)'):
             self.controller.run()
+
+    def test_daily_activation_requires_host_rehearsal_bound_to_installed_controller(self):
+        self.controller.activation_gate()
+        approval = d.read_json(self.state / 'host-rehearsal-approved.json')
+        d.atomic_json(self.state / 'host-rehearsal-approved.json', {**approval, 'controller_sha256': '0' * 64})
+        with self.assertRaises(d.Stop):
+            self.controller.activation_gate()
 
     def test_main_daily_failure_latch_and_manual_clear(self):
         config = self.root / "config.json"

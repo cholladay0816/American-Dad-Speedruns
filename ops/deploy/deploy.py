@@ -8,6 +8,7 @@ import fcntl
 import hashlib
 import json
 import os
+import posixpath
 from pathlib import Path
 import pwd
 import re
@@ -35,6 +36,8 @@ CAPS = {
     "KillMode": "control-group", "OOMPolicy": "kill",
 }
 SHA = re.compile(r"[a-f0-9]{40}\Z")
+MAX_SOURCE_FILE = 20_000_000
+HASH_CHUNK = 65536
 
 
 class Stop(Exception):
@@ -101,9 +104,20 @@ def capacity(root, meminfo=Path("/proc/meminfo")):
             "capacity: need 2000000000 free disk bytes; operator retention review required")
 
 
-def migration_gate(candidate, previous, database):
+def schema_fingerprint(database):
+    require(database.is_file(), "shared database missing; never create or replace it")
+    uri = "file:" + urllib.parse.quote(str(database), safe="/") + "?mode=ro"
+    with sqlite3.connect(uri, uri=True, timeout=3) as connection:
+        rows = connection.execute("SELECT type,name,tbl_name,substr(sql,1,65537) FROM sqlite_master "
+            "WHERE name NOT GLOB 'sqlite_*' ORDER BY type,name,tbl_name LIMIT 257").fetchall()
+    require(len(rows) <= 256 and all(all(value is None or len(value) <= 65536 for value in row) for row in rows),
+            "oversized schema metadata; operator review required")
+    return hashlib.sha256(json.dumps(rows, separators=(",", ":")).encode()).hexdigest()
+
+
+def migration_gate(candidate, previous, database, approved_schema=None):
     def migrations(root):
-        return {p.stem: hashlib.sha256(p.read_bytes()).hexdigest()
+        return {p.stem: fingerprint_file(root, str(p.relative_to(root)))
                 for p in (root / "database/migrations").glob("*.php")}
     new, old = migrations(candidate), migrations(previous)
     require(new and new == old,
@@ -116,26 +130,91 @@ def migration_gate(candidate, previous, database):
         applied = {row[0] for row in rows}
     require(applied == set(new),
             "pending/unknown migrations: operator must review ledger; no migrations run")
+    if approved_schema is not None:
+        require(re.fullmatch(r"[a-f0-9]{64}", approved_schema)
+                and schema_fingerprint(database) == approved_schema,
+                "database schema drift from reviewed baseline; stop for operator review, no migrations run")
 
 
 def source_fingerprint(archive):
     expected = {}
     with tarfile.open(archive) as stream:
-        for member in stream:
+        for index, member in enumerate(stream):
+            require(index < 8192, "too many source archive entries")
             path = Path(member.name)
             require(not path.is_absolute() and ".." not in path.parts
                     and (member.isdir() or member.isfile()), "unsafe source archive entry")
             if member.isfile():
-                require(member.size <= 20_000_000, "oversized source file")
-                expected[member.name] = hashlib.sha256(stream.extractfile(member).read()).hexdigest()
+                require(member.size <= MAX_SOURCE_FILE and member.name not in expected
+                        and len(expected) < 4096, "oversized/duplicate source archive entry")
+                with stream.extractfile(member) as content:
+                    expected[member.name] = hash_stream(content, member.size)
     return expected
 
 
+def hash_stream(stream, expected_size):
+    require(type(expected_size) is int and 0 <= expected_size <= MAX_SOURCE_FILE, "oversized source file")
+    digest, size = hashlib.sha256(), 0
+    while True:
+        chunk = stream.read(min(HASH_CHUNK, expected_size - size + 1))
+        if not chunk:
+            break
+        size += len(chunk)
+        require(size <= expected_size, "source grew during bounded hashing")
+        digest.update(chunk)
+    require(size == expected_size, "source size differs from approved archive")
+    return {"sha256": digest.hexdigest(), "size": size}
+
+
+@contextlib.contextmanager
+def file_beneath(root, relative):
+    """Never follow a link in any component, including after an earlier lstat."""
+    path = Path(relative)
+    require(not path.is_absolute() and path.parts and ".." not in path.parts, "invalid source path")
+    directory = os.open(root, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    descriptor = None
+    try:
+        for part in path.parts[:-1]:
+            child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=directory)
+            os.close(directory)
+            directory = child
+        descriptor = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=directory)
+        info = os.fstat(descriptor)
+        require(stat.S_ISREG(info.st_mode) and info.st_nlink == 1, "unexpected source type or hard link")
+        with os.fdopen(descriptor, "rb") as stream:
+            descriptor = None
+            yield stream, info
+    except OSError:
+        raise Stop("unsafe or missing source path: " + relative)
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+        os.close(directory)
+
+
+def fingerprint_file(root, relative, expected_size=None):
+    with file_beneath(root, relative) as (stream, before):
+        require(before.st_size <= MAX_SOURCE_FILE and
+                (expected_size is None or before.st_size == expected_size),
+                "source size differs from approved archive: " + relative)
+        result = hash_stream(stream, before.st_size)
+        after = os.fstat(stream.fileno())
+        require((before.st_size, before.st_mtime_ns, before.st_ctime_ns) ==
+                (after.st_size, after.st_mtime_ns, after.st_ctime_ns), "source changed during verification")
+        return result
+
+
+def small_source_json(root, relative):
+    with file_beneath(root, relative) as (stream, info):
+        require(info.st_size <= 65536, "oversized source configuration")
+        return json.loads(stream.read(65537))
+
+
 def verify_source(release, expected):
-    for relative, digest in expected.items():
-        path = release / relative
-        require(path.is_file() and not path.is_symlink()
-                and hashlib.sha256(path.read_bytes()).hexdigest() == digest,
+    for relative, record in expected.items():
+        require(isinstance(record, dict) and set(record) == {"sha256", "size"}
+                and re.fullmatch(r"[a-f0-9]{64}", record["sha256"]), "size-bearing source manifest required")
+        require(fingerprint_file(release, relative, record["size"]) == record,
                 "release differs from approved source: " + relative)
 
 
@@ -149,26 +228,122 @@ def installed_source(release, commit):
 def publish_assets(release, destination):
     """Append immutable generated assets; Apache Alias preserves both sides of rollback."""
     private(destination)
+    private(destination.parent)
     require(destination.is_dir(), "reviewed shared Vite asset store required")
     gid = pwd.getpwnam("www-data").pw_gid
     source = release / "public/build/assets"
     require(source.is_dir() and not source.is_symlink(), "missing regular Vite assets")
-    for asset in source.iterdir():
-        require(asset.is_file() and not asset.is_symlink()
-                and re.fullmatch(r"[A-Za-z0-9_.-]+\.(js|css|woff2?|ttf|png|jpe?g|svg|webp|gif|ico|map)", asset.name)
-                and asset.stat().st_size <= 20_000_000, "unexpected Vite asset needs review")
-        target = destination / asset.name
-        if target.exists() or target.is_symlink():
-            require(target.is_file() and not target.is_symlink()
-                    and hashlib.sha256(target.read_bytes()).digest() == hashlib.sha256(asset.read_bytes()).digest(),
-                    "immutable Vite asset collision")
-        else:
-            with target.open("xb") as stream:
-                stream.write(asset.read_bytes())
+    total = 0
+    for index, asset in enumerate(source.iterdir()):
+        require(index < 512, "too many generated Vite assets")
+        require(re.fullmatch(r"[A-Za-z0-9_.-]+\.(js|css|woff2?|ttf|png|jpe?g|svg|webp|gif|ico|map)", asset.name),
+                "unexpected Vite asset needs review")
+        record = fingerprint_file(source, asset.name)
+        total += record["size"]
+        require(total <= 64_000_000, "generated Vite assets exceed reviewed 64000000 byte budget")
+        directory = os.open(destination, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+        try:
+            info = os.fstat(directory)
+            require(info.st_uid == 0 and not info.st_mode & 0o022, "unsafe shared asset directory")
+            try:
+                output = os.open(asset.name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                                 0o640, dir_fd=directory)
+            except FileExistsError:
+                require(fingerprint_file(destination, asset.name, record["size"]) == record,
+                        "immutable Vite asset collision")
+                continue
+            with os.fdopen(output, "wb") as stream, file_beneath(source, asset.name) as (content, _):
+                shutil.copyfileobj(content, stream, length=HASH_CHUNK)
                 stream.flush()
                 os.fsync(stream.fileno())
-            os.chown(target, 0, gid)
-            os.chmod(target, 0o640)
+                os.fchown(stream.fileno(), 0, gid)
+                os.fchmod(stream.fileno(), 0o640)
+        finally:
+            os.close(directory)
+
+
+def seal_tree(root, gid, expected=None):
+    """Transfer ownership through no-follow descriptors before inspecting build output."""
+    visited = 0
+    def walk(directory, relative=""):
+        nonlocal visited
+        os.fchown(directory, 0, gid)
+        os.fchmod(directory, 0o750)
+        for entry in os.scandir(directory):
+            visited += 1
+            require(visited <= 100000, "too many build filesystem entries")
+            name = entry.name
+            local = posixpath.join(relative, name)
+            info = os.stat(name, dir_fd=directory, follow_symlinks=False)
+            if stat.S_ISLNK(info.st_mode):
+                target = os.readlink(name, dir_fd=directory)
+                category = local.split("/", 1)[0]
+                resolved = posixpath.normpath(posixpath.join(posixpath.dirname(local), target))
+                require(category in ("node_modules", "vendor") and not target.startswith("/")
+                        and resolved.startswith(category + "/"), "unexpected build-created link: " + local)
+                os.chown(name, 0, gid, dir_fd=directory, follow_symlinks=False)
+                continue
+            descriptor = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK,
+                                 dir_fd=directory)
+            try:
+                actual = os.fstat(descriptor)
+                require((info.st_ino, info.st_dev) == (actual.st_ino, actual.st_dev), "build path changed")
+                if stat.S_ISDIR(actual.st_mode):
+                    walk(descriptor, local)
+                else:
+                    require(stat.S_ISREG(actual.st_mode) and actual.st_nlink == 1,
+                            "unexpected build output type or hard link: " + local)
+                    if expected is not None:
+                        require(local in expected or local in
+                                ("source.tar", "public/build/manifest.json", "public/build/.vite/manifest.json")
+                                or local.startswith(("node_modules/", "vendor/", ".build-home/", "public/build/assets/")),
+                                "unexpected build-created source/artifact: " + local)
+                    os.fchown(descriptor, 0, gid)
+                    os.fchmod(descriptor, 0o640)
+            finally:
+                os.close(descriptor)
+    descriptor = os.open(root, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        walk(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def generated_health(release, helper, gid):
+    """Create only a new regular artifact in the sealed public directory."""
+    private(helper)
+    directory = os.open(release / "public", os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        info = os.fstat(directory)
+        require(info.st_uid == 0 and not info.st_mode & 0o022, "public directory must be sealed")
+        try:
+            descriptor = os.open("_adsr-health.php", os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                                 0o640, dir_fd=directory)
+        except FileExistsError:
+            raise Stop("unexpected build-created health artifact")
+        with os.fdopen(descriptor, "wb") as output, file_beneath(helper.parent, helper.name) as (content, info):
+            require(info.st_size <= 65536, "oversized installed health helper")
+            shutil.copyfileobj(content, output, length=HASH_CHUNK)
+            output.flush()
+            os.fsync(output.fileno())
+            os.fchown(output.fileno(), 0, gid)
+            os.fchmod(output.fileno(), 0o640)
+    finally:
+        os.close(directory)
+
+
+def writable_cache(path):
+    directory = os.open(path, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        for name in os.listdir(directory):
+            info = os.stat(name, dir_fd=directory, follow_symlinks=False)
+            require(stat.S_ISDIR(info.st_mode) or stat.S_ISREG(info.st_mode), "unexpected runtime cache link/type")
+            if stat.S_ISDIR(info.st_mode):
+                writable_cache(path / name)
+        # Grant directory writes only after traversal; no later root writes below it.
+        os.fchmod(directory, 0o770)
+    finally:
+        os.close(directory)
 
 
 def remove_archive_placeholders(path):
@@ -176,7 +351,10 @@ def remove_archive_placeholders(path):
     if not path.exists():
         return
     require(path.is_dir(), "unexpected source storage file")
-    entries = list(path.rglob("*"))
+    entries = []
+    for entry in path.rglob("*"):
+        require(len(entries) < 4096, "too many archive storage placeholders")
+        entries.append(entry)
     require(all(not item.is_symlink() and (item.is_dir() or
                 (item.is_file() and item.name == ".gitignore")) for item in entries),
             "unexpected archive storage content")
@@ -378,25 +556,38 @@ class Controller:
         journal.unlink()
 
     def permissions(self, release):
-        gid = pwd.getpwnam(self.web_user).pw_gid
-        for base, directories, files in os.walk(release, followlinks=False):
-            for path in [Path(base), *(Path(base) / x for x in directories + files)]:
-                if path.is_symlink():
-                    os.lchown(path, 0, gid)
-                else:
-                    os.chown(path, 0, gid)
-                    os.chmod(path, 0o750 if path.is_dir() else 0o640)
-        for path in [release / "bootstrap/cache", release / "storage/framework"]:
-            for base, _, files in os.walk(path, followlinks=False):
-                os.chown(base, 0, gid)
-                os.chmod(base, 0o770)
-                for name in files:
-                    item = Path(base) / name
-                    if not item.is_symlink():
-                        os.chown(item, 0, gid)
-                        os.chmod(item, 0o660)
+        private(release)
+        for relative in ("bootstrap/cache", "storage/framework/cache/data", "storage/framework/views"):
+            writable_cache(release / relative)
+
+    def no_build_processes(self):
+        uid = pwd.getpwnam(self.build_user).pw_uid
+        for process in Path("/proc").iterdir():
+            if process.name.isdigit():
+                try:
+                    require(process.stat().st_uid != uid,
+                            "build account still has a process; stop before root verification/writes")
+                except FileNotFoundError:
+                    pass
+
+    def activation_gate(self):
+        record = self.state / "host-rehearsal-approved.json"
+        require(record.is_file(), "host Apache/mod_php/OPcache and rollback rehearsal approval required before daily activation")
+        approval = read_json(record)
+        require(all(approval.get(key) is True for key in
+                    ("apache_modphp_switch", "opcache_release_identity", "write_preserving_rollback", "shared_paths"))
+                and approval.get("controller_sha256") == fingerprint_file(self.lib, "deploy.py")["sha256"],
+                "daily activation requires reviewed Apache/mod_php/OPcache and rollback rehearsal for installed controller")
 
     def prepare(self, candidate, previous, tree):
+        private(self.root)
+        private(self.releases)
+        self.no_build_processes()
+        schema_record = self.state / "schema-approved.json"
+        require(schema_record.is_file(), "reviewed database schema fingerprint required")
+        approved_schema = read_json(schema_record)["sha256"]
+        require(isinstance(approved_schema, str) and re.fullmatch(r"[a-f0-9]{64}", approved_schema),
+                "reviewed database schema fingerprint required")
         release = self.releases / (candidate + "-" + self.run_id)
         release.mkdir(mode=0o750)
         build = pwd.getpwnam(self.build_user)
@@ -411,8 +602,8 @@ class Controller:
         verify_source(release, expected)
         require(not (release / "vendor").exists() and not (release / ".env").exists(),
                 "source must not contain vendor or environment")
-        package = json.loads((release / "package.json").read_text())
-        composer = json.loads((release / "composer.json").read_text())
+        package = small_source_json(release, "package.json")
+        composer = small_source_json(release, "composer.json")
         require(package.get("scripts", {}).get("build") == "vite build", "review frontend build command")
         require(composer.get("scripts", {}).get("post-autoload-dump") == [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump", "@php artisan package:discover --ansi"],
@@ -433,8 +624,10 @@ class Controller:
         self.step("composer-install", ["/usr/local/bin/composer", "install", "--no-dev", "--prefer-dist",
             "--optimize-autoloader", "--no-scripts", "--no-plugins", "--no-interaction"], cwd=release, env=environment)
         self.step("platform", ["/usr/local/bin/composer", "check-platform-reqs", "--no-dev", "--no-plugins"], cwd=release, env=environment)
+        self.no_build_processes()
+        seal_tree(release, pwd.getpwnam(self.web_user).pw_gid, expected)
         verify_source(release, expected)
-        migration_gate(release, previous, self.shared / "database/preview.sqlite")
+        migration_gate(release, previous, self.shared / "database/preview.sqlite", approved_schema)
         # Only link persistent locations after builds have finished. No source command runs as root.
         links = {".env": self.shared / ".env", "storage/app": self.shared / "storage/app",
                  "storage/logs": self.shared / "storage/logs",
@@ -450,7 +643,7 @@ class Controller:
             path.symlink_to(destination, target_is_directory=destination.is_dir())
         for relative in ["storage/framework/cache/data", "storage/framework/views", "bootstrap/cache"]:
             (release / relative).mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(self.lib / "health.php", release / "public/_adsr-health.php")
+        generated_health(release, self.lib / "health.php", pwd.getpwnam(self.web_user).pw_gid)
         atomic_json(release / ".adsr-release.json", {"commit": candidate, "tree": tree})
         atomic_json(release / ".adsr-source.json", {"commit": candidate, "files": {
             name: digest for name, digest in expected.items() if not name.startswith("storage/")}})
@@ -462,7 +655,7 @@ class Controller:
             "post-autoload-dump", "--no-dev", "--no-interaction"], user=self.web_user, cwd=release,
             env={"COMPOSER_MEMORY_LIMIT": "224M", "COMPOSER_MAX_PARALLEL_HTTP": "1",
                  "COMPOSER_MAX_PARALLEL_PROCESSES": "1", "HOME": "/nonexistent"})
-        migration_gate(release, previous, self.shared / "database/preview.sqlite")
+        migration_gate(release, previous, self.shared / "database/preview.sqlite", approved_schema)
         publish_assets(release, self.shared / "vite-assets")
         return release
 
@@ -564,6 +757,8 @@ def main():
         elif action != "recover":
             require(not (STATE / "failure.json").exists(), "failure latch set; inspect and clear-failure after review")
         try:
+            if action == "daily":
+                controller.activation_gate()
             controller.orphan_gate()
             result = controller.recover() if action == "recover" else controller.run()
             atomic_json(STATE / "last-result.json", {**result, "at": controller.run_id})

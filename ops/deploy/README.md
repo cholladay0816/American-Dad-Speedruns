@@ -63,11 +63,16 @@ it must persist through all preview deployments. Preserve the vhost's
 headers. No application schedule/worker or certificate timer was installed.
 
 PR #73's homepage title filter was rejected and closed unmerged. The parent is
-restoring the original `e97f98c` controller and applying the owner's targeted banner
-expiration update to SQLite instead. **Do not merge, preserve or resurrect that
+restoring the original `e97f98c` controller and inspecting the targeted banner in
+SQLite instead. **Do not merge, preserve or resurrect that
 filter.** The original source fingerprint must match the restored `e97f98c` release;
-the approved banner row expiration is persistent application data, outside source
-fingerprints and unrelated to the unchanged migration ledger.
+banner row data is outside source fingerprints and unrelated to the unchanged
+migration ledger. The parent verified restoration at 2026-10-26 13:39 UTC:
+`SpeedrunController.php` SHA256 is
+`31cbc7817d13f7d47000c79ae88961ae3caee77e0d7f0f909945bdb3dc978dd8`.
+Banner ID 1 was already expired on 2025-02-15 and retains 581 assignments; no DB
+adjustment was needed and the DB hash stayed unchanged. Do not encode an expiration
+override or delete banner data as part of deployment.
 
 Generic overlay protection remains: record any unreconciled source overlay as an
 `overlay` object in private active metadata and the generated release manifest.
@@ -89,6 +94,10 @@ does not fetch, execute or extract source. A plain archive label is not verifica
 the source archive must come from the trusted immutable Git object. Persistent
 `storage/` placeholders are excluded from installed-file checks; env, uploaded data
 and generated artifacts are never used to manufacture source provenance.
+Manifests include each expected file's exact size and SHA256. Older digest-only
+manifests must be regenerated from the verified archive; they are refused.
+Verification uses no-follow file descriptors, rejects an unexpected size before
+reading, and hashes at most 64 KiB per read (20,000,000 bytes per source file).
 
 Before any installer mutation, the operator must verify these prerequisites:
 
@@ -127,6 +136,17 @@ Before any installer mutation, the operator must verify these prerequisites:
 Use a verified immutable archive of the reviewed PR head; do not execute an
 installer from mutable fetched master. These steps describe parent/operator work
 after review; none have been executed by this coding task.
+
+An unchanged migration ledger is not a complete schema check. The operator must
+review actual SQLite table/index/view/trigger definitions against the approved
+baseline and protected recovery evidence, then record root `0600`
+`/var/lib/adsr-deploy/schema-approved.json` as `{"sha256":"<reviewed schema digest>"}`.
+The reviewed helper's `schema_fingerprint(Path(...))` computes this digest read-only
+from bounded, ordered schema metadata, without user rows. Do not automatically
+approve an uninspected database by hashing it. The installer checks that record;
+each candidate checks it again before and after package discovery. Manual schema
+drift stops deployment even if every migration filename/ledger entry is unchanged.
+Data-only changes do not alter this fingerprint.
 
 1. Create `/etc/adsr-deploy` root `0755` and `/var/lib/adsr-deploy` root `0700`.
    Create root `0600` `preview-required.json` containing `{"required":true}`.
@@ -175,6 +195,16 @@ after review; none have been executed by this coding task.
    CI provides synthetic evidence, not a claim of a host rehearsal. Verify memory
    limits, capacity, local HTTP identity, permissions and rollback on the actual host.
 7. After that review, explicitly enable only deployment cron:
+
+   First create root `0600` `host-rehearsal-approved.json` in the private state
+   directory with `apache_modphp_switch`, `opcache_release_identity`,
+   `write_preserving_rollback` and `shared_paths` all true, plus `controller_sha256`
+   equal to the installed `deploy.py` file's SHA256. This is an operator attestation
+   **after** isolated actual Apache/mod_php/OPcache switching, rollback and shared
+   path checks. Synthetic HTTP CI is not an Apache test and cannot supply it.
+   Daily execution refuses a missing/false/stale record; a changed installed
+   controller needs renewed review/rehearsal. Manual `run` remains available for
+   the reviewed rehearsal before enabling unattended work.
 
    ```sh
    install -o root -g root -m 0644 ops/deploy/adsr-deploy.cron /etc/cron.d/adsr-deploy
@@ -245,6 +275,18 @@ Per-release views and application caches avoid stale compiled paths and shared
 cache clearing. Persistent sessions, uploads, DB and environment are linked only
 after builds. Built code/vendor/assets become root-owned read-only; only local
 compiled cache/view directories and approved shared paths are web-writable.
+
+Before any privileged processing of build output, the controller requires the
+build account to have no remaining process, then seals directories/files using
+no-follow file descriptors. It rejects hard links, special files, unexpected
+application artifacts and all links outside confined Node/vendor dependency links.
+Privileged health creation uses an exclusive no-follow open in the sealed public
+directory; it never overwrites a build-created file or follows its target. Shared
+asset publication uses exclusive descriptor-based creation and bounded hashes.
+Assets are limited to 512 files / 64,000,000 bytes and source files to 20,000,000
+bytes each. Source size must equal the verified archive before a 64 KiB streaming
+hash begins. Directory traversal also has explicit entry bounds. Refusal leaves
+the candidate unserved and preserves environment/controller/data files.
 
 ## Atomic switch, failures and recovery
 
