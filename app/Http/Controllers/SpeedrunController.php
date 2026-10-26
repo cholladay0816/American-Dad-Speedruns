@@ -19,10 +19,10 @@ class SpeedrunController extends Controller
 {
     public function welcome()
     {
-        if(auth()->guest())
-            $banner = Banner::orderBy('created_at', 'ASC')->first();
-        else
-            $banner = auth()->user()->banners()->orderBy('created_at', 'ASC')->first();
+        $banners = auth()->guest() ? Banner::query() : auth()->user()->banners();
+        $banner = $banners->where('banners.title', '<>',
+            'Click here to sign up, the top bar is currently broken.'
+        )->orderBy('banners.created_at', 'ASC')->first();
         $featured = Speedrun::where('verified',1)->inRandomOrder()->get()->filter(function($run) {return !$run->disqualified();})->first();
         $speedruns = Speedrun::where('verified',1)->latest()->limit(12)->get()->filter(function($run) {return !$run->disqualified();});
         return view('welcome', ['featured'=>$featured, 'speedruns'=>$speedruns, 'banner'=>$banner]);
