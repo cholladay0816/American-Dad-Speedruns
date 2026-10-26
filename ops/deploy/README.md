@@ -320,6 +320,11 @@ overlap/background guards. Preserve that schedule; the daily 03:30 Chicago deplo
 is independent. The host lock prevents deploy/jobs or minute invocations from
 overlapping. A missed midnight scheduler invocation does not backfill mutations.
 Do not change app timezone or parallelize these commands implicitly.
+When the daily deployment is due but has not acquired its daily attempt marker,
+minute jobs yield and report `waiting-for-daily-deploy`; they cannot repeatedly
+win the lock and starve deployment. Enable deployment cron before production jobs.
+If that cron is absent or broken, resolve it rather than bypassing the shared
+operation order. Any missed midnight invocation is still recorded without replay.
 
 `QUEUE_CONNECTION=sync` would execute queued mail inline. The prepared production
 wrapper therefore refuses it and requires database queue, failed-job driver

@@ -9,13 +9,19 @@ import sys
 import deploy as d
 
 
-def record_missed_midnight(state, now, busy=False):
+def record_missed_midnight(state, now, busy=False, reason=None):
     day = now.date().isoformat()
     record = state / 'last-midnight.json'
     attempted = d.read_json(record).get('day') if record.exists() else None
     if attempted != day and (busy or (now.hour, now.minute) != (0, 0)):
         d.atomic_json(state / 'missed-midnight.json', {'day': day, 'status': 'not-observed',
-                      'reason': 'shared lock busy' if busy else 'midnight invocation not recorded'})
+                      'reason': reason or ('shared lock busy' if busy else 'midnight invocation not recorded')})
+
+
+def deployment_priority(state, now):
+    marker = state / 'daily.json'
+    attempted = d.read_json(marker).get('day') if marker.exists() else None
+    return d.due(now, attempted) is not None
 
 
 def run_jobs(controller):
@@ -46,6 +52,13 @@ def main():
     config = d.read_json(d.CONFIG)
     # Preview invocation is a cheap no-op; it never boots the application or touches a queue.
     if config.get('mode') != 'production':
+        return 0
+    now = dt.datetime.now(dt.timezone.utc)
+    if deployment_priority(d.STATE, now):
+        # Daily cron writes its attempt marker only after acquiring the same lock.
+        # Yield until then, so the minute runner cannot starve daily deployment.
+        record_missed_midnight(d.STATE, now, busy=True, reason='daily deployment pending')
+        d.atomic_json(d.STATE / 'last-jobs.json', {'status': 'waiting-for-daily-deploy', 'at': now.isoformat()})
         return 0
     controller = d.Controller(config)
     with d.exclusive(d.STATE) as acquired:

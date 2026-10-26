@@ -542,6 +542,19 @@ class Jobs(unittest.TestCase):
         with self.assertRaises(d.Stop):
             self.jobs.run_jobs(Fake())
 
+    def test_due_daily_deployment_has_priority_over_repeated_minute_jobs(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            state = Path(temporary)
+            now = dt.datetime(2026, 10, 26, 9, tzinfo=dt.timezone.utc)  # Chicago 04:00.
+            self.assertTrue(self.jobs.deployment_priority(state, now))
+            with patch.object(d, 'STATE', state), patch.object(d, 'read_json', return_value={'mode': 'production'}), \
+                    patch.object(self.jobs, 'deployment_priority', return_value=True), patch.object(d, 'Controller') as controller:
+                self.assertEqual(self.jobs.main(), 0)
+                controller.assert_not_called()
+            d.atomic_json(state / 'daily.json', {'day': '2026-10-26'})
+            self.assertFalse(self.jobs.deployment_priority(state, now))
+            self.assertFalse(self.jobs.deployment_priority(state, now.replace(hour=7)))
+
     def test_production_runs_schedule_then_bounded_database_queue(self):
         from unittest.mock import Mock
         controller = Mock()
