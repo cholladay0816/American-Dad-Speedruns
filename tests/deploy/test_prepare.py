@@ -28,6 +28,7 @@ class RealPrepare(unittest.TestCase):
         self.state = self.root / 'state'
         self.state.mkdir(mode=0o700)
         (self.root / 'releases').mkdir(mode=0o755)
+        (self.root / 'releases').chmod(0o755)
         self.shared = self.root / 'shared'
         for name in ('database', 'storage/app/public', 'storage/logs', 'storage/framework/sessions', 'vite-assets'):
             (self.shared / name).mkdir(parents=True, mode=0o750)
@@ -77,6 +78,7 @@ class RealPrepare(unittest.TestCase):
         self.controller = d.Controller({'root': str(self.root), 'build_user': 'nobody', 'mode': 'preview'},
                                        self.state, self.lib)
         self.attack = 'none'
+        self.attack_ran = False
         self.protected = {self.env: self.env.read_bytes(), self.installed: self.installed.read_bytes()}
         self.controller.git = self.archive_command
         self.controller.step = self.external_step
@@ -94,7 +96,8 @@ class RealPrepare(unittest.TestCase):
             resource.setrlimit(resource.RLIMIT_FSIZE, (2_147_483_648, 2_147_483_648))
         result = subprocess.run([str(arg) for arg in argv], cwd=cwd, preexec_fn=unprivileged,
                                 capture_output=True, timeout=10)
-        d.require(result.returncode == 0, 'synthetic unprivileged build process failed')
+        self.assertEqual(result.returncode, 0,
+                         'synthetic process failed: ' + result.stderr.decode(errors='replace')[:2000])
 
     def archive_command(self, *args, **kwargs):
         destination = next(value.removeprefix('--output=') for value in args if value.startswith('--output='))
@@ -135,12 +138,15 @@ class RealPrepare(unittest.TestCase):
                 self.process(['/usr/bin/python3', '-c',
                     "import os,pathlib,sys; pathlib.Path('.editorconfig').unlink(); os.link(sys.argv[1], '.editorconfig')",
                     self.outside], release)
+            self.attack_ran = self.attack != 'none'
         elif name == 'effective-app-config':
             return json.dumps({'key_present': True, 'debug': False, 'driver': 'sqlite',
                 'database': str(self.db), 'mailer': 'array', 'cookie': 'adsr_php85_preview_session', 'session': 'file'})
         return None
 
     def unchanged(self):
+        if self.attack != 'none':
+            self.assertTrue(self.attack_ran, 'the injection must run before a security refusal can pass')
         for path, content in self.protected.items():
             self.assertEqual(path.read_bytes(), content)
             self.assertEqual(path.stat().st_uid, 0)
