@@ -402,15 +402,15 @@ class Transactions(unittest.TestCase):
         d.atomic_json(self.state / 'active.json', {**active, 'overlay': {'pr': 73, 'head': B}})
         with self.assertRaisesRegex(d.Stop, 'overlay'):
             self.controller.validate_current()
+        d.atomic_json(self.state / 'active.json', active)
+        d.atomic_json(self.old / '.adsr-release.json', {'commit': A, 'overlay': {'pr': 73, 'head': B}})
+        with self.assertRaisesRegex(d.Stop, 'overlay'):
+            self.controller.validate_current()
 
     def test_unrecorded_overlay_fails_source_fingerprint_before_remote_lookup(self):
         (self.old / 'fixture.txt').write_text('unmerged homepage overlay')
         with self.assertRaisesRegex(d.Stop, 'differs from approved source'):
             self.controller.run()
-        d.atomic_json(self.state / 'active.json', active)
-        d.atomic_json(self.old / '.adsr-release.json', {'commit': A, 'overlay': {'pr': 73, 'head': B}})
-        with self.assertRaisesRegex(d.Stop, 'overlay'):
-            self.controller.validate_current()
 
     def test_main_daily_failure_latch_and_manual_clear(self):
         config = self.root / "config.json"
