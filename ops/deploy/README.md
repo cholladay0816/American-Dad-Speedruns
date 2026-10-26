@@ -73,6 +73,18 @@ parent must reconcile the overlay into an exact trusted merged source tree in a
 fresh release, independently verify its provenance and update baseline metadata.
 The baseline example below applies only to an **unmodified** original archive;
 use the reconciled release's actual immutable identity after the overlay changes.
+Additionally, a root-owned `.adsr-source.json` fingerprint manifest must match the
+actual baseline files, so omitting overlay metadata cannot bypass reconciliation.
+Generate it from an **independently verified original Git archive**, never from the
+overlaid serving directory: on the trusted source checkout use
+`git archive --format=tar --output=baseline.tar <full-commit>`, then on a Linux
+Python runtime run `python3 ops/deploy/make_manifest.py baseline.tar <full-commit>
+baseline-source.json`. Verify archive provenance/hash before copying that generated
+manifest to the baseline as `.adsr-source.json`, root:`www-data` `0640`. The helper
+does not fetch, execute or extract source. A plain archive label is not verification;
+the source archive must come from the trusted immutable Git object. Persistent
+`storage/` placeholders are excluded from installed-file checks; env, uploaded data
+and generated artifacts are never used to manufacture source provenance.
 
 Before any installer mutation, the operator must verify these prerequisites:
 

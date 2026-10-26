@@ -44,6 +44,11 @@ assert release.parent == pathlib.Path('/srv/adsr-preview/releases') and not rele
 assert pathlib.Path('/srv/adsr-preview/current').resolve() == release
 assert json.loads((release / '.adsr-release.json').read_text())['commit'] == active['commit']
 assert not json.loads((release / '.adsr-release.json').read_text()).get('overlay')
+import importlib.util
+spec = importlib.util.spec_from_file_location('deploy', pathlib.Path('deploy.py'))
+controller = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(controller)
+controller.installed_source(release, active['commit'])
 gate = pathlib.Path('/var/lib/adsr-deploy/preview-required.json')
 assert gate.is_file() and json.loads(gate.read_text()) == {'required': True}
 assert gate.stat().st_uid == 0 and not gate.stat().st_mode & 0o077 and not gate.is_symlink()
@@ -59,7 +64,7 @@ for asset in (release / 'public/build/assets').iterdir():
     assert hashlib.sha256(asset.read_bytes()).digest() == hashlib.sha256(target.read_bytes()).digest()
 PY
 install -d -o root -g root -m 0755 /usr/local/lib/adsr-deploy
-install -o root -g root -m 0644 deploy.py caps_guard.py jobs.py preflight.php health.php /usr/local/lib/adsr-deploy/
+install -o root -g root -m 0644 deploy.py caps_guard.py jobs.py make_manifest.py preflight.php health.php /usr/local/lib/adsr-deploy/
 install -d -o root -g root -m 0700 /var/lib/adsr-deploy/approvals
 install -o root -g root -m 0644 adsr-deploy.logrotate /etc/logrotate.d/adsr-deploy
 echo 'Controller installed DISABLED. No cron, Apache reload, source deployment or application jobs were started.'

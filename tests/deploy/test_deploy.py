@@ -199,6 +199,24 @@ class Filesystem(unittest.TestCase):
         with self.assertRaises(d.Stop):
             d.verify_source(self.root, expected)
 
+    def test_nested_archive_placeholders_can_be_replaced_without_touching_data(self):
+        app = self.root / 'archive-storage/app'
+        (app / 'public').mkdir(parents=True)
+        (app / '.gitignore').write_text('*')
+        (app / 'public/.gitignore').write_text('*')
+        d.remove_archive_placeholders(app)
+        self.assertFalse(app.exists())
+        app.mkdir()
+        (app / 'user-upload.txt').write_text('preserve')
+        with self.assertRaises(d.Stop):
+            d.remove_archive_placeholders(app)
+        self.assertEqual((app / 'user-upload.txt').read_text(), 'preserve')
+        linked = self.root / 'linked-storage'
+        linked.symlink_to(app)
+        with self.assertRaises(d.Stop):
+            d.remove_archive_placeholders(linked)
+        self.assertEqual((app / 'user-upload.txt').read_text(), 'preserve')
+
     def test_shared_assets_preserve_old_new_and_reject_collisions_or_links(self):
         assets = self.new / 'public/build/assets'
         assets.mkdir(parents=True)
@@ -249,7 +267,10 @@ class Transactions(unittest.TestCase):
         self.old, self.new = self.releases / "old", self.releases / "new"
         for path, commit in [(self.old, A), (self.new, B)]:
             path.mkdir()
+            (path / 'fixture.txt').write_text('approved source')
             d.atomic_json(path / ".adsr-release.json", {"commit": commit})
+            d.atomic_json(path / '.adsr-source.json', {'commit': commit, 'files': {
+                'fixture.txt': d.hashlib.sha256(b'approved source').hexdigest()}})
         self.current = self.root / "current"
         self.current.symlink_to(self.old)
         self.db = self.root / "persistent.sqlite"
@@ -369,6 +390,28 @@ class Transactions(unittest.TestCase):
             ("approved", "jobs_share_lock", "mail_ready", "queue_backlog_reviewed", "schedule_approved")})
         self.controller.validate_app({**app, "mailer": "smtp"})
 
+    def test_persistent_preview_gate_ignores_app_env_and_blocks_mode_flip(self):
+        with patch.dict(os.environ, {'APP_ENV': 'production'}):
+            self.controller.validate_mode()
+        self.controller.c['mode'] = 'production'
+        with self.assertRaisesRegex(d.Stop, 'preview gate still required'):
+            self.controller.validate_mode()
+
+    def test_overlay_in_either_private_or_release_metadata_stops(self):
+        active = d.read_json(self.state / 'active.json')
+        d.atomic_json(self.state / 'active.json', {**active, 'overlay': {'pr': 73, 'head': B}})
+        with self.assertRaisesRegex(d.Stop, 'overlay'):
+            self.controller.validate_current()
+
+    def test_unrecorded_overlay_fails_source_fingerprint_before_remote_lookup(self):
+        (self.old / 'fixture.txt').write_text('unmerged homepage overlay')
+        with self.assertRaisesRegex(d.Stop, 'differs from approved source'):
+            self.controller.run()
+        d.atomic_json(self.state / 'active.json', active)
+        d.atomic_json(self.old / '.adsr-release.json', {'commit': A, 'overlay': {'pr': 73, 'head': B}})
+        with self.assertRaisesRegex(d.Stop, 'overlay'):
+            self.controller.validate_current()
+
     def test_main_daily_failure_latch_and_manual_clear(self):
         config = self.root / "config.json"
         d.atomic_json(config, {"root": "/srv/adsr-preview", "mode": "preview", "build_user": "adsr-build", "workflows": WORKFLOWS})
@@ -427,6 +470,9 @@ class GitSource(unittest.TestCase):
         tree = self.git('rev-parse', self.candidate + '^{tree}')
         d.atomic_json(self.old / '.adsr-release.json', {'commit': self.old_sha})
         d.atomic_json(self.new / '.adsr-release.json', {'commit': self.candidate})
+        for release, commit in [(self.old, self.old_sha), (self.new, self.candidate)]:
+            source = d.read_json(release / '.adsr-source.json')
+            d.atomic_json(release / '.adsr-source.json', {**source, 'commit': commit})
         d.atomic_json(self.state / 'active.json', {'release': str(self.old), 'commit': self.old_sha})
         (self.state / 'approvals').mkdir(exist_ok=True)
         data, approval = ci_fixture()
@@ -478,6 +524,17 @@ class Jobs(unittest.TestCase):
         with patch.object(d, 'read_json', return_value={'mode': 'preview'}), patch.object(d, 'Controller') as controller:
             self.assertEqual(self.jobs.main(), 0)
             controller.assert_not_called()
+
+    def test_missed_midnight_is_recorded_without_replay(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            state = Path(temporary)
+            midnight = dt.datetime(2026, 10, 26, tzinfo=dt.timezone.utc)
+            self.jobs.record_missed_midnight(state, midnight, busy=True)
+            self.assertEqual(d.read_json(state / 'missed-midnight.json')['reason'], 'shared lock busy')
+            d.atomic_json(state / 'last-midnight.json', {'day': '2026-10-26', 'status': 'attempted'})
+            (state / 'missed-midnight.json').unlink()
+            self.jobs.record_missed_midnight(state, midnight.replace(hour=1))
+            self.assertFalse((state / 'missed-midnight.json').exists())
 
     def test_jobs_hold_same_exclusive_lock_and_preview_cannot_run(self):
         class Fake:

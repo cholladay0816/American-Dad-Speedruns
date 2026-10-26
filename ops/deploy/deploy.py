@@ -53,9 +53,9 @@ def private(path):
             "root control path must be root-owned and not group/world writable")
 
 
-def read_json(path):
+def read_json(path, maximum=65536):
     private(path)
-    require(path.stat().st_size < 65536, "oversized control metadata")
+    require(path.stat().st_size < maximum, "oversized control metadata")
     return json.loads(path.read_text())
 
 
@@ -136,7 +136,14 @@ def verify_source(release, expected):
         path = release / relative
         require(path.is_file() and not path.is_symlink()
                 and hashlib.sha256(path.read_bytes()).hexdigest() == digest,
-                "build changed approved source: " + relative)
+                "release differs from approved source: " + relative)
+
+
+def installed_source(release, commit):
+    manifest = read_json(release / ".adsr-source.json", maximum=512000)
+    require(manifest.get("commit") == commit and manifest.get("files"),
+            "verified immutable baseline source manifest required")
+    verify_source(release, manifest["files"])
 
 
 def publish_assets(release, destination):
@@ -162,6 +169,20 @@ def publish_assets(release, destination):
                 os.fsync(stream.fileno())
             os.chown(target, 0, gid)
             os.chmod(target, 0o640)
+
+
+def remove_archive_placeholders(path):
+    require(not path.is_symlink(), "unexpected source storage symlink")
+    if not path.exists():
+        return
+    require(path.is_dir(), "unexpected source storage file")
+    entries = list(path.rglob("*"))
+    require(all(not item.is_symlink() and (item.is_dir() or
+                (item.is_file() and item.name == ".gitignore")) for item in entries),
+            "unexpected archive storage content")
+    for item in sorted(entries, key=lambda item: len(item.parts), reverse=True):
+        item.rmdir() if item.is_dir() else item.unlink()
+    path.rmdir()
 
 
 def api(path):
@@ -292,6 +313,7 @@ class Controller:
                 "active release identity mismatch")
         require(not read_json(release / ".adsr-release.json").get("overlay"),
                 "release overlay present: reconcile source against trusted merged master")
+        installed_source(release, active["commit"])
         return active, release
 
     def validate_mode(self):
@@ -381,6 +403,9 @@ class Controller:
         os.chown(release, build.pw_uid, build.pw_gid)
         self.git("archive", "--format=tar", "--output=" + str(release / "source.tar"), candidate, capture=False)
         expected = source_fingerprint(release / "source.tar")
+        require(not any(name in expected for name in
+                (".env", ".adsr-release.json", ".adsr-source.json", "public/_adsr-health.php", "source.tar")),
+                "source contains reserved deployment artifacts")
         self.step("extract", ["/usr/bin/tar", "--extract", "--file=source.tar", "--no-same-owner",
                              "--no-same-permissions"], cwd=release)
         verify_source(release, expected)
@@ -418,18 +443,17 @@ class Controller:
         for relative, destination in links.items():
             path = release / relative
             require(destination.exists(), "missing persistent location: " + relative)
-            if path.is_dir():
-                # Archive placeholders only; never remove an existing or persistent tree.
-                require(all(p.name == ".gitignore" for p in path.iterdir()), "unexpected archive storage content")
-                for placeholder in path.iterdir():
-                    placeholder.unlink()
-                path.rmdir()
+            if relative != ".env" and (path.exists() or path.is_symlink()):
+                # Newly extracted nested .gitignore placeholders only; never persistent data.
+                remove_archive_placeholders(path)
             require(not path.exists() and not path.is_symlink(), "unexpected source link target")
             path.symlink_to(destination, target_is_directory=destination.is_dir())
         for relative in ["storage/framework/cache/data", "storage/framework/views", "bootstrap/cache"]:
             (release / relative).mkdir(parents=True, exist_ok=True)
         shutil.copyfile(self.lib / "health.php", release / "public/_adsr-health.php")
         atomic_json(release / ".adsr-release.json", {"commit": candidate, "tree": tree})
+        atomic_json(release / ".adsr-source.json", {"commit": candidate, "files": {
+            name: digest for name, digest in expected.items() if not name.startswith("storage/")}})
         self.permissions(release)
         config = self.step("effective-app-config", ["/usr/bin/php8.5", self.lib / "preflight.php"],
                            user=self.web_user, cwd=release, capture=True)
