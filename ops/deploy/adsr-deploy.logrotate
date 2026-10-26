@@ -1,0 +1,11 @@
+/var/lib/adsr-deploy/run.log {
+    daily
+    rotate 14
+    maxsize 5M
+    missingok
+    notifempty
+    compress
+    delaycompress
+    create 0600 root root
+    su root root
+}

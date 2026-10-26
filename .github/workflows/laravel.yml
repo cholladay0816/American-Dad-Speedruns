@@ -11,6 +11,9 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
       - name: Install locked frontend and browser harness dependencies
         run: docker run --rm --memory=2g --memory-swap=2g --cpus=2 -v "$PWD:/app" -w /app node:26.3.0-bookworm-slim sh -c 'npm ci --ignore-scripts && npm audit && npm run build && cd tests/baseline && npm ci --ignore-scripts && npm audit'
       - name: Prepare single capped PHP and browser runtime

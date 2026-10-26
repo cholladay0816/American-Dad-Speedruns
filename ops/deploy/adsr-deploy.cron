@@ -1,0 +1,6 @@
+# Install only after reviewed bootstrap, manual rehearsal and explicit cron enablement.
+SHELL=/bin/sh
+PATH=/usr/local/bin:/usr/bin:/bin
+MAILTO=""
+# Debian cron uses the host timezone; the controller gates America/Chicago 03:30 itself.
+* * * * * root /usr/bin/python3 /usr/local/lib/adsr-deploy/deploy.py daily >/dev/null 2>&1

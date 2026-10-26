@@ -1,0 +1,33 @@
+name: Guarded daily deployment
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  deployment-guards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Synthetic source, filesystem, process, health and rollback scenarios
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          sudo /usr/bin/python3 -m unittest discover -s tests/deploy -v
+          sh -n ops/deploy/install.sh
+          php -l ops/deploy/preflight.php
+          php -l ops/deploy/health.php
+  effective-limits:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Verify effective systemd constraints and kill descendant processes
+        run: sudo /usr/bin/python3 tests/deploy/effective_limits.py

@@ -1,0 +1,10 @@
+{
+  "root": "/srv/adsr-preview",
+  "build_user": "adsr-build",
+  "mode": "preview",
+  "tls_ca": "/etc/adsr-deploy/preview-ca.pem",
+  "workflows": {
+    ".github/workflows/laravel.yml": {"id": 5698625, "jobs": ["regression"]},
+    ".github/workflows/guarded-deploy.yml": {"id": 396712994, "jobs": ["deployment-guards", "effective-limits"]}
+  }
+}
