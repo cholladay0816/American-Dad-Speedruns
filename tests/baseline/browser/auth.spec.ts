@@ -22,6 +22,8 @@ test('ordinary runner cannot delete another users run',async({page})=>{
 });
 test('profile renders under observed live auth overlay',async({page})=>{
  await login(page,'runner@example.test');expect((await page.goto('/user/profile'))?.status()).toBe(200);await expect(page.locator('body')).not.toContainText('Server Error');
+ await expect(page.locator('#name')).toHaveValue('SyntheticRunner');
+ await expect(page.locator('#email')).toHaveValue('runner@example.test');
  await expect(page).toHaveScreenshot('profile.png',{fullPage:true});
 });
 test('@retirement-acceptance retired billing controls are unavailable on profile',async({page})=>{

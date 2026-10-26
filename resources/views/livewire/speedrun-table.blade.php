@@ -9,10 +9,10 @@
                         <th class="border-r-2 sm:border-0 border-dashed border-gray-200 sm:px-6 py-3 bg-gray-50 text-center sm:text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                             Place
                         </th>
-                        <th class="border-r-2 sm:border-0 border-dashed sm:px-6 py-3 bg-gray-50 text-center sm:text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="border-r-2 sm:border-0 border-dashed border-gray-200 sm:px-6 py-3 bg-gray-50 text-center sm:text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                             Name
                         </th>
-                        <th class="border-r-2 sm:border-0 border-dashed sm:px-6 py-3 bg-gray-50 text-center sm:text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="border-r-2 sm:border-0 border-dashed border-gray-200 sm:px-6 py-3 bg-gray-50 text-center sm:text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                             Time
                         </th>
                         <th class="md:hidden table-cell sm:px-6 py-3 bg-gray-50 text-center sm:text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
