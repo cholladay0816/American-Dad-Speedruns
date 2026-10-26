@@ -7,7 +7,7 @@ test('new account registers, edits profile, logs out and signs back in',async({p
  await page.goto('/user/profile');await page.locator('#name').fill(name+'Edited');const form=page.locator('form').filter({has:page.locator('#name')});await Promise.all([page.waitForResponse(r=>r.url().includes('/livewire/update')&&r.status()===200),form.getByRole('button',{name:'Save',exact:true}).click()]);await page.reload();await expect(page.locator('#name')).toHaveValue(name+'Edited');
  expect((await page.request.post('/logout',{headers:await headers(page),maxRedirects:0})).status()).toBe(204);
  await page.goto('/user/profile');await expect(page).toHaveURL(/\/login$/);
- await page.goto('/login');await page.locator('#email').fill(email);await page.locator('#password').fill(password);await page.getByRole('button',{name:'Login',exact:true}).click();await expect(page).toHaveURL(/\/user\/profile$/);await expect(page.locator('#name')).toHaveValue(name+'Edited');
+ await page.goto('/login');await expect(page.locator('#email')).toBeFocused();await page.locator('#email').fill(email);await page.locator('#password').fill(password);await expect(page.locator('#email')).toHaveValue(email);await expect(page.locator('#password')).toHaveValue(password);await page.getByRole('button',{name:'Login',exact:true}).click();await expect(page).toHaveURL(/\/user\/profile$/);await expect(page.locator('#name')).toHaveValue(name+'Edited');
 });
 
 test('password reset rejects invalid token and nonexistent user without outbound mail',async({page})=>{
