@@ -1,7 +1,17 @@
 import {test,expect} from './helpers';
 import fs from 'node:fs';
 const password='Synthetic-only-Password123!';
-async function signIn(page:any,email:string,pw=password){await page.goto('/login');await page.locator('#email').fill(email);await page.locator('#password').fill(pw);await page.getByRole('button',{name:'Login',exact:true}).click();await expect(page).toHaveURL(/dashboard$/);}
+async function signIn(page:any,email:string,pw=password){
+ await page.goto('/login');
+ // Observe initial autofocus before typing, just as on the reset form.
+ await expect(page.locator('#email')).toBeFocused();
+ await page.locator('#email').fill(email);await page.locator('#password').fill(pw);
+ await expect(page.locator('#email')).toHaveValue(email);
+ await expect(page.locator('#password')).toHaveValue(pw);
+ const response=page.waitForResponse(r=>r.request().method()==='POST'&&new URL(r.url()).pathname==='/login');
+ await page.getByRole('button',{name:'Login',exact:true}).click();
+ expect((await response).status()).toBe(302);await expect(page).toHaveURL(/dashboard$/);
+}
 test('valid reset token completes in browser, is single use, and new password signs in',async({page},info)=>{
  const email='reset-'+info.project.name+'@example.test';const token=JSON.parse(fs.readFileSync('/tmp/adsr-reset-fixtures.json','utf8'))[info.project.name];const url='/reset-password/'+token+'?email='+encodeURIComponent(email);const next='Synthetic-Changed-Password123!';
  async function submitReset() {
