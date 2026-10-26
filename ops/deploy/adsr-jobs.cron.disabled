@@ -1,0 +1,6 @@
+# Production cutover approval, queue/mail audit and backlog review required before installation.
+# Keep OUT of /etc/cron.d on preview. Rename/copy to adsr-jobs only after explicit approval.
+SHELL=/bin/sh
+PATH=/usr/local/bin:/usr/bin:/bin
+MAILTO=""
+* * * * * root /usr/bin/python3 /usr/local/lib/adsr-deploy/jobs.py >/dev/null 2>&1
