@@ -5,7 +5,11 @@ for(const [role,admin,runs,banners] of [['admin',200,200,200],['moderator',200,2
  });
 }
 test('profile hydrates current user and offers no active 2FA enrollment @auth-characterization',async({page})=>{
- const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await login(page);await page.goto('/user/profile');
+ const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await login(page);
+ // Finish the dashboard's initial table request before navigating away.
+ const table=page.locator('[wire\\:init="loadRuns"]');
+ await expect.poll(()=>table.evaluate(el=>(window as any).Livewire.find(el.getAttribute('wire:id')).readyToLoad)).toBe(true);
+ await page.goto('/user/profile');
  await expect(page.locator('#name')).toHaveValue('SyntheticRunner');await expect(page.locator('#email')).toHaveValue('runner@example.test');expect(errors).toEqual([]);
  // Desired preservation of observed disabled trait; flag UI inconsistency instead of enabling it.
  await expect(page.getByRole('button',{name:'Enable',exact:true})).toHaveCount(0);
