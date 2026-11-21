@@ -173,7 +173,7 @@ class SpeedrunFeatureTest extends TestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_revoke_a_cache_on_update() {
         $this->seed();
-        $speedrun = Speedrun::factory()->create();
+        $speedrun = Speedrun::factory()->create(['time' => 4]);
         $speedrun->categories()->attach(Category::first());
         $speedrun->platforms()->attach(Platform::first());
 
