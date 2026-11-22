@@ -419,6 +419,22 @@ def ci_gate(candidate, tree, approval, workflows, get=api):
     return evidence
 
 
+def health_command(config):
+    base = ["/usr/bin/curl", "--disable", "--silent", "--show-error", "--fail",
+            "--noproxy", "*", "--connect-timeout", "2", "--max-time", "8"]
+    mode = config.get("mode")
+    if mode == "production":
+        host = config.get("production_health_host")
+        require(host in ("americandadspeedruns.com", "www.americandadspeedruns.com"),
+                "production health requires an approved ADSR domain")
+        return base + ["--resolve", f"{host}:443:127.0.0.1",
+                       "--cacert", "/etc/ssl/certs/ca-certificates.crt",
+                       f"https://{host}/_adsr-health.php"]
+    require(mode == "preview", "unknown deployment health mode")
+    return base + ["--resolve", "3.89.97.195:443:127.0.0.1",
+                   "--cacert", config["tls_ca"], "https://3.89.97.195/_adsr-health.php"]
+
+
 class Controller:
     def __init__(self, config, state=STATE, lib=LIB):
         self.c, self.state, self.lib = config, state, lib
@@ -511,12 +527,11 @@ class Controller:
 
     def health(self, release):
         expected = read_json(release / ".adsr-release.json")
+        argv = health_command(self.c)
         for _ in range(5):
             try:
-                value = self.step("http-health", ["/usr/bin/curl", "--silent", "--show-error", "--fail",
-                    "--noproxy", "*", "--connect-timeout", "2", "--max-time", "8",
-                    "--resolve", "3.89.97.195:443:127.0.0.1", "--cacert", self.c["tls_ca"],
-                    "https://3.89.97.195/_adsr-health.php"], user=self.web_user, capture=True, reserve=False)
+                value = self.step("http-health", argv, user=self.web_user,
+                                  capture=True, reserve=False)
                 require(json.loads(value) == {"ok": True, "commit": expected["commit"],
                                                "release": str(release)}, "unexpected HTTP release identity")
                 return

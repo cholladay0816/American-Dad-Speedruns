@@ -100,6 +100,32 @@ class CIGates(unittest.TestCase):
             d.ci_gate(B, TREE, ci_fixture()[1], WORKFLOWS, offline)
 
 
+class HealthEndpoint(unittest.TestCase):
+    def test_production_uses_allowlisted_sni_with_system_trust_over_loopback(self):
+        for host in ("americandadspeedruns.com", "www.americandadspeedruns.com"):
+            argv = d.health_command({"mode": "production", "production_health_host": host,
+                                     "tls_ca": "/obsolete-preview-ca.pem"})
+            self.assertEqual(argv[-5:], ["--resolve", f"{host}:443:127.0.0.1",
+                                         "--cacert", "/etc/ssl/certs/ca-certificates.crt",
+                                         f"https://{host}/_adsr-health.php"])
+            self.assertEqual(argv[:2], ["/usr/bin/curl", "--disable"])
+            self.assertIn("--noproxy", argv)
+            for option in ("--insecure", "-k", "/obsolete-preview-ca.pem"):
+                self.assertNotIn(option, argv)
+
+    def test_production_rejects_unapproved_hosts_and_never_falls_back(self):
+        for host in (None, "3.89.97.195", "americandadspeedruns.com.example.net",
+                     "https://americandadspeedruns.com", "americandadspeedruns.com:443"):
+            with self.subTest(host=host), self.assertRaisesRegex(d.Stop, "approved ADSR domain"):
+                d.health_command({"mode": "production", "production_health_host": host})
+
+    def test_preview_keeps_original_pinned_ip_and_custom_ca(self):
+        argv = d.health_command({"mode": "preview", "tls_ca": "/preview-ca.pem"})
+        self.assertEqual(argv[-5:], ["--resolve", "3.89.97.195:443:127.0.0.1",
+                                     "--cacert", "/preview-ca.pem",
+                                     "https://3.89.97.195/_adsr-health.php"])
+
+
 class DailyGate(unittest.TestCase):
     def test_both_dst_transition_days_have_one_attempt(self):
         for date, hour in [("2026-03-08", 8), ("2026-11-01", 9), ("2026-07-15", 8), ("2026-12-15", 9)]:

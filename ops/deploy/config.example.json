@@ -2,6 +2,7 @@
   "root": "/srv/adsr-preview",
   "build_user": "adsr-build",
   "mode": "preview",
+  "production_health_host": "americandadspeedruns.com",
   "tls_ca": "/etc/adsr-deploy/preview-ca.pem",
   "workflows": {
     ".github/workflows/laravel.yml": {"id": 5698625, "jobs": ["regression"]},
